@@ -1,0 +1,79 @@
+name: Create Release
+
+# IMPORTANT: Requires temporarily allowing push to main without pull request.
+
+on:
+  # Manually triggered
+  workflow_dispatch:
+    inputs:
+      versionType:
+        description: 'The version type to bump: major, minor, or patch'
+        required: true
+      releaseTitle:
+        description: 'The title of the release'
+        required: true
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all history for all tags and branches
+
+      # Bump version number
+      - name: Bump version
+        id: bump_version
+        run: |
+          echo "::set-output name=VERSION::$(node .github/helpers/bump-version.js ${{ github.event.inputs.versionType }})"
+
+      # Commit the bumped version in package.json
+      - name: Commit version bump
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add package.json
+          git commit -m "Release: bump version to ${{ steps.bump_version.outputs.VERSION }}"
+          git push -f
+
+      # Create changelog
+      - name: Create changelog from commits
+        id: changelog
+        run: |
+          changelog=$(git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:'%h - %s')
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "$changelog" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      # Package code
+      - name: Run npm pack
+        run: npm run pack
+
+      # Get new version number
+      - name: Get the version from package.json
+        id: package_version
+        run: echo "::set-output name=VERSION::$(node -p "require('./package.json').version")"
+
+      # Create new release
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.package_version.outputs.VERSION }}
+          name: ${{ github.event.inputs.releaseTitle }}
+          body: ${{ env.CHANGELOG }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Upload packaged code
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/bcgov-citz-imb-kc-express-${{ steps.package_version.outputs.VERSION }}.tgz
+          asset_name: bcgov-citz-imb-kc-express-${{ steps.package_version.outputs.VERSION }}.tgz
+          asset_content_type: application/gzip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,77 @@
+import { Request, Response, NextFunction, RequestHandler } from "express";
+import { ProtectedRouteOptions } from "./types";
+import { isJWTValid } from "./utils/kcApi";
+import { getUserInfo, hasAllRoles, hasAtLeastOneRole } from "./utils/user";
+
+/**
+ * Express middleware that checks for a valid JWT in the Authorization header,
+ * sets the decoded token and user information in the request object, and passes
+ * control to the next middleware function.
+ * @param {string | string[]} roles - (optional) Role(s) required to use the protected route.
+ * @param {object} options - (optional) Additional options.
+ * @property options.requireAllRoles - When false, only a single role is required from roles.
+ */
+export const protectedRoute = (
+  roles?: string[],
+  options?: ProtectedRouteOptions
+): RequestHandler => {
+  const routeMiddleware = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    // Check if Authorization header exists.
+    const header = req.headers["authorization"];
+    if (!header)
+      return res.status(401).json({ error: "No authorization header found." });
+
+    // Extract token from header and check if it is valid.
+    const token = header.split(" ")[1];
+    const isTokenValid = await isJWTValid(token);
+    if (!isTokenValid)
+      return res.status(401).json({
+        error: "Unauthorized: Invalid token, login to get a new one.",
+      });
+
+    // Get user info and check role.
+    const userInfo = getUserInfo(token);
+    const userRoles = userInfo?.client_roles;
+
+    if (
+      roles &&
+      Array.isArray(roles) &&
+      roles.every((item) => typeof item === "string")
+    ) {
+      if (options && options?.requireAllRoles === false) {
+        if (!userRoles || !hasAtLeastOneRole(userRoles, roles)) {
+          // User does not have at least one of the required roles.
+          return res.status(403).json({
+            error: `User must have at least one of the follwoing roles: [${roles}]`,
+          });
+        }
+      } else {
+        if (!userRoles || !hasAllRoles(userRoles, roles)) {
+          // User does not have all the required roles.
+          return res.status(403).json({
+            error: `User must have all of the following roles: [${roles}]`,
+          });
+        }
+      }
+    } else if (
+      roles &&
+      typeof roles === "string" &&
+      (!userRoles || !userRoles?.includes(roles))
+    ) {
+      // User is missing required role.
+      return res.status(403).json({ error: `User must have role: '${roles}'` });
+    }
+
+    // Set decoded token and user information in request object.
+    req.token = token;
+    req.user = userInfo ?? undefined;
+
+    // Pass control to the next middleware function.
+    next();
+  };
+  return routeMiddleware;
+};
