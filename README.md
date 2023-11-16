@@ -56,7 +56,7 @@
 ``` JSON5
 {
   "dependencies": {
-    "@bcgov/kc-express": "https://github.com/bcgov/citz-imb-kc-express/releases/download/v<VERSION>/bcgov-citz-imb-kc-express-<VERSION>.tgz",
+    "@bcgov/citz-imb-kc-express": "https://github.com/bcgov/citz-imb-kc-express/releases/download/v<VERSION>/bcgov-citz-imb-kc-express-<VERSION>.tgz",
     // The rest of your dependencies...
   },
 }
