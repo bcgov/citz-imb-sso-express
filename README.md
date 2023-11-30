@@ -256,15 +256,6 @@ Import `protectedRoute` from `@bcgov/citz-imb-kc-express` and add as middleware.
 import { protectedRoute } from '@bcgov/citz-imb-kc-express';
 
 app.use("/users", protectedRoute(), usersRouter);
-
-// Users must have 'Member' role.
-app.use("/post", protectedRoute(['Member']), postRouter);
-
-// Users must have BOTH 'Member' and 'Commenter' roles.
-app.use("/comment", protectedRoute(['Member', 'Commenter']), commentRouter);
-
-// Users must have EITHER 'Member' or 'Verified' role.
-app.use("/vote", protectedRoute(['Member', 'Verified'], { requireAllRoles: false }), voteRouter);
 ```
 
 [Return to Top](#bcgov-sso-keycloak-integration-for-express)
@@ -273,19 +264,42 @@ app.use("/vote", protectedRoute(['Member', 'Verified'], { requireAllRoles: false
 
 ## Authorization on an Endpoint
 
-Get the keycloak user info in a protected endpoint.  
+The first way of authorization on an endpoint is by adding the required roles to the `protectedRoute()` middleware that was introduced above.
+
+```Javascript
+// Users must have 'Member' role.
+app.use("/post", protectedRoute(['Member']), postRouter);
+
+// Users must have BOTH 'Member' and 'Commenter' roles.
+// requireAllRoles option is true by default.
+app.use("/comment", protectedRoute(['Member', 'Commenter']), commentRouter);
+
+// Users must have EITHER 'Member' or 'Verified' role.
+app.use("/vote", protectedRoute(['Member', 'Verified'], { requireAllRoles: false }), voteRouter);
+```
+
+<br />
+
+Here is how to get the keycloak user info **in a protected endpoint**.  
 **IMPORTANT:** `req.user` is either populated or null and the `req.user.client_roles` property is either a populated array or undefined.
 
 Example within a controller of a protected route:
 
+Use case could be first protecting the route so only users with the `Analyst` composite role can
+use the endpoint, and then checking that the user also has the role/permission to `open_issue`.
+
 ```JavaScript
 const user = req?.user;
-if (!user) return res.status(404).send("User not found.");
-else {
-  if (!req.user?.client_roles?.includes('Admin'))
-    return res.status(403).send('User must be Admin.');
-  // Do something with user.
+if (!user) return res.status(404).send("Error: User not found.");
+
+if (!req.user?.client_roles?.includes('open_issue')) {
+  console.log(`User ${user.display_name} does not have permission to open issues.`);
+  return res.status(403).send('User does not have permission to open issues.');
 }
+
+// Do something with user who has permission to open issues.
+const userFullname = `${user.given_name} ${user.family_name}`;
+// ...
 ```
 
 For all user properties reference [SSO Keycloak Wiki - Identity Provider Attribute Mapping].  
