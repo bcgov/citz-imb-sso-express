@@ -23,18 +23,14 @@
 ## Table of Contents
 
 - [General Information](#general-information)
-
 - [Installing the Package](#installing-the-package) - **Start Here!**
 - [Basic Setup Guide](#basic-setup-guide) - Setting up after installing.
 - [Environment Variables](#environment-variables) - Required variables for initialization.
-
 - [Module Exports](#module-exports) - Functions and Types available from the module.
 - [TypeScript Types](#typescript-types) - Available TypeScript types.
 - [Initialization Options](#initialization-options) - Additional options.
-
 - [Authentication on an Endpoint](#authentication-on-an-endpoint) - Require user to be signed in.
 - [Authorization on an Endpoint](#authorization-on-an-endpoint) - Require user to have a role/permission.
-
 - [Authentication Flow](#authentication-flow) - How it works.
 - [Applications using Keycloak Solution](#applications-using-keycloak-solution) - See an example of how to use.
 
@@ -100,18 +96,17 @@ keycloak(app);
 ```ENV
 # Ensure the following environment variables are defined on the container.
 
-DEBUG= # (optional) Set to 'true' to get useful debug statements in api console.
-ENVIRONMENT= # (local only) Set to 'local' when running container locally.
-FRONTEND_PORT= # (local only) Port of the frontend application.
-PORT= # (local only) Port of the backend application.
-
-FRONTEND_URL= # (production only) URL of the frontend application.
-BACKEND_URL= # (production only) URL of the backend application.
+FRONTEND_URL= # URL of the frontend application.
+BACKEND_URL= # URL of the backend application.
 
 SSO_CLIENT_ID= # Keycloak client_id
 SSO_CLIENT_SECRET= # Keycloak client_secret
 SSO_AUTH_SERVER_URL= # Keycloak auth URL, see example below.
 # https://dev.loginproxy.gov.bc.ca/auth/realms/standard/protocol/openid-connect
+
+DEBUG= # (optional) Set to 'true' to get useful debug statements in api console.
+SM_LOGOUT_URI= # (optional) Site minder logout url, see default value below.
+# https://logontest7.gov.bc.ca/clp-cgi/logoff.cgi
 ```
 
 [Return to Top](#bcgov-sso-keycloak-integration-for-express)
@@ -203,8 +198,8 @@ export type KeycloakUser = {
 } & (KeycloakIdirUser | KeycloakBCeIDUser | KeycloakGithubUser);
 
 export type KCOptions = {
-  afterUserLogin?: (userInfo: KeycloakUser | null) => Promise<void> | void;
-  afterUserLogout?: (userInfo: KeycloakUser | null) => Promise<void> | void;
+  afterUserLogin?: (userInfo: KeycloakUser) => Promise<void> | void;
+  afterUserLogout?: (userInfo: KeycloakUser) => Promise<void> | void;
 };
 
 export type ProtectedRouteOptions = {
@@ -227,14 +222,10 @@ Use cases may include adding user to database upon first login or updating a las
 import { KCOptions, KeycloakUser, keycloak } from "@bcgov/citz-imb-kc-express";
 
 const KEYCLOAK_OPTIONS: KCOptions = {
-  afterUserLogin: (user: KeycloakUser | null) => {
-    if (DEBUG)
-      console.log("DEBUG: afterUserLogin in config KEYCLOAK_OPTIONS called.");
+  afterUserLogin: (user: KeycloakUser) => {
     if (user) activateUser(user);
   },
-  afterUserLogout: (user: KeycloakUser | null) => {
-    if (DEBUG)
-      console.log("DEBUG: afterUserLogout in config KEYCLOAK_OPTIONS called.");
+  afterUserLogout: (user: KeycloakUser) => {
     console.log(`${user?.display_name ?? "Unknown"} has logged out.`);
   },
 };

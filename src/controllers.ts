@@ -50,7 +50,18 @@ export const loginCallback = (options?: KCOptions) => {
 
       // Run after login callback request.
       if (options?.afterUserLogin) {
-        options.afterUserLogin(getUserInfo(access_token));
+        const user = getUserInfo(access_token);
+
+        // DEBUG
+        if (!user && DEBUG)
+          console.log("DEBUG: Can't get user info in afterUserLogin function.");
+        else if (DEBUG)
+          console.log(
+            "DEBUG: afterUserLogin in config KEYCLOAK_OPTIONS called."
+          );
+        else if (!user) return;
+
+        options.afterUserLogin(user);
       }
     } catch (error: any) {
       console.error("Keycloak: Error in login callback controller", error);
@@ -76,7 +87,20 @@ export const logout = (options?: KCOptions) => {
 
       // Run after logout callback request.
       if (options?.afterUserLogout) {
-        options.afterUserLogout(getUserInfo(id_token as string));
+        const user = getUserInfo(id_token as string);
+
+        // DEBUG
+        if (!user && DEBUG)
+          console.log(
+            "DEBUG: Can't get user info in afterUserLogout function."
+          );
+        else if (DEBUG)
+          console.log(
+            "DEBUG: afterUserLogout in config KEYCLOAK_OPTIONS called."
+          );
+        else if (!user) return;
+
+        options.afterUserLogout(user);
       }
     } catch (error: any) {
       console.error("Keycloak: Error in logout controller", error);
