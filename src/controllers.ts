@@ -59,9 +59,8 @@ export const loginCallback = (options?: KCOptions) => {
           console.log(
             "DEBUG: afterUserLogin in config KEYCLOAK_OPTIONS called."
           );
-        else if (!user) return;
 
-        options.afterUserLogin(user);
+        if (user) options.afterUserLogin(user);
       }
     } catch (error: any) {
       console.error("Keycloak: Error in login callback controller", error);
@@ -98,9 +97,8 @@ export const logout = (options?: KCOptions) => {
           console.log(
             "DEBUG: afterUserLogout in config KEYCLOAK_OPTIONS called."
           );
-        else if (!user) return;
 
-        options.afterUserLogout(user);
+        if (user) options.afterUserLogout(user);
       }
     } catch (error: any) {
       console.error("Keycloak: Error in logout controller", error);
