@@ -1,8 +1,6 @@
-const { FRONTEND_PORT, PORT } = process.env;
-
 const {
-  FRONTEND_URL = `http://localhost:${FRONTEND_PORT}`,
-  BACKEND_URL = `http://localhost:${PORT}`,
+  FRONTEND_URL = "",
+  BACKEND_URL = "",
   SSO_AUTH_SERVER_URI = "https://dev.loginproxy.gov.bc.ca/auth/realms/standard/protocol/openid-connect",
   SM_LOGOUT_URI = "https://logontest7.gov.bc.ca/clp-cgi/logoff.cgi",
   SSO_CLIENT_ID = "",

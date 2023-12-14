@@ -55,8 +55,8 @@ export type KeycloakUser = {
 } & (KeycloakIdirUser | KeycloakBCeIDUser | KeycloakGithubUser);
 
 export type KCOptions = {
-  afterUserLogin?: (userInfo: KeycloakUser | null) => Promise<void> | void;
-  afterUserLogout?: (userInfo: KeycloakUser | null) => Promise<void> | void;
+  afterUserLogin?: (userInfo: KeycloakUser) => Promise<void> | void;
+  afterUserLogout?: (userInfo: KeycloakUser) => Promise<void> | void;
 };
 
 export type ProtectedRouteOptions = {
