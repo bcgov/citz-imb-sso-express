@@ -5,7 +5,7 @@ import router from "./router";
 import { KCOptions } from "./types";
 import config from "./config";
 
-const { FRONTEND_URL } = config;
+const { FRONTEND_URL, DEBUG } = config;
 
 export { protectedRoute } from "./middleware";
 
@@ -46,5 +46,5 @@ export const keycloak = (app: Application, options?: KCOptions) => {
   // Routes defined in ./router file.
   app.use("/auth", router(options));
 
-  console.log("Initialized keycloak express.");
+  if (DEBUG) console.log("Initialized keycloak express.");
 };
