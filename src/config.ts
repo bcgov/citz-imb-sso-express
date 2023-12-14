@@ -10,7 +10,7 @@ const {
 
 // Exports.
 export default {
-  DEBUG: DEBUG !== "false" ? Boolean(DEBUG) : false,
+  DEBUG: DEBUG === "true" ? true : false,
   SSO_CLIENT_ID,
   SSO_CLIENT_SECRET,
   KC_AUTHORIZATION_URI: `${SSO_AUTH_SERVER_URI}/auth`,
