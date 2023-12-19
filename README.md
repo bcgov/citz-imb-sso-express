@@ -272,7 +272,7 @@ app.use("/vote", protectedRoute(['Member', 'Verified'], { requireAllRoles: false
 <br />
 
 Here is how to get the keycloak user info **in a protected endpoint**.  
-**IMPORTANT:** `req.user` is either populated or null and the `req.user.client_roles` property is either a populated array or undefined.
+**IMPORTANT:** `req.user.client_roles` property is either a populated array or undefined.
 
 Example within a controller of a protected route:
 
@@ -281,7 +281,6 @@ use the endpoint, and then checking that the user also has the role/permission t
 
 ```JavaScript
 const user = req?.user;
-if (!user) return res.status(404).send("Error: User not found.");
 
 if (!req.user?.client_roles?.includes('open_issue')) {
   console.log(`User ${user.display_name} does not have permission to open issues.`);

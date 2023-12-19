@@ -35,6 +35,7 @@ export const protectedRoute = (
 
     // Get user info and check role.
     const userInfo = getUserInfo(token);
+    if (!userInfo) return res.status(404).json({ error: `User not found.` });
     const userRoles = userInfo?.client_roles;
 
     if (
@@ -68,7 +69,7 @@ export const protectedRoute = (
 
     // Set decoded token and user information in request object.
     req.token = token;
-    req.user = userInfo ?? undefined;
+    req.user = userInfo;
 
     // Pass control to the next middleware function.
     next();
