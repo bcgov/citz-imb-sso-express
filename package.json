@@ -1,6 +1,6 @@
 {
   "name": "@bcgov/citz-imb-kc-express",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "BCGov Pathfinder SSO Keycloak integration for Express API",
   "author": "Brady Mitchell <braden.mitchell@gov.bc.ca>",
   "license": "Apache-2.0",
