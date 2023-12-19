@@ -37,11 +37,18 @@ export const protectedRoute = (
     const userInfo = getUserInfo(token);
     const userRoles = userInfo?.client_roles;
 
+    // Ensure proper use of function.
     if (
       roles &&
-      Array.isArray(roles) &&
-      roles.every((item) => typeof item === "string")
-    ) {
+      (!Array.isArray(roles) ||
+        !roles.every((item) => typeof item === "string"))
+    )
+      throw new Error(
+        "Error in protectedRoute middleware of `citz-imb-kc-express`. Pass roles as an array of strings."
+      );
+
+    // Check for roles.
+    if (roles) {
       if (options && options?.requireAllRoles === false) {
         if (!userRoles || !hasAtLeastOneRole(userRoles, roles)) {
           // User does not have at least one of the required roles.
@@ -57,13 +64,6 @@ export const protectedRoute = (
           });
         }
       }
-    } else if (
-      roles &&
-      typeof roles === "string" &&
-      (!userRoles || !userRoles?.includes(roles))
-    ) {
-      // User is missing required role.
-      return res.status(403).json({ error: `User must have role: '${roles}'` });
     }
 
     // Set decoded token and user information in request object.
