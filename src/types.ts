@@ -62,3 +62,7 @@ export type KCOptions = {
 export type ProtectedRouteOptions = {
   requireAllRoles?: boolean;
 };
+
+export type HasRoleOptions = {
+  requireAllRoles?: boolean;
+};

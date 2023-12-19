@@ -121,6 +121,7 @@ These are the functions and types exported by the `@bcgov/citz-imb-kc-express` m
 import {
   keycloak, // Initializes the keycloak service in your express app.
   protectedRoute, // Middleware function used for authentication and authorization.
+  hasRole, // Utility function used to return a boolean if user has specified roles.
 } from '@bcgov/citz-imb-kc-express';
 
 // TypeScript Types:
@@ -131,6 +132,7 @@ import {
   KeycloakGithubUser, // User types specific to Github users
   KCOptions, // Type of optional second parameter for keycloak()
   ProtectedRouteOptions, // Type of optional second parameter for protectedRoute()
+  HasRoleOptions, // Type of optional third parameter for hasRole()
   IdentityProvider, // Combined type for identity providers.
   IdirIdentityProvider,
   BceidIdentityProvider,
@@ -150,6 +152,11 @@ These are the TypeScript types of the `@bcgov/citz-imb-kc-express` module.
 ```TypeScript
 const keycloak: (app: Application, options?: KCOptions) => void;
 const protectedRoute: (roles?: string[], options?: ProtectedRouteOptions) => RequestHandler;
+const hasRole = (
+  user: KeycloakUser,
+  roles: string[],
+  options?: HasRoleOptions
+) => boolean;
 
 export type IdirIdentityProvider = "idir";
 export type BceidIdentityProvider =
@@ -203,6 +210,10 @@ export type KCOptions = {
 };
 
 export type ProtectedRouteOptions = {
+  requireAllRoles?: boolean;
+};
+
+export type HasRoleOptions = {
   requireAllRoles?: boolean;
 };
 ```
@@ -272,24 +283,30 @@ app.use("/vote", protectedRoute(['Member', 'Verified'], { requireAllRoles: false
 <br />
 
 Here is how to get the keycloak user info **in a protected endpoint**.  
-**IMPORTANT:** `req.user.client_roles` property is either a populated array or undefined.
+
+**IMPORTANT:** `req.user.client_roles` property is either a populated array or undefined. It is recommended to use the `hasRole()` function instead of checking `req.user.client_roles`.
 
 Example within a controller of a protected route:
 
-Use case could be first protecting the route so only users with the `Analyst` composite role can
-use the endpoint, and then checking that the user also has the role/permission to `open_issue`.
+Add import `import { hasRole } from '@bcgov/citz-imb-kc-express'` if using `hasRole()` function.
+
+Use case could be first protecting the route so only users with the `Admin, Member, Commenter, OR Verified` roles can use the endpoint, and then doing something different based on role/permission.
 
 ```JavaScript
 const user = req?.user;
 
-if (!req.user?.client_roles?.includes('open_issue')) {
-  console.log(`User ${user.display_name} does not have permission to open issues.`);
-  return res.status(403).send('User does not have permission to open issues.');
-}
-
-// Do something with user who has permission to open issues.
+// Do something with users full name.
 const userFullname = `${user.given_name} ${user.family_name}`;
-// ...
+
+// User must have 'Admin' role.
+if (hasRole(user, ['Admin'])) // Do something...
+
+// Users must have BOTH 'Member' and 'Commenter' roles.
+// requireAllRoles option is true by default.
+if (hasRole(user, ['Member', 'Commenter'])) // Do something...
+
+// Users must have EITHER 'Member' or 'Verified' role.
+if (hasRole(user, ['Member', 'Verified'], { requireAllRoles: false })) // Do Something...
 ```
 
 For all user properties reference [SSO Keycloak Wiki - Identity Provider Attribute Mapping].  
