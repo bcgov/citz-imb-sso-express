@@ -8,6 +8,14 @@ const {
   DEBUG = "false",
 } = process.env;
 
+if (DEBUG === "true") {
+  console.log(`DEBUG: 'citz-imb-kc-express' environment variables:
+  SSO_CLIENT_ID=${SSO_CLIENT_ID}
+  SSO_CLIENT_SECRET=${SSO_CLIENT_SECRET}
+  FRONTEND_URL=${FRONTEND_URL}
+  BACKEND_URL=${BACKEND_URL}`);
+}
+
 // Exports.
 export default {
   DEBUG: DEBUG === "true" ? true : false,
