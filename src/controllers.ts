@@ -38,7 +38,8 @@ export const loginCallback = (options?: KCOptions) => {
       console.info("DEBUG: loginCallback controller in kc-express called.");
     try {
       const { code } = req.query;
-      const { access_token, refresh_token } = await getTokens(code as string);
+      const { access_token, refresh_token, refresh_expires_in } =
+        await getTokens(code as string);
 
       // Send response.
       res
@@ -46,7 +47,7 @@ export const loginCallback = (options?: KCOptions) => {
           httpOnly: true,
           secure: true,
         })
-        .redirect(FRONTEND_URL);
+        .redirect(`${FRONTEND_URL}?refresh_expires_in=${refresh_expires_in}`);
 
       // Run after login callback request.
       if (options?.afterUserLogin) {

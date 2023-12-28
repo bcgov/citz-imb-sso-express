@@ -39,7 +39,8 @@ export const getTokens = async (code: string) => {
     body: qs.stringify(params),
   });
 
-  const { id_token, access_token, refresh_token } = await response.json();
+  const { id_token, access_token, refresh_token, refresh_expires_in } =
+    await response.json();
 
   const id_token_decoded = parseJWT(id_token);
   const access_token_decoded = parseJWT(access_token);
@@ -52,6 +53,7 @@ export const getTokens = async (code: string) => {
     access_token_decoded,
     refresh_token,
     refresh_token_decoded,
+    refresh_expires_in,
   };
 };
 
