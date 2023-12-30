@@ -1,6 +1,6 @@
 {
   "name": "@bcgov/citz-imb-kc-express",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "BCGov Pathfinder SSO Keycloak integration for Express API",
   "author": "Brady Mitchell <braden.mitchell@gov.bc.ca>",
   "license": "Apache-2.0",
@@ -8,7 +8,7 @@
   "types": "build/index.d.ts",
   "scripts": {
     "build": "rm -rf build && tsc",
-    "bundle:dts": "node bundle-dts.mjs && rollup -c rollup.config.mjs && node remove-dts.mjs && rm build/utils/*.d.ts",
+    "bundle:dts": "node bundle-dts.mjs && rollup -c rollup.config.mjs && node remove-dts.mjs && rm build/**/*.d.ts",
     "pack": "npm i && npm run build && npm run bundle:dts && npm cache clean --force && npm pack && mkdir releases && mv *.tgz ./releases/"
   },
   "dependencies": {
