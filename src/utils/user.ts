@@ -33,7 +33,7 @@ export const hasRole = (
     !roles.every((item) => typeof item === "string")
   )
     throw new Error(
-      "Error in hasRole function of `citz-imb-kc-express`. Pass roles as an array of strings."
+      "Error: hasRole function of `citz-imb-kc-express`. Pass roles as an array of strings."
     );
 
   // Return false because user does not have any roles

@@ -2,6 +2,10 @@ name: Create Release
 
 # IMPORTANT: Requires temporarily allowing push to main without pull request.
 
+env:
+  PACKAGE-FILENAME: 'bcgov-citz-imb-kc-express'
+  CHANGELOG: '' # Leave empty.
+
 on:
   # Manually triggered
   workflow_dispatch:
@@ -19,7 +23,7 @@ jobs:
     steps:
       # Checkout code
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Fetch all history for all tags and branches
 
@@ -72,8 +76,8 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/bcgov-citz-imb-kc-express-${{ steps.package_version.outputs.VERSION }}.tgz
-          asset_name: bcgov-citz-imb-kc-express-${{ steps.package_version.outputs.VERSION }}.tgz
+          asset_path: ./releases/${{ env.PACKAGE-FILENAME }}-${{ steps.package_version.outputs.VERSION }}.tgz
+          asset_name: ${{ env.PACKAGE-FILENAME }}-${{ steps.package_version.outputs.VERSION }}.tgz
           asset_content_type: application/gzip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

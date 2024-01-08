@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { getNewTokens, getTokens } from "./utils/kcApi";
 import { getLoginURL, getLogoutURL } from "./utils/authUrls";
 import { getUserInfo } from "./utils/user";
+import { debugControllerCalled } from "./utils/debug";
 import config from "./config";
 
 const { FRONTEND_URL, DEBUG } = config;
@@ -14,7 +15,7 @@ const { FRONTEND_URL, DEBUG } = config;
  */
 export const login = (options?: KCOptions) => {
   const request = async (req: Request, res: Response) => {
-    if (DEBUG) console.info("DEBUG: login controller in kc-express called.");
+    if (DEBUG) debugControllerCalled("login");
     try {
       const { idp } = req.query;
       if (!req.token) return res.redirect(getLoginURL(idp as IdentityProvider));
@@ -34,8 +35,7 @@ export const login = (options?: KCOptions) => {
  */
 export const loginCallback = (options?: KCOptions) => {
   const request = async (req: Request, res: Response) => {
-    if (DEBUG)
-      console.info("DEBUG: loginCallback controller in kc-express called.");
+    if (DEBUG) debugControllerCalled("loginCallback");
     try {
       const { code } = req.query;
       const { access_token, refresh_token, refresh_expires_in } =
@@ -55,16 +55,19 @@ export const loginCallback = (options?: KCOptions) => {
 
         // DEBUG
         if (!user && DEBUG)
-          console.log("DEBUG: Can't get user info in afterUserLogin function.");
-        else if (DEBUG)
           console.log(
-            "DEBUG: afterUserLogin in config KEYCLOAK_OPTIONS called."
+            "DEBUG: Can't get user info in afterUserLogin function of `citz-imb-kc-express`."
           );
+        else if (DEBUG)
+          console.log("DEBUG: afterUserLogin of `citz-imb-kc-express` called.");
 
         if (user) options.afterUserLogin(user);
       }
     } catch (error: any) {
-      console.error("Keycloak: Error in login callback controller", error);
+      console.error(
+        "Error: loginCallback controller of `citz-imb-kc-express`",
+        error
+      );
       res.json({ success: false, error: error.message ?? error });
     }
   };
@@ -78,7 +81,7 @@ export const loginCallback = (options?: KCOptions) => {
  */
 export const logout = (options?: KCOptions) => {
   const request = async (req: Request, res: Response) => {
-    if (DEBUG) console.info("DEBUG: logout controller in kc-express called.");
+    if (DEBUG) debugControllerCalled("logout");
     try {
       const { id_token } = req.query;
       if (!id_token)
@@ -92,17 +95,17 @@ export const logout = (options?: KCOptions) => {
         // DEBUG
         if (!user && DEBUG)
           console.log(
-            "DEBUG: Can't get user info in afterUserLogout function."
+            "DEBUG: Can't get user info in afterUserLogout function of `citz-imb-kc-express`."
           );
         else if (DEBUG)
           console.log(
-            "DEBUG: afterUserLogout in config KEYCLOAK_OPTIONS called."
+            "DEBUG: afterUserLogout function of `citz-imb-kc-express` called."
           );
 
         if (user) options.afterUserLogout(user);
       }
     } catch (error: any) {
-      console.error("Keycloak: Error in logout controller", error);
+      console.error("Error: logout controller of `citz-imb-kc-express`", error);
       res.json({ success: false, error: error.message ?? error });
     }
   };
@@ -116,14 +119,16 @@ export const logout = (options?: KCOptions) => {
  */
 export const logoutCallback = (options?: KCOptions) => {
   const request = async (req: Request, res: Response) => {
-    if (DEBUG)
-      console.info("DEBUG: logoutCallback controller in kc-express called.");
+    if (DEBUG) debugControllerCalled("logoutCallback");
     try {
       res
         .cookie("refresh_token", "", { httpOnly: true, secure: true })
         .redirect(FRONTEND_URL);
     } catch (error: any) {
-      console.error("Keycloak: Error in logout callback controller", error);
+      console.error(
+        "Error: logoutCallback controller of `citz-imb-kc-express`",
+        error
+      );
     }
   };
   return request;
@@ -136,8 +141,7 @@ export const logoutCallback = (options?: KCOptions) => {
  */
 export const refreshToken = (options?: KCOptions) => {
   const request = async (req: Request, res: Response) => {
-    if (DEBUG)
-      console.info("DEBUG: refreshToken controller in kc-express called.");
+    if (DEBUG) debugControllerCalled("refreshToken");
     try {
       const { refresh_token } = req.cookies;
       if (!refresh_token || refresh_token === "")

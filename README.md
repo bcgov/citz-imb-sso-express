@@ -127,16 +127,16 @@ import {
 // TypeScript Types:
 import {
   KeycloakUser, // Base type for req.user
-  KeycloakIdirUser, // User types specific to Idir users
-  KeycloakBCeIDUser, // User types specific to BCeID users
-  KeycloakGithubUser, // User types specific to Github users
+  KeycloakIdirUser, // User types specific to Idir users.
+  KeycloakBCeIDUser, // User types specific to BCeID users.
+  KeycloakGithubUser, // User types specific to Github users.
   KCOptions, // Type of optional second parameter for keycloak()
   ProtectedRouteOptions, // Type of optional second parameter for protectedRoute()
   HasRoleOptions, // Type of optional third parameter for hasRole()
   IdentityProvider, // Combined type for identity providers.
-  IdirIdentityProvider,
-  BceidIdentityProvider,
-  GithubIdentityProvider,
+  IdirIdentityProvider, // Used for more efficient login.
+  BceidIdentityProvider, // Used for more efficient login.
+  GithubIdentityProvider, // Used for more efficient login.
 } from '@bcgov/citz-imb-kc-express';
 
 ```
@@ -227,7 +227,7 @@ export type HasRoleOptions = {
 Optional second parameter to the `keycloak()` function.  
 Use cases may include adding user to database upon first login or updating a last login field.
 
-*Example usage:*
+*Example:*
 
 ```JavaScript
 import { KCOptions, KeycloakUser, keycloak } from "@bcgov/citz-imb-kc-express";
@@ -257,7 +257,28 @@ Import `protectedRoute` from `@bcgov/citz-imb-kc-express` and add as middleware.
 ```JavaScript
 import { protectedRoute } from '@bcgov/citz-imb-kc-express';
 
+// Use in file where express app is defined:
 app.use("/users", protectedRoute(), usersRouter);
+
+// OR use in router:
+import express from "express";
+const router = express.Router();
+
+router.get("/", exampleController());
+router.get("/protected", protectedRoute(), exampleProtectedController());
+```
+
+<br />
+
+> [!Important]  
+> The following **WILL NOT WORK**:
+
+```JavaScript
+import { protectedRoute } from '@bcgov/citz-imb-kc-express';
+
+// THIS WILL NOT WORK.
+app.use("/api", protectedRoute(), guestRouter);
+app.use("/api", protectedRoute(['admin']), adminRouter);
 ```
 
 [Return to Top](#bcgov-sso-keycloak-integration-for-express)
@@ -282,9 +303,23 @@ app.use("/vote", protectedRoute(['Member', 'Verified'], { requireAllRoles: false
 
 <br />
 
+> [!Important]  
+> The following **WILL NOT WORK** (see above section for router usage and workaround):
+
+```JavaScript
+import { protectedRoute } from '@bcgov/citz-imb-kc-express';
+
+// THIS WILL NOT WORK.
+app.use("/api", protectedRoute(), guestRouter);
+app.use("/api", protectedRoute(['admin']), adminRouter);
+```
+
+<br />
+
 Here is how to get the keycloak user info **in a protected endpoint**.  
 
-**IMPORTANT:** `req.user.client_roles` property is either a populated array or undefined. It is recommended to use the `hasRole()` function instead of checking `req.user.client_roles`.
+> [!IMPORTANT] 
+> `req.user.client_roles` property is either a populated array or undefined. It is recommended to use the `hasRole()` function instead of checking `req.user.client_roles`.
 
 Example within a controller of a protected route:
 

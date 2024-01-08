@@ -45,7 +45,7 @@ export const protectedRoute = (
         !roles.every((item) => typeof item === "string"))
     )
       throw new Error(
-        "Error in protectedRoute middleware of `citz-imb-kc-express`. Pass roles as an array of strings."
+        "Error: protectedRoute middleware of `citz-imb-kc-express`. Pass roles as an array of strings."
       );
 
     // Check for roles.
@@ -54,7 +54,7 @@ export const protectedRoute = (
         if (!userRoles || !hasAtLeastOneRole(userRoles, roles)) {
           // User does not have at least one of the required roles.
           return res.status(403).json({
-            error: `User must have at least one of the follwoing roles: [${roles}]`,
+            error: `User must have at least one of the following roles: [${roles}]`,
           });
         }
       } else {

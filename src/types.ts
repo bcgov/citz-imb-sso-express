@@ -15,9 +15,10 @@ export type BceidIdentityProvider =
   | "bceidboth";
 export type GithubIdentityProvider = "githubbcgov" | "githubpublic";
 
-export type IdentityProvider = IdirIdentityProvider &
-  BceidIdentityProvider &
-  GithubIdentityProvider;
+export type IdentityProvider =
+  | IdirIdentityProvider
+  | BceidIdentityProvider
+  | GithubIdentityProvider;
 
 export type KeycloakIdirUser = {
   identity_provider: IdirIdentityProvider;

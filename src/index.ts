@@ -47,5 +47,5 @@ export const keycloak = (app: Application, options?: KCOptions) => {
   // Routes defined in ./router file.
   app.use("/auth", router(options));
 
-  if (DEBUG) console.log("DEBUG: Initialized keycloak express.");
+  if (DEBUG) console.log("DEBUG: Initialized 'citz-imb-kc-express'.");
 };
