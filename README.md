@@ -169,24 +169,34 @@ export type IdentityProvider = IdirIdentityProvider &
   BceidIdentityProvider &
   GithubIdentityProvider;
 
+export type BaseKeycloakUser = {
+  name?: string;
+  preferred_username: string;
+  email: string;
+  display_name: string;
+  client_roles?: string[];
+  scope?: string;
+  identity_provider:
+    | IdirIdentityProvider
+    | BceidIdentityProvider
+    | GithubIdentityProvider;
+};
+
 export type KeycloakIdirUser = {
-  identity_provider: IdirIdentityProvider;
-  idir_user_guid: string;
-  idir_username: string;
-  given_name: string;
-  family_name: string;
+  idir_user_guid?: string;
+  idir_username?: string;
+  given_name?: string;
+  family_name?: string;
 };
 
 export type KeycloakBCeIDUser = {
-  identity_provider: BceidIdentityProvider;
-  bceid_user_guid: string;
-  bceid_username: string;
+  bceid_user_guid?: string;
+  bceid_username?: string;
   bceid_business_name?: string;
 };
 
 export type KeycloakGithubUser = {
-  identity_provider: GithubIdentityProvider;
-  github_id: string;
+  github_id?: string;
   github_username?: string;
   orgs?: string;
   given_name?: string;
@@ -195,14 +205,10 @@ export type KeycloakGithubUser = {
   last_name?: string;
 };
 
-export type KeycloakUser = {
-  name?: string;
-  preferred_username: string;
-  email: string;
-  display_name: string;
-  client_roles?: string[];
-  scope?: string;
-} & (KeycloakIdirUser | KeycloakBCeIDUser | KeycloakGithubUser);
+export type KeycloakUser = BaseKeycloakUser &
+  KeycloakIdirUser &
+  KeycloakBCeIDUser &
+  KeycloakGithubUser;
 
 export type KCOptions = {
   afterUserLogin?: (userInfo: KeycloakUser) => Promise<void> | void;
@@ -379,6 +385,7 @@ Example IDIR `req.user` object (Typescript Type is `KeycloakUser & KeycloakIdirU
 The following applications are currently using this keycloak implementation solution:
 
 [SET](https://github.com/bcgov/citz-imb-salary-estimate-tool) - Salary Estimation Tool
+[PLAY](https://github.com/bcgov/citz-imb-playground) - CITZ IMB Package Testing App
 
 [Return to Top](#bcgov-sso-keycloak-integration-for-express)
 

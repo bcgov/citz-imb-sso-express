@@ -7,7 +7,7 @@
   "main": "build/index.js",
   "types": "build/bundle.d.ts",
   "//": [
-    "THIS IS A COMMENT: Explaination of below scripts.",
+    "THIS IS A COMMENT: Explanation of below scripts.",
     "'build' will compile all src code into a bundle in build/ directory.",
     "'build:dts' is part of 'build' and it bundles the typescipt declarations into a single bundle.d.ts file.",
     "'clean:prebuild' is part of build and it removes directories and files before the build.",

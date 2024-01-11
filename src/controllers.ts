@@ -1,4 +1,4 @@
-import { IdentityProvider, KCOptions, KeycloakUser } from "./types";
+import { IdentityProvider, KCOptions } from "./types";
 import { Request, Response } from "express";
 import { getNewTokens, getTokens } from "./utils/kcApi";
 import { getLoginURL, getLogoutURL } from "./utils/authUrls";
