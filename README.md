@@ -26,6 +26,8 @@
 - [Installing the Package](#installing-the-package) - **Start Here!**
 - [Basic Setup Guide](#basic-setup-guide) - Setting up after installing.
 - [Environment Variables](#environment-variables) - Required variables for initialization.
+- [Directory Structure](#directory-structure) - How the repo is designed.
+- [Scripts](#scripts) - Scripts for running and working on the package.
 - [Module Exports](#module-exports) - Functions and Types available from the module.
 - [TypeScript Types](#typescript-types) - Available TypeScript types.
 - [Initialization Options](#initialization-options) - Additional options.
@@ -107,6 +109,74 @@ SSO_AUTH_SERVER_URL= # Keycloak auth URL, see example below.
 DEBUG= # (optional) Set to 'true' to get useful debug statements in api console.
 SM_LOGOUT_URI= # (optional) Site minder logout url, see default value below.
 # https://logontest7.gov.bc.ca/clp-cgi/logoff.cgi
+```
+
+[Return to Top](#bcgov-sso-keycloak-integration-for-express)
+
+<br />
+
+## Directory Structure
+
+```
+.
+├── .github/
+|   ├── config/
+|   |   └── dep-report.json5                # Configure options for NPM Dep Report.
+|   ├── helpers/
+|   |   ├── github-api/                     # Functions to access the GitHub API.
+|   |   ├── bump-version.js                 # Bumps package.json version.
+|   |   ├── create-npm-dep-report-issues.js # Creates GitHub Issues for Npm Dep Reports.
+|   |   ├── create-npm-dep-report.js        # Creates text bodies for Npm Dep Reports.
+|   |   ├── parse-json5-config.js           # Parses json5 files for GitHub actions output.
+|   |   └── parse-npm-deps.js               # Parses package.json files for changes to package versions.
+|   ├── workflows/
+|   |   ├── npm-dep-report.yaml             # Reports on new package versions.
+|   |   └── releases.yaml                   # Creates a new GitHub Release.
+├── scripts/
+|   ├── remove-dts-files.mjs                # Removes TypeScript declaration files from the build.
+|   └── remove-empty-dirs.mjs               # Removes empty directories from the build.
+├── src/                                    # Source code for package.
+|   ├── utils/                              # Utility functions.
+|   ├── config.ts                           # Config variables.
+|   ├── controllers.ts                      # Controllers such as login and logout.
+|   ├── index.ts                            # Export functions for the package.
+|   ├── middleware.ts                       # Protected route middleware.
+|   ├── router.ts                           # Router for routes such as login and token.
+|   └── types.ts                            # TypeScript types.
+├── package.json                            # Package config and dependencies.
+├── rollup.config.mjs                       # Builds and compiles TypeScript files into JavaScript.
+├── rollupdts.config.mjs                    # Builds and compiles TypeScript declartion files.
+```
+
+[Return to Top](#bcgov-sso-keycloak-integration-for-express)
+
+<br />
+
+## Scripts
+
+```bash
+# Compile all src code into a bundle in build/ directory.
+$ npm run build
+```
+
+```bash
+# Part of 'build' and it bundles the typescipt declarations into a single bundle.d.ts file.
+$ npm run build:dts
+```
+
+```bash
+# Part of build and it removes directories and files before the build.
+$ npm run clean:prebuild
+```
+
+```bash
+# Part of build and it removes directories and files after the build.
+$ npm run clean:postbuild
+```
+
+```bash
+# Used to package the code before a release.
+$ npm run pack
 ```
 
 [Return to Top](#bcgov-sso-keycloak-integration-for-express)
