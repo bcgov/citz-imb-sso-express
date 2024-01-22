@@ -237,7 +237,7 @@ const escapeForGitHubActions = (str) =>
       )}`;
 
     // Output reminder.
-    if (deps.outdated > 0 || devDeps.outdated > 0) {
+    if (packagePath !== "." && (deps.outdated > 0 || devDeps.outdated > 0)) {
       results[packagePath] += `${line(
         `\n**Make sure to change directory to where the package.json is located using...**`
       )}`;
