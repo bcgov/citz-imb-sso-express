@@ -107,6 +107,7 @@ SSO_AUTH_SERVER_URL= # Keycloak auth URL, see example below.
 # https://dev.loginproxy.gov.bc.ca/auth/realms/standard/protocol/openid-connect
 
 DEBUG= # (optional) Set to 'true' to get useful debug statements in api console.
+VERBOSE_DEBUG= # (optional) Set to 'true' to get extra details from DEBUG.
 SM_LOGOUT_URI= # (optional) Site minder logout url, see default value below.
 # https://logontest7.gov.bc.ca/clp-cgi/logoff.cgi
 ```
@@ -455,6 +456,7 @@ Example IDIR `req.user` object (Typescript Type is `KeycloakUser & KeycloakIdirU
 The following applications are currently using this keycloak implementation solution:
 
 [SET](https://github.com/bcgov/citz-imb-salary-estimate-tool) - Salary Estimation Tool
+[PIMS](https://github.com/bcgov/PIMS) - Property Inventory Management System (experimenting in express-api directory)
 [PLAY](https://github.com/bcgov/citz-imb-playground) - CITZ IMB Package Testing App
 
 [Return to Top](#bcgov-sso-keycloak-integration-for-express)

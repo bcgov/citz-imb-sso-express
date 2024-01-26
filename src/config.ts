@@ -6,9 +6,10 @@ const {
   SSO_CLIENT_ID = "",
   SSO_CLIENT_SECRET = "",
   DEBUG = "false",
+  VERBOSE_DEBUG = "false",
 } = process.env;
 
-if (DEBUG === "true") {
+if (DEBUG === "true" && VERBOSE_DEBUG === "true") {
   console.log(`DEBUG: 'citz-imb-kc-express' environment variables:
   SSO_CLIENT_ID=${SSO_CLIENT_ID}
   SSO_CLIENT_SECRET=${SSO_CLIENT_SECRET}
@@ -18,7 +19,8 @@ if (DEBUG === "true") {
 
 // Exports.
 export default {
-  DEBUG: DEBUG === "true" ? true : false,
+  DEBUG: DEBUG === "true",
+  VERBOSE_DEBUG: VERBOSE_DEBUG === "true",
   SSO_CLIENT_ID,
   SSO_CLIENT_SECRET,
   KC_AUTHORIZATION_URI: `${SSO_AUTH_SERVER_URI}/auth`,
