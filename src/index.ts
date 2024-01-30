@@ -8,7 +8,7 @@ import config from "./config";
 const { FRONTEND_URL, DEBUG } = config;
 
 export { protectedRoute } from "./middleware";
-export { hasRole } from "./utils/user";
+export { hasRole, hasAllRoles, hasAtLeastOneRole } from "./utils/user";
 
 export const keycloak = (app: Application, options?: KCOptions) => {
   /**
