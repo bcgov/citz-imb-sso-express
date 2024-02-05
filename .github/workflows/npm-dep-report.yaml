@@ -2,7 +2,7 @@ name: NPM Dependency Reports
 
 on:
   schedule:
-    - cron: '0 15 1-7 * 2' # First Tuesday of the month at 7:00-8:00am Pacific Time.
+    - cron: '0 15 * * 2' # Tuesday morning at 7:00-8:00am Pacific Time.
   workflow_dispatch:
 
 # START HERE! v
