@@ -1,10 +1,10 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import { resolve } from "path";
 
 // Parse and validate version numbers
 const parseVersion = (version) => {
   const parts = version.split(".");
-  if (parts.length !== 3 || parts.some(isNaN)) {
+  if (parts.length !== 3 || parts.some((part) => isNaN(part))) {
     throw new Error("Invalid version number");
   }
   return parts.map(Number);
@@ -37,8 +37,8 @@ const bumpVersion = (version, releaseType) => {
 };
 
 // Update package.json
-const updatePackageVersion = (releaseType) => {
-  const packagePath = path.resolve(process.cwd(), "package.json");
+const main = (releaseType) => {
+  const packagePath = resolve(process.cwd(), "package.json");
 
   if (!fs.existsSync(packagePath)) {
     console.error("package.json not found!");
@@ -53,7 +53,7 @@ const updatePackageVersion = (releaseType) => {
     packageJson.version = newVersion;
 
     fs.writeFileSync(packagePath, JSON.stringify(packageJson, null, 2) + "\n");
-    console.log(newVersion);
+    console.log(`\nVersion updated from ${oldVersion} to ${newVersion}\n`);
   } catch (error) {
     console.error(`Error: ${error.message}`);
     process.exit(1);
@@ -64,9 +64,9 @@ const updatePackageVersion = (releaseType) => {
 const releaseType = process.argv[2]; // "patch" | "minor" | "major"
 
 if (!releaseType) {
-  console.error("Usage: node bump-version.js <release_type>");
+  console.error("Usage: node bump-version.mjs <release_type>");
   console.error('Release type must be "major", "minor", or "patch".');
   process.exit(1);
 }
 
-updatePackageVersion(releaseType);
+main(releaseType);

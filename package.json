@@ -12,14 +12,16 @@
     "'build:dts' is part of 'build' and it bundles the typescipt declarations into a single bundle.d.ts file.",
     "'clean:prebuild' is part of build and it removes directories and files before the build.",
     "'clean:postbuild' is part of build and it removes directories and files after the build.",
-    "'pack' is used to package the code before a release."
+    "'pack' is used to package the code before a release.",
+    "'prepare' is automatically used to set up husky git hooks after an npm install"
   ],
   "scripts": {
     "build": "npm run clean:prebuild && rollup -c rollup.config.mjs && npm run build:dts && npm run clean:postbuild",
     "build:dts": "rollup -c rollupdts.config.mjs && node scripts/remove-dts-files.mjs",
     "clean:prebuild": "rm -rf .rollup.cache build tsconfig.tsbuildinfo",
     "clean:postbuild": "node scripts/remove-empty-dirs.mjs && rm -rf .rollup.cache tsconfig.tsbuildinfo",
-    "pack": "npm i && npm run build && npm cache clean --force && npm pack && mkdir releases && mv *.tgz ./releases/"
+    "pack": "npm i && npm run build && npm cache clean --force && npm pack && mkdir releases && mv *.tgz ./releases/",
+    "prepare": "husky"
   },
   "dependencies": {
     "cookie-parser": "1.4.6",
@@ -34,6 +36,7 @@
     "@types/cookie-parser": "1.4.6",
     "@types/cors": "2.8.17",
     "@types/express": "4.17.21",
+    "husky": "9.0.11",
     "rollup-plugin-dts": "6.1.0",
     "tslib": "2.6.2",
     "typescript": "5.3.3"

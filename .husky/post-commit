@@ -1,0 +1,38 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Check for the BYPASS_HOOK variable to bypass the hook
+if [ "$BYPASS_HOOK" = "true" ]; then
+  exit 0
+fi
+
+# Retrieve the last commit message
+COMMIT_MSG=$(git log -1 --pretty=%B)
+
+VERSION_CHANGE_REGEX="^(Patch|Minor|Major)"
+
+if ! echo "$COMMIT_MSG" | grep -E "$VERSION_CHANGE_REGEX"; then
+  echo "Error: Commit message must start with 'Patch', 'Minor', or 'Major'."
+  exit 1
+fi
+
+# Execute the Node.js script. Pass the commit message as an argument if needed.
+node scripts/pre-commit-version-change.mjs "$COMMIT_MSG"
+
+# Capture the exit status of the Node.js script
+EXIT_STATUS=$?
+
+# Check if the Node.js script executed successfully
+if [ $EXIT_STATUS -eq 0 ]; then
+  # Stage the package.json changes
+  git add package.json
+  
+  # Use an environment variable to bypass the hook for the next commit
+  BYPASS_HOOK=true git commit -m "Version bump in package.json"
+
+  # Reset the BYPASS_HOOK variable
+  unset BYPASS_HOOK
+fi
+
+# Exit with the captured exit status
+exit $EXIT_STATUS
