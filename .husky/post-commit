@@ -20,7 +20,7 @@ if ! echo "$COMMIT_MSG" | grep -E "$VERSION_CHANGE_REGEX"; then
 fi
 
 # Execute the Node.js script. Pass the commit message as an argument if needed.
-node scripts/pre-commit-version-change.mjs "$COMMIT_MSG"
+node scripts/post-commit-version-change.mjs "$COMMIT_MSG"
 
 # Capture the exit status of the Node.js script
 EXIT_STATUS=$?
