@@ -17,7 +17,7 @@ RED="\x1b[31m"
 
 if ! echo "$COMMIT_MSG" | grep -E "$VERSION_CHANGE_REGEX"; then
   echo ""
-  echo "$REDError: Commit message must start with 'Patch', 'Minor', or 'Major'.$RESET"
+  echo "$RED Error: Commit message must start with 'Patch', 'Minor', or 'Major'.$RESET"
   echo "Make a new change before re-trying the commit."
   echo ""
   exit 1
