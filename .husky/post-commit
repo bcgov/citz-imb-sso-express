@@ -12,8 +12,10 @@ COMMIT_MSG=$(git log -1 --pretty=%B)
 VERSION_CHANGE_REGEX="^(Patch|Minor|Major)"
 
 if ! echo "$COMMIT_MSG" | grep -E "$VERSION_CHANGE_REGEX"; then
-  echo "\nError: Commit message must start with 'Patch', 'Minor', or 'Major'."
-  echo "Make a new change before re-trying the commit.\n"
+  echo ""
+  echo "Error: Commit message must start with 'Patch', 'Minor', or 'Major'."
+  echo "Make a new change before re-trying the commit."
+  echo ""
   exit 1
 fi
 
