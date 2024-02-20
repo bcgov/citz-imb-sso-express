@@ -43,6 +43,7 @@
 - For Keycloak Gold Standard.
 - Works with Vanilla JavaScript or Typescript 5.
 - For use with [@bcgov/citz-imb-kc-react]
+- Test
 
 ---
 
@@ -126,7 +127,6 @@ SM_LOGOUT_URI= # (optional) Site minder logout url, see default value below.
 |   |   └── dep-report.json5                # Configure options for NPM Dep Report.
 |   ├── helpers/
 |   |   ├── github-api/                     # Functions to access the GitHub API.
-|   |   ├── bump-version.js                 # Bumps package.json version.
 |   |   ├── create-npm-dep-report-issues.js # Creates GitHub Issues for Npm Dep Reports.
 |   |   ├── create-npm-dep-report.js        # Creates text bodies for Npm Dep Reports.
 |   |   ├── parse-json5-config.js           # Parses json5 files for GitHub actions output.
@@ -134,7 +134,11 @@ SM_LOGOUT_URI= # (optional) Site minder logout url, see default value below.
 |   ├── workflows/
 |   |   ├── npm-dep-report.yaml             # Reports on new package versions.
 |   |   └── releases.yaml                   # Creates a new GitHub Release.
+├── .husky/
+|   └── post-commit                         # Script that runs after a git commit.
 ├── scripts/
+|   ├── bump-version.mjs                    # Bumps version in package.json file.
+|   ├── post-commit-version-change.mjs      # Bumps version when post-commit is run.
 |   ├── remove-dts-files.mjs                # Removes TypeScript declaration files from the build.
 |   └── remove-empty-dirs.mjs               # Removes empty directories from the build.
 ├── src/                                    # Source code for package.
@@ -146,6 +150,7 @@ SM_LOGOUT_URI= # (optional) Site minder logout url, see default value below.
 |   ├── router.ts                           # Router for routes such as login and token.
 |   └── types.ts                            # TypeScript types.
 ├── package.json                            # Package config and dependencies.
+├── .npmrc                                  # NPM config.
 ├── rollup.config.mjs                       # Builds and compiles TypeScript files into JavaScript.
 ├── rollupdts.config.mjs                    # Builds and compiles TypeScript declartion files.
 ```
