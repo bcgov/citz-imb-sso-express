@@ -43,7 +43,6 @@
 - For Keycloak Gold Standard.
 - Works with Vanilla JavaScript or Typescript 5.
 - For use with [@bcgov/citz-imb-kc-react]
-- Test
 
 ---
 
