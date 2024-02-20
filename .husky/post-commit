@@ -11,9 +11,13 @@ COMMIT_MSG=$(git log -1 --pretty=%B)
 
 VERSION_CHANGE_REGEX="^(Patch|Minor|Major)"
 
+# Colors
+RESET="\x1b[0m"
+RED="\x1b[31m"
+
 if ! echo "$COMMIT_MSG" | grep -E "$VERSION_CHANGE_REGEX"; then
   echo ""
-  echo "Error: Commit message must start with 'Patch', 'Minor', or 'Major'."
+  echo "$REDError: Commit message must start with 'Patch', 'Minor', or 'Major'.$RESET"
   echo "Make a new change before re-trying the commit."
   echo ""
   exit 1
