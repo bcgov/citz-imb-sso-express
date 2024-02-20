@@ -14,7 +14,7 @@ VERSION_CHANGE_REGEX="^(Patch|Minor|Major)"
 if ! echo "$COMMIT_MSG" | grep -E "$VERSION_CHANGE_REGEX"; then
   echo ""
   echo -e "\033[31mError: Commit message must start with 'Patch', 'Minor', or 'Major'.\033[0m"
-  echo -e "\033[31mMake a new change before re-trying the commit.\033[0m"
+  echo -e "\033[31mMake a new change and add it to staging ground before re-trying the commit.\033[0m"
   echo ""
   exit 1
 fi
