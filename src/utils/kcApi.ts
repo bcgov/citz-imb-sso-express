@@ -1,6 +1,6 @@
-import qs from "qs";
-import config from "../config";
-import { encodeJWT, parseJWT } from "./jwt";
+import qs from 'qs';
+import config from '../config';
+import { encodeJWT, parseJWT } from './jwt';
 
 const {
   SSO_CLIENT_ID,
@@ -27,20 +27,17 @@ export const getTokens = async (code: string) => {
   };
 
   const headers = {
-    Authorization: `Basic ${encodeJWT(
-      `${SSO_CLIENT_ID}:${SSO_CLIENT_SECRET}`
-    )}`,
-    "Content-Type": "application/x-www-form-urlencoded",
+    Authorization: `Basic ${encodeJWT(`${SSO_CLIENT_ID}:${SSO_CLIENT_SECRET}`)}`,
+    'Content-Type': 'application/x-www-form-urlencoded',
   };
 
   const response = await fetch(KC_TOKEN_URI, {
-    method: "POST",
+    method: 'POST',
     headers,
     body: qs.stringify(params),
   });
 
-  const { id_token, access_token, refresh_token, refresh_expires_in } =
-    await response.json();
+  const { id_token, access_token, refresh_token, refresh_expires_in } = await response.json();
 
   const id_token_decoded = parseJWT(id_token);
   const access_token_decoded = parseJWT(access_token);
@@ -58,33 +55,62 @@ export const getTokens = async (code: string) => {
 };
 
 /**
+ * Checks if a JWT is valid.
+ * @param jwt
+ * @returns
+ */
+export const isJWTValid = async (jwt: string) => {
+  if (!jwt || jwt === '') throw new Error('Missing jwt in isJWTValid');
+
+  const params = {
+    client_id: SSO_CLIENT_ID,
+    client_secret: SSO_CLIENT_SECRET,
+    token: jwt,
+  };
+
+  const headers = {
+    Accept: '*/*',
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+
+  const response = await fetch(KC_INTROSPECT_URI, {
+    method: 'POST',
+    headers,
+    body: qs.stringify(params),
+  });
+
+  const { active } = await response.json();
+  return active;
+};
+
+/**
  * Get a new access_token from refresh_token.
  * @param {string} refresh_token
  * @returns
  */
 export const getNewTokens = async (
-  refresh_token: string
+  refresh_token: string,
 ): Promise<null | {
   access_token: string;
   id_token: string;
   expires_in: number;
 }> => {
-  if (!refresh_token || refresh_token === "") return null;
+  if (!refresh_token || refresh_token === '') return null;
 
   // Check if refresh_token is valid.
   const isTokenValid = await isJWTValid(refresh_token);
   if (!isTokenValid) return null;
 
   const params = {
-    grant_type: "refresh_token",
+    grant_type: 'refresh_token',
     client_id: SSO_CLIENT_ID,
     client_secret: SSO_CLIENT_SECRET,
     refresh_token,
   };
 
   const response = await fetch(KC_TOKEN_URI, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: qs.stringify(params),
   });
 
@@ -94,33 +120,4 @@ export const getNewTokens = async (
     throw new Error("Couldn't get access or id token from KC token endpoint");
 
   return { access_token, id_token, expires_in };
-};
-
-/**
- * Checks if a JWT is valid.
- * @param jwt
- * @returns
- */
-export const isJWTValid = async (jwt: string) => {
-  if (!jwt || jwt === "") throw new Error("Missing jwt in isJWTValid");
-
-  const params = {
-    client_id: SSO_CLIENT_ID,
-    client_secret: SSO_CLIENT_SECRET,
-    token: jwt,
-  };
-
-  const headers = {
-    Accept: "*/*",
-    "Content-Type": "application/x-www-form-urlencoded",
-  };
-
-  const response = await fetch(KC_INTROSPECT_URI, {
-    method: "POST",
-    headers,
-    body: qs.stringify(params),
-  });
-
-  const { active } = await response.json();
-  return active;
 };

@@ -1,5 +1,5 @@
-import { execSync } from "child_process";
-import { resolve } from "path";
+import { execSync } from 'child_process';
+import { resolve } from 'path';
 
 // Check commit message for version change type
 const checkCommitMessageForVersionChange = (commitMsg) => {
@@ -8,7 +8,7 @@ const checkCommitMessageForVersionChange = (commitMsg) => {
   const matchResult = commitMsg.match(versionChangeRegex);
   if (!matchResult) {
     console.error(
-      'Commit message must start with "Patch", "Minor", or "Major" to indicate the version change type.'
+      'Commit message must start with "Patch", "Minor", or "Major" to indicate the version change type.',
     );
     process.exit(1); // Abort the commit
   }
@@ -20,8 +20,8 @@ const checkCommitMessageForVersionChange = (commitMsg) => {
 
 // Execute bump-version.js script
 const executeBumpVersion = (versionChange) => {
-  const scriptPath = resolve(process.cwd(), "scripts/bump-version.mjs");
-  execSync(`node ${scriptPath} ${versionChange}`, { stdio: "inherit" });
+  const scriptPath = resolve(process.cwd(), 'scripts/bump-version.mjs');
+  execSync(`node ${scriptPath} ${versionChange}`, { stdio: 'inherit' });
 };
 
 // Main function to run the pre-commit hook logic
@@ -30,7 +30,7 @@ const main = () => {
   const commitMsg = process.argv[2];
 
   if (!commitMsg) {
-    console.error("Error: Commit message not provided.");
+    console.error('Error: Commit message not provided.');
     process.exit(1);
   }
 

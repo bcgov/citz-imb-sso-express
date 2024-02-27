@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable no-unused-vars */
 // The token and user properties are not a part of the Request object by default.
 declare global {
   namespace Express {
@@ -8,12 +10,9 @@ declare global {
   }
 }
 
-export type IdirIdentityProvider = "idir";
-export type BceidIdentityProvider =
-  | "bceidbasic"
-  | "bceidbusiness"
-  | "bceidboth";
-export type GithubIdentityProvider = "githubbcgov" | "githubpublic";
+export type IdirIdentityProvider = 'idir';
+export type BceidIdentityProvider = 'bceidbasic' | 'bceidbusiness' | 'bceidboth';
+export type GithubIdentityProvider = 'githubbcgov' | 'githubpublic';
 
 export type IdentityProvider =
   | IdirIdentityProvider
@@ -27,10 +26,7 @@ export type BaseKeycloakUser = {
   display_name: string;
   client_roles?: string[];
   scope?: string;
-  identity_provider:
-    | IdirIdentityProvider
-    | BceidIdentityProvider
-    | GithubIdentityProvider;
+  identity_provider: IdirIdentityProvider | BceidIdentityProvider | GithubIdentityProvider;
 };
 
 export type KeycloakIdirUser = {

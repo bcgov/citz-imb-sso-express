@@ -1,14 +1,14 @@
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import { Application, urlencoded, json } from "express";
-import router from "./router";
-import { KCOptions } from "./types";
-import config from "./config";
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import { Application, urlencoded, json } from 'express';
+import router from './router';
+import { KCOptions } from './types';
+import config from './config';
 
 const { FRONTEND_URL, DEBUG } = config;
 
-export { protectedRoute } from "./middleware";
-export { hasRole, hasAllRoles, hasAtLeastOneRole } from "./utils/user";
+export { protectedRoute } from './middleware';
+export { hasRole, hasAllRoles, hasAtLeastOneRole } from './utils/user';
 
 export const keycloak = (app: Application, options?: KCOptions) => {
   /**
@@ -27,7 +27,7 @@ export const keycloak = (app: Application, options?: KCOptions) => {
    * with the specified engine. By setting it to EJS, you can use EJS templates
    * to generate HTML output in your application.
    */
-  app.set("view engine", "ejs");
+  app.set('view engine', 'ejs');
 
   // Allows for use of req.cookies
   app.use(cookieParser());
@@ -41,11 +41,11 @@ export const keycloak = (app: Application, options?: KCOptions) => {
     cors({
       origin: FRONTEND_URL,
       credentials: true,
-    })
+    }),
   );
 
   // Routes defined in ./router file.
-  app.use("/auth", router(options));
+  app.use('/auth', router(options));
 
   if (DEBUG) console.log("DEBUG: Initialized 'citz-imb-kc-express'.");
 };
