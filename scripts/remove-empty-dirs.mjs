@@ -1,12 +1,12 @@
-import { readdirSync, rmdirSync, statSync } from "fs";
-import { resolve, join } from "path";
+import { readdirSync, rmdirSync, statSync } from 'fs';
+import { resolve, join } from 'path';
 
 /**
  * Removes all empty directories within build directory.
  * Clean up.
  */
 
-const buildDir = resolve("build");
+const buildDir = resolve('build');
 
 const removeEmptyDirectories = (directory) => {
   const files = readdirSync(directory);

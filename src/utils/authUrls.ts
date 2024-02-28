@@ -1,6 +1,6 @@
-import qs from "qs";
-import { IdentityProvider } from "../types";
-import config from "../config";
+import qs from 'qs';
+import { IdentityProvider } from '../types';
+import config from '../config';
 
 const {
   SSO_CLIENT_ID,
@@ -40,16 +40,12 @@ export const getLoginURL = (kc_idp_hint?: IdentityProvider) => {
 export const getLogoutURL = (id_token: string) => {
   const kcParams = {
     id_token_hint: id_token,
-    post_logout_redirect_uri: encodeURIComponent(
-      `${BACKEND_URL}${LOGOUT_CALLBACK}`
-    ),
+    post_logout_redirect_uri: encodeURIComponent(`${BACKEND_URL}${LOGOUT_CALLBACK}`),
   };
 
   const smParams = {
     retnow: 1,
-    returl: encodeURIComponent(
-      `${KC_LOGOUT_URI}?${qs.stringify(kcParams, { encode: false })}`
-    ),
+    returl: encodeURIComponent(`${KC_LOGOUT_URI}?${qs.stringify(kcParams, { encode: false })}`),
   };
 
   return `${SM_LOGOUT_URI}?${qs.stringify(smParams, { encode: false })}`;
