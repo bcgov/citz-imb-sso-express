@@ -13,7 +13,10 @@
     "'clean:prebuild' is part of build and it removes directories and files before the build.",
     "'clean:postbuild' is part of build and it removes directories and files after the build.",
     "'pack' is used to package the code before a release.",
-    "'prepare' is automatically used to set up husky git hooks after an npm install"
+    "'prepare' is automatically used to set up husky git hooks after an npm install",
+    "'bump:patch' updates the version number by a patch version",
+    "'bump:minor' updates the version number by a minor version",
+    "'bump:major' updates the version number by a major version"
   ],
   "scripts": {
     "build": "npm run clean:prebuild && rollup -c rollup.config.mjs && npm run build:dts && npm run clean:postbuild",
@@ -21,7 +24,10 @@
     "clean:prebuild": "rm -rf .rollup.cache build tsconfig.tsbuildinfo",
     "clean:postbuild": "node scripts/remove-empty-dirs.mjs && rm -rf .rollup.cache tsconfig.tsbuildinfo",
     "pack": "npm i && npm run build && npm cache clean --force && npm pack && mkdir releases && mv *.tgz ./releases/",
-    "prepare": "husky"
+    "prepare": "husky",
+    "bump:patch": "node scripts/bump-version.mjs patch",
+    "bump:minor": "node scripts/bump-version.mjs minor",
+    "bump:major": "node scripts/bump-version.mjs major"
   },
   "dependencies": {
     "cookie-parser": "1.4.6",
@@ -57,7 +63,8 @@
     "oidc",
     "single sign on",
     "pathfinder",
-    "redhat",
+    "idir",
+    "bceid",
     "express",
     "npm"
   ],
