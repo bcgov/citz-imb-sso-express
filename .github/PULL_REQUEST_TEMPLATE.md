@@ -1,12 +1,14 @@
 <!--  
 PR Title format:  
 JIRA_BOARD_ABBREVIATION-JIRA_TASK_NUMBER: TITLE_OF_JIRA_TASK  
+
+MVP-100: Title of Ticket
 -->
 
 ## 🎯 Summary
 
 <!-- COMPLETE JIRA LINK BELOW -->  
-[<EDIT-ME>](https://apps.itsm.gov.bc.ca/jira/browse/<EDIT-ME>)
+[MVP-](https://citz-imb.atlassian.net/jira/browse/MVP-)
 
 <!-- PROVIDE BELOW an explanation of your changes and any images to support your explanation -->
 
