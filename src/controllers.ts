@@ -3,10 +3,10 @@ import { Request, Response } from 'express';
 import { getNewTokens, getTokens } from './utils/kcApi';
 import { getLoginURL, getLogoutURL } from './utils/authUrls';
 import { getUserInfo } from './utils/user';
-import { debugControllerCalled } from './utils/debug';
-import config from './config';
+import debug from './utils/debug';
 
-const { FRONTEND_URL, DEBUG } = config;
+import config from './config';
+const { FRONTEND_URL } = config;
 
 /**
  * Prompts the user to login.
@@ -16,14 +16,14 @@ const { FRONTEND_URL, DEBUG } = config;
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 export const login = (options?: KCOptions) => {
   const request = async (req: Request, res: Response) => {
-    if (DEBUG) debugControllerCalled('login');
+    debug.controllerCalled('login');
     try {
       const { idp } = req.query;
       if (!req.token) return res.redirect(getLoginURL(idp as IdentityProvider));
       return res.redirect('');
     } catch (error: unknown) {
       // Log error and send response
-      console.error('Keycloak: Error in login controller', error);
+      debug.controllerError('login', error);
       if (error instanceof Error) {
         res.json({ success: false, error: error.message ?? error });
       } else {
@@ -41,7 +41,7 @@ export const login = (options?: KCOptions) => {
  */
 export const loginCallback = (options?: KCOptions) => {
   const request = async (req: Request, res: Response) => {
-    if (DEBUG) debugControllerCalled('loginCallback');
+    debug.controllerCalled('loginCallback');
     try {
       const { code } = req.query;
       const { access_token, refresh_token, refresh_expires_in } = await getTokens(code as string);
@@ -57,19 +57,13 @@ export const loginCallback = (options?: KCOptions) => {
       // Run after login callback request.
       if (options?.afterUserLogin) {
         const user = getUserInfo(access_token);
-
-        // DEBUG
-        if (!user && DEBUG)
-          console.log(
-            "DEBUG: Can't get user info in afterUserLogin function of `citz-imb-kc-express`.",
-          );
-        else if (DEBUG) console.log('DEBUG: afterUserLogin of `citz-imb-kc-express` called.');
+        debug.afterUserLogin(user);
 
         if (user) options.afterUserLogin(user);
       }
     } catch (error: unknown) {
       // Log error and send response
-      console.error('loginCallback controller of `citz-imb-kc-express`', error);
+      debug.controllerError('loginCallback', error);
       if (error instanceof Error) {
         res.json({ success: false, error: error.message ?? error });
       } else {
@@ -87,7 +81,7 @@ export const loginCallback = (options?: KCOptions) => {
  */
 export const logout = (options?: KCOptions) => {
   const request = async (req: Request, res: Response) => {
-    if (DEBUG) debugControllerCalled('logout');
+    debug.controllerCalled('logout');
     try {
       const { id_token } = req.query;
       if (!id_token) return res.status(401).send('id_token query param required');
@@ -96,20 +90,13 @@ export const logout = (options?: KCOptions) => {
       // Run after logout callback request.
       if (options?.afterUserLogout) {
         const user = getUserInfo(id_token as string);
-
-        // DEBUG
-        if (!user && DEBUG)
-          console.log(
-            "DEBUG: Can't get user info in afterUserLogout function of `citz-imb-kc-express`.",
-          );
-        else if (DEBUG)
-          console.log('DEBUG: afterUserLogout function of `citz-imb-kc-express` called.');
+        debug.afterUserLogout(user);
 
         if (user) options.afterUserLogout(user);
       }
     } catch (error: unknown) {
       // Log error and send response
-      console.error('Error: logout controller of `citz-imb-kc-express`', error);
+      debug.controllerError('logout', error);
       if (error instanceof Error) {
         res.json({ success: false, error: error.message ?? error });
       } else {
@@ -128,12 +115,12 @@ export const logout = (options?: KCOptions) => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 export const logoutCallback = (options?: KCOptions) => {
   const request = async (req: Request, res: Response) => {
-    if (DEBUG) debugControllerCalled('logoutCallback');
+    debug.controllerCalled('logoutCallback');
     try {
       res.cookie('refresh_token', '', { httpOnly: true, secure: true }).redirect(FRONTEND_URL);
     } catch (error: unknown) {
       // Log error and send response
-      console.error('Error: logoutCallback controller of `citz-imb-kc-express`', error);
+      debug.controllerError('logoutCallback', error);
       if (error instanceof Error) {
         res.json({ success: false, error: error.message ?? error });
       } else {
@@ -152,7 +139,7 @@ export const logoutCallback = (options?: KCOptions) => {
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 export const refreshToken = (options?: KCOptions) => {
   const request = async (req: Request, res: Response) => {
-    if (DEBUG) debugControllerCalled('refreshToken');
+    debug.controllerCalled('refreshToken');
     try {
       const { refresh_token } = req.cookies;
       if (!refresh_token || refresh_token === '')

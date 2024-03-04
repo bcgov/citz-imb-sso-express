@@ -3,6 +3,9 @@ import { ProtectedRouteOptions } from './types';
 import { isJWTValid } from './utils/kcApi';
 import { getUserInfo, hasAllRoles, hasAtLeastOneRole } from './utils/user';
 
+import config from './config';
+const { PACKAGE_NAME } = config;
+
 /**
  * Express middleware that checks for a valid JWT in the Authorization header,
  * sets the decoded token and user information in the request object, and passes
@@ -25,7 +28,7 @@ export const protectedRoute = (
     const isTokenValid = await isJWTValid(token);
     if (!isTokenValid)
       return res.status(401).json({
-        error: 'Unauthorized: Invalid token, login to get a new one.',
+        error: 'Unauthorized: Invalid token, re-log to get a new one.',
       });
 
     // Get user info and check role.
@@ -36,7 +39,7 @@ export const protectedRoute = (
     // Ensure proper use of function.
     if (roles && (!Array.isArray(roles) || !roles.every((item) => typeof item === 'string')))
       throw new Error(
-        'Error: protectedRoute middleware of `citz-imb-kc-express`. Pass roles as an array of strings.',
+        `Error: protectedRoute middleware of '${PACKAGE_NAME}'. Pass roles as an array of strings.`,
       );
 
     // Check for roles.

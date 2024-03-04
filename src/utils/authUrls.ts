@@ -34,8 +34,8 @@ export const getLoginURL = (kc_idp_hint?: IdentityProvider) => {
 
 /**
  * Gets the logout URL to redirect the user to the OIDC server for logout.
- * @param id_token
- * @returns
+ * @param {string} id_token
+ * @returns {string}
  */
 export const getLogoutURL = (id_token: string) => {
   const kcParams = {

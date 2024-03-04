@@ -21,6 +21,7 @@ if (DEBUG === 'true' && VERBOSE_DEBUG === 'true') {
 export default {
   DEBUG: DEBUG === 'true',
   VERBOSE_DEBUG: VERBOSE_DEBUG === 'true',
+  PACKAGE_NAME: 'citz-imb-kc-express',
   SSO_CLIENT_ID,
   SSO_CLIENT_SECRET,
   KC_AUTHORIZATION_URI: `${SSO_AUTH_SERVER_URI}/auth`,
