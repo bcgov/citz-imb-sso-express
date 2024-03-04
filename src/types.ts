@@ -66,6 +66,6 @@ export type ProtectedRouteOptions = {
   requireAllRoles?: boolean;
 };
 
-export type HasRoleOptions = {
+export type HasRolesOptions = {
   requireAllRoles?: boolean;
 };

@@ -1,12 +1,12 @@
 import qs from 'qs';
 import config from '../config';
-import { encodeJWT, parseJWT } from './jwt';
+import { encodeJWT } from './jwt';
 
 const {
   SSO_CLIENT_ID,
   SSO_CLIENT_SECRET,
-  KC_TOKEN_URI,
-  KC_INTROSPECT_URI,
+  KC_TOKEN_URL,
+  KC_INTROSPECT_URL,
   OIDC_GRANT_TYPE,
   LOGIN_CALLBACK,
   BACKEND_URL,
@@ -16,7 +16,6 @@ const {
  * Gets decoded tokens and user information from the OIDC server using a code.
  * See https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.3
  * @param {string} code
- * @returns
  */
 export const getTokens = async (code: string) => {
   const params = {
@@ -31,7 +30,7 @@ export const getTokens = async (code: string) => {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
 
-  const response = await fetch(KC_TOKEN_URI, {
+  const response = await fetch(KC_TOKEN_URL, {
     method: 'POST',
     headers,
     body: qs.stringify(params),
@@ -39,17 +38,10 @@ export const getTokens = async (code: string) => {
 
   const { id_token, access_token, refresh_token, refresh_expires_in } = await response.json();
 
-  const id_token_decoded = parseJWT(id_token);
-  const access_token_decoded = parseJWT(access_token);
-  const refresh_token_decoded = parseJWT(refresh_token);
-
   return {
     id_token,
-    id_token_decoded,
     access_token,
-    access_token_decoded,
     refresh_token,
-    refresh_token_decoded,
     refresh_expires_in,
   };
 };
@@ -73,7 +65,7 @@ export const isJWTValid = async (jwt: string) => {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
 
-  const response = await fetch(KC_INTROSPECT_URI, {
+  const response = await fetch(KC_INTROSPECT_URL, {
     method: 'POST',
     headers,
     body: qs.stringify(params),
@@ -108,7 +100,7 @@ export const getNewTokens = async (
     refresh_token,
   };
 
-  const response = await fetch(KC_TOKEN_URI, {
+  const response = await fetch(KC_TOKEN_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: qs.stringify(params),

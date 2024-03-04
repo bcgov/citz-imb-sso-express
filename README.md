@@ -109,7 +109,7 @@ SSO_AUTH_SERVER_URL= # Keycloak auth URL, see example below.
 
 DEBUG= # (optional) Set to 'true' to get useful debug statements in api console.
 VERBOSE_DEBUG= # (optional) Set to 'true' to get extra details from DEBUG.
-SM_LOGOUT_URI= # (optional) Site minder logout url, see default value below.
+SM_LOGOUT_URL= # (optional) Site minder logout url, see default value below.
 # https://logontest7.gov.bc.ca/clp-cgi/logoff.cgi
 ```
 
@@ -197,7 +197,7 @@ These are the functions and types exported by the `@bcgov/citz-imb-kc-express` m
 import {
   keycloak, // Initializes the keycloak service in your express app.
   protectedRoute, // Middleware function used for authentication and authorization.
-  hasRole, // Utility function used to return a boolean if user has specified roles.
+  hasRoles, // Utility function used to return a boolean if user has specified roles.
 } from '@bcgov/citz-imb-kc-express';
 
 // TypeScript Types:
@@ -208,7 +208,7 @@ import {
   KeycloakGithubUser, // User types specific to Github users.
   KCOptions, // Type of optional second parameter for keycloak()
   ProtectedRouteOptions, // Type of optional second parameter for protectedRoute()
-  HasRoleOptions, // Type of optional third parameter for hasRole()
+  HasRolesOptions, // Type of optional third parameter for hasRoles()
   IdentityProvider, // Combined type for identity providers.
   IdirIdentityProvider, // Used for more efficient login.
   BceidIdentityProvider, // Used for more efficient login.
@@ -228,10 +228,10 @@ These are the TypeScript types of the `@bcgov/citz-imb-kc-express` module.
 ```TypeScript
 const keycloak: (app: Application, options?: KCOptions) => void;
 const protectedRoute: (roles?: string[], options?: ProtectedRouteOptions) => RequestHandler;
-const hasRole = (
+const hasRoles = (
   user: KeycloakUser,
   roles: string[],
-  options?: HasRoleOptions
+  options?: HasRolesOptions
 ) => boolean;
 
 export type IdirIdentityProvider = "idir";
@@ -295,7 +295,7 @@ export type ProtectedRouteOptions = {
   requireAllRoles?: boolean;
 };
 
-export type HasRoleOptions = {
+export type HasRolesOptions = {
   requireAllRoles?: boolean;
 };
 ```
@@ -401,11 +401,11 @@ app.use("/api", protectedRoute(['admin']), adminRouter);
 Here is how to get the keycloak user info **in a protected endpoint**.  
 
 > [!IMPORTANT] 
-> `req.user.client_roles` property is either a populated array or undefined. It is recommended to use the `hasRole()` function instead of checking `req.user.client_roles`.
+> `req.user.client_roles` property is either a populated array or undefined. It is recommended to use the `hasRoles()` function instead of checking `req.user.client_roles`.
 
 Example within a controller of a protected route:
 
-Add import `import { hasRole } from '@bcgov/citz-imb-kc-express'` if using `hasRole()` function.
+Add import `import { hasRoles } from '@bcgov/citz-imb-kc-express'` if using `hasRoles()` function.
 
 Use case could be first protecting the route so only users with the `Admin, Member, Commenter, OR Verified` roles can use the endpoint, and then doing something different based on role/permission.
 
@@ -416,14 +416,14 @@ const user = req?.user;
 const userFullname = `${user.given_name} ${user.family_name}`;
 
 // User must have 'Admin' role.
-if (hasRole(user, ['Admin'])) // Do something...
+if (hasRoles(user, ['Admin'])) // Do something...
 
 // Users must have BOTH 'Member' and 'Commenter' roles.
 // requireAllRoles option is true by default.
-if (hasRole(user, ['Member', 'Commenter'])) // Do something...
+if (hasRoles(user, ['Member', 'Commenter'])) // Do something...
 
 // Users must have EITHER 'Member' or 'Verified' role.
-if (hasRole(user, ['Member', 'Verified'], { requireAllRoles: false })) // Do Something...
+if (hasRoles(user, ['Member', 'Verified'], { requireAllRoles: false })) // Do Something...
 ```
 
 For all user properties reference [SSO Keycloak Wiki - Identity Provider Attribute Mapping].  

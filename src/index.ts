@@ -3,12 +3,13 @@ import cors from 'cors';
 import { Application, urlencoded, json } from 'express';
 import router from './router';
 import { KCOptions } from './types';
-import config from './config';
+import debug from './utils/debug';
 
-const { FRONTEND_URL, DEBUG } = config;
+import config from './config';
+const { FRONTEND_URL } = config;
 
 export { protectedRoute } from './middleware';
-export { hasRole, hasAllRoles, hasAtLeastOneRole } from './utils/user';
+export { hasRoles, hasAllRoles, hasAtLeastOneRole } from './utils/user';
 
 export const keycloak = (app: Application, options?: KCOptions) => {
   /**
@@ -47,5 +48,5 @@ export const keycloak = (app: Application, options?: KCOptions) => {
   // Routes defined in ./router file.
   app.use('/auth', router(options));
 
-  if (DEBUG) console.log("DEBUG: Initialized 'citz-imb-kc-express'.");
+  debug.initialized();
 };
