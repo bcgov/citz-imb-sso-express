@@ -13,6 +13,38 @@ on:
         required: true
 
 jobs:
+  check_version_change:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for all tags and branches
+      
+      # Fetch all tags
+      - name: Fetch tags
+        run: git fetch --tags
+
+      # Get latest tag name
+      - name: Get latest tag
+        id: latest_tag
+        run: echo "::set-output name=TAG::$(git describe --tags `git rev-list --tags --max-count=1`)"
+
+      # Get version from package.json
+      - name: Get package version
+        id: package_version
+        run: echo "::set-output name=VERSION::$(node -p "require('./package.json').version")"
+
+      # Compare versions and fail if they match
+      - name: Compare versions and fail if necessary
+        run: |
+          if [ "v${{ steps.package_version.outputs.VERSION }}" == "${{ steps.latest_tag.outputs.TAG }}" ]; then
+            echo "Version in package.json (${{ steps.package_version.outputs.VERSION }}) matches the latest tag (${{ steps.latest_tag.outputs.TAG }})."
+            echo "You must update the version with 'npm run bump' before a release can be made."
+            exit 1
+          fi
+          
   create_release:
     runs-on: ubuntu-latest
     steps:
