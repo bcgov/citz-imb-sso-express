@@ -72,7 +72,14 @@ jobs:
         id: package_version
         run: echo "::set-output name=VERSION::$(node -p "require('./package.json').version")"
 
-      # Create new release
+      # Publish package to NPM
+      - name: Publish to npm
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public
+
+      # Create new release in GitHub
       - name: Create GitHub Release
         id: create_release
         uses: softprops/action-gh-release@v1
