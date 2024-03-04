@@ -109,7 +109,7 @@ SSO_AUTH_SERVER_URL= # Keycloak auth URL, see example below.
 
 DEBUG= # (optional) Set to 'true' to get useful debug statements in api console.
 VERBOSE_DEBUG= # (optional) Set to 'true' to get extra details from DEBUG.
-SM_LOGOUT_URI= # (optional) Site minder logout url, see default value below.
+SM_LOGOUT_URL= # (optional) Site minder logout url, see default value below.
 # https://logontest7.gov.bc.ca/clp-cgi/logoff.cgi
 ```
 

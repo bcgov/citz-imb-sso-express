@@ -5,8 +5,8 @@ import { encodeJWT } from './jwt';
 const {
   SSO_CLIENT_ID,
   SSO_CLIENT_SECRET,
-  KC_TOKEN_URI,
-  KC_INTROSPECT_URI,
+  KC_TOKEN_URL,
+  KC_INTROSPECT_URL,
   OIDC_GRANT_TYPE,
   LOGIN_CALLBACK,
   BACKEND_URL,
@@ -30,7 +30,7 @@ export const getTokens = async (code: string) => {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
 
-  const response = await fetch(KC_TOKEN_URI, {
+  const response = await fetch(KC_TOKEN_URL, {
     method: 'POST',
     headers,
     body: qs.stringify(params),
@@ -65,7 +65,7 @@ export const isJWTValid = async (jwt: string) => {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
 
-  const response = await fetch(KC_INTROSPECT_URI, {
+  const response = await fetch(KC_INTROSPECT_URL, {
     method: 'POST',
     headers,
     body: qs.stringify(params),
@@ -100,7 +100,7 @@ export const getNewTokens = async (
     refresh_token,
   };
 
-  const response = await fetch(KC_TOKEN_URI, {
+  const response = await fetch(KC_TOKEN_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: qs.stringify(params),

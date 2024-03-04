@@ -4,9 +4,9 @@ import config from '../config';
 
 const {
   SSO_CLIENT_ID,
-  KC_AUTHORIZATION_URI,
-  KC_LOGOUT_URI,
-  SM_LOGOUT_URI,
+  KC_AUTHORIZATION_URL,
+  KC_LOGOUT_URL,
+  SM_LOGOUT_URL,
   OIDC_RESPONSE_TYPE,
   OIDC_SCOPE,
   LOGIN_CALLBACK,
@@ -29,7 +29,7 @@ export const getLoginURL = (kc_idp_hint?: IdentityProvider) => {
     kc_idp_hint,
   };
 
-  return `${KC_AUTHORIZATION_URI}?${qs.stringify(params, { encode: false })}`;
+  return `${KC_AUTHORIZATION_URL}?${qs.stringify(params, { encode: false })}`;
 };
 
 /**
@@ -45,8 +45,8 @@ export const getLogoutURL = (id_token: string) => {
 
   const smParams = {
     retnow: 1,
-    returl: encodeURIComponent(`${KC_LOGOUT_URI}?${qs.stringify(kcParams, { encode: false })}`),
+    returl: encodeURIComponent(`${KC_LOGOUT_URL}?${qs.stringify(kcParams, { encode: false })}`),
   };
 
-  return `${SM_LOGOUT_URI}?${qs.stringify(smParams, { encode: false })}`;
+  return `${SM_LOGOUT_URL}?${qs.stringify(smParams, { encode: false })}`;
 };
