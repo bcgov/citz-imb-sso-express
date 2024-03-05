@@ -50,22 +50,7 @@
 
 ## Installing the Package
 
-1. Add the following line to your `package.json`:
-
-``` JSON5
-{
-  "dependencies": {
-    "@bcgov/citz-imb-kc-express": "https://github.com/bcgov/citz-imb-kc-express/releases/download/v<VERSION>/bcgov-citz-imb-kc-express-<VERSION>.tgz",
-    // The rest of your dependencies...
-  },
-}
-```
-
-2. Replace `<VERSION>` with the version you wish to use. Reference [releases] for version numbers.
-
-<br />
-
-3. Run `npm install` to add the package.
+Run `npm install @bcgov/citz-imb-kc-express` or select a specific version tag from [NPM Package].
 
 [Return to Top](#bcgov-sso-keycloak-integration-for-express)
 
@@ -469,5 +454,6 @@ The following applications are currently using this keycloak implementation solu
 <!-- Link References -->
 
 [@bcgov/citz-imb-kc-react]: https://github.com/bcgov/citz-imb-kc-react
+[NPM Package]: https://www.npmjs.com/package/@bcgov/citz-imb-kc-express
 [releases]: https://github.com/bcgov/citz-imb-kc-express/releases
 [SSO Keycloak Wiki - Identity Provider Attribute Mapping]: https://github.com/bcgov/sso-keycloak/wiki/Identity-Provider-Attribute-Mapping
