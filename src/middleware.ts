@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import { ProtectedRouteOptions } from './types';
 import { isJWTValid } from './utils/kcApi';
-import { getUserInfo, hasAllRoles, hasAtLeastOneRole } from './utils/user';
+import { getUserInfo, hasAllRoles, hasAtLeastOneRole, normalizeUser } from './utils/user';
 
 import config from './config';
 const { PACKAGE_NAME } = config;
@@ -33,7 +33,8 @@ export const protectedRoute = (
 
     // Get user info and check role.
     const userInfo = getUserInfo(token);
-    if (!userInfo) return res.status(404).json({ error: `User not found.` });
+    const normalizedUser = normalizeUser(userInfo);
+    if (!userInfo || !normalizedUser) return res.status(404).json({ error: `User not found.` });
     const userRoles = userInfo?.client_roles;
 
     // Ensure proper use of function.
@@ -63,7 +64,8 @@ export const protectedRoute = (
 
     // Set decoded token and user information in request object.
     req.token = token;
-    req.user = userInfo;
+    req.user = normalizedUser;
+    req.userInfo = userInfo;
 
     // Pass control to the next middleware function.
     next();

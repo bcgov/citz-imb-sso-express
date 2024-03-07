@@ -187,7 +187,8 @@ import {
 
 // TypeScript Types:
 import {
-  KeycloakUser, // Base type for req.user
+  KeycloakUser, // Normalized user type for req.user
+  CombinedKeycloakUser, // All user properties, type for req.userInfo
   KeycloakIdirUser, // User types specific to Idir users.
   KeycloakBCeIDUser, // User types specific to BCeID users.
   KeycloakGithubUser, // User types specific to Github users.
@@ -266,14 +267,21 @@ export type KeycloakGithubUser = {
   last_name?: string;
 };
 
-export type KeycloakUser = BaseKeycloakUser &
+export type CombinedKeycloakUser = BaseKeycloakUser &
   KeycloakIdirUser &
   KeycloakBCeIDUser &
   KeycloakGithubUser;
 
+export type KeycloakUser = BaseKeycloakUser & {
+  guid: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+};
+
 export type KCOptions = {
-  afterUserLogin?: (userInfo: KeycloakUser) => Promise<void> | void;
-  afterUserLogout?: (userInfo: KeycloakUser) => Promise<void> | void;
+  afterUserLogin?: (user: KeycloakUser, userInfo: CombinedKeycloakUser) => Promise<void> | void;
+  afterUserLogout?: (user: KeycloakUser, userInfo: CombinedKeycloakUser) => Promise<void> | void;
 };
 
 export type ProtectedRouteOptions = {
@@ -283,6 +291,16 @@ export type ProtectedRouteOptions = {
 export type HasRolesOptions = {
   requireAllRoles?: boolean;
 };
+
+declare global {
+  namespace Express {
+    interface Request {
+      token?: string;
+      user?: KeycloakUser;
+      userInfo?: CombinedKeycloakUser;
+    }
+  }
+}
 ```
 
 [Return to Top](#bcgov-sso-keycloak-integration-for-express)
@@ -297,13 +315,17 @@ Use cases may include adding user to database upon first login or updating a las
 *Example:*
 
 ```JavaScript
-import { KCOptions, KeycloakUser, keycloak } from "@bcgov/citz-imb-kc-express";
+import { KCOptions, KeycloakUser, CombinedKeycloakUser, keycloak } from "@bcgov/citz-imb-kc-express";
 
 const KEYCLOAK_OPTIONS: KCOptions = {
-  afterUserLogin: (user: KeycloakUser) => {
+  afterUserLogin: (user: KeycloakUser, userInfo: CombinedKeycloakUser) => {
+    // user is preferred as it is a normalized user object.
+    // userInfo contains all user properties (each identity provider has unique properties).
     if (user) activateUser(user);
   },
-  afterUserLogout: (user: KeycloakUser) => {
+  afterUserLogout: (user: KeycloakUser, userInfo: CombinedKeycloakUser) => {
+    // user is preferred as it is a normalized user object.
+    // userInfo contains all user properties (each identity provider has unique properties).
     console.log(`${user?.display_name ?? "Unknown"} has logged out.`);
   },
 };
@@ -343,7 +365,7 @@ router.get("/protected", protectedRoute(), exampleProtectedController());
 ```JavaScript
 import { protectedRoute } from '@bcgov/citz-imb-kc-express';
 
-// THIS WILL NOT WORK.
+// THIS WILL NOT WORK (each route must have a unique path).
 app.use("/api", protectedRoute(), guestRouter);
 app.use("/api", protectedRoute(['admin']), adminRouter);
 ```
@@ -376,7 +398,7 @@ app.use("/vote", protectedRoute(['Member', 'Verified'], { requireAllRoles: false
 ```JavaScript
 import { protectedRoute } from '@bcgov/citz-imb-kc-express';
 
-// THIS WILL NOT WORK.
+// THIS WILL NOT WORK (each route must have a unique path).
 app.use("/api", protectedRoute(), guestRouter);
 app.use("/api", protectedRoute(['admin']), adminRouter);
 ```
@@ -386,7 +408,7 @@ app.use("/api", protectedRoute(['admin']), adminRouter);
 Here is how to get the keycloak user info **in a protected endpoint**.  
 
 > [!IMPORTANT] 
-> `req.user.client_roles` property is either a populated array or undefined. It is recommended to use the `hasRoles()` function instead of checking `req.user.client_roles`.
+> `req.userInfo.client_roles` property is either a populated array or undefined. It is recommended to use the `hasRoles()` function instead of checking `req.userInfo.client_roles`. Alternatively it is safe to use `req.user.client_roles` and `req.user` is always preferred over `re.userInfo`.
 
 Example within a controller of a protected route:
 
@@ -398,7 +420,7 @@ Use case could be first protecting the route so only users with the `Admin, Memb
 const user = req?.user;
 
 // Do something with users full name.
-const userFullname = `${user.given_name} ${user.family_name}`;
+const userFullname = `${user.first_name} ${user.last_name}`;
 
 // User must have 'Admin' role.
 if (hasRoles(user, ['Admin'])) // Do something...
@@ -411,23 +433,27 @@ if (hasRoles(user, ['Member', 'Commenter'])) // Do something...
 if (hasRoles(user, ['Member', 'Verified'], { requireAllRoles: false })) // Do Something...
 ```
 
-For all user properties reference [SSO Keycloak Wiki - Identity Provider Attribute Mapping].  
-Example IDIR `req.user` object (Typescript Type is `KeycloakUser & KeycloakIdirUser`):
+User state can be accessed through `req.user`, or `req.userInfo`. It is preferred that you use `req.user` as it is a normalized object that combines properties of users from different identity providers into a single user object.
+
+Example `req.user` object (Typescript Type is `KeycloakUser`):
 
 ```JSON
 {
-  "idir_user_guid": "W7802F34D2390EFA9E7JK15923770279",
-  "identity_provider": "idir",
-  "idir_username": "JOHNDOE",
-  "name": "Doe, John CITZ:EX",
+  "guid": "W7802F34D2390EFA9E7JK15923770279",
   "preferred_username": "a7254c34i2755fea9e7ed15918356158@idir",
-  "given_name": "John",
-  "display_name": "Doe, John CITZ:EX",
-  "family_name": "Doe",
+  "username": "JOHNDOE",
   "email": "john.doe@gov.bc.ca",
-  "client_roles": ["Admin"]
+  "name": "Doe, John CITZ:EX",
+  "display_name": "Doe, John CITZ:EX",
+  "first_name": "John",
+  "last_name": "Doe",
+  "client_roles": ["Admin"],
+  "scope": "openid idir email profile azureidir",
+  "identity_provider": "idir"
 }
 ```
+
+For all properties of `req.userInfo` which is of type `CombinedKeycloakUser`, reference [SSO Keycloak Wiki - Identity Provider Attribute Mapping].  
 
 [Return to Top](#bcgov-sso-keycloak-integration-for-express)
 
