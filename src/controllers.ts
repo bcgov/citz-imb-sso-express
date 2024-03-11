@@ -2,7 +2,7 @@ import { IdentityProvider, KCOptions } from './types';
 import { Request, Response } from 'express';
 import { getNewTokens, getTokens } from './utils/kcApi';
 import { getLoginURL, getLogoutURL } from './utils/authUrls';
-import { getUserInfo } from './utils/user';
+import { getUserInfo, normalizeUser } from './utils/user';
 import debug from './utils/debug';
 
 import config from './config';
@@ -57,9 +57,10 @@ export const loginCallback = (options?: KCOptions) => {
       // Run after login callback request.
       if (options?.afterUserLogin) {
         const user = getUserInfo(access_token);
-        debug.afterUserLogin(user);
+        const normalizedUser = normalizeUser(user);
+        debug.afterUserLogin(normalizedUser, user);
 
-        if (user) options.afterUserLogin(user);
+        if (normalizedUser && user) options.afterUserLogin(normalizedUser, user);
       }
     } catch (error: unknown) {
       // Log error and send response
@@ -90,9 +91,10 @@ export const logout = (options?: KCOptions) => {
       // Run after logout callback request.
       if (options?.afterUserLogout) {
         const user = getUserInfo(id_token as string);
-        debug.afterUserLogout(user);
+        const normalizedUser = normalizeUser(user);
+        debug.afterUserLogout(normalizedUser, user);
 
-        if (user) options.afterUserLogout(user);
+        if (normalizedUser && user) options.afterUserLogout(normalizedUser, user);
       }
     } catch (error: unknown) {
       // Log error and send response

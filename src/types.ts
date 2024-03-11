@@ -1,14 +1,5 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable no-unused-vars */
-// The token and user properties are not a part of the Request object by default.
-declare global {
-  namespace Express {
-    interface Request {
-      token?: string;
-      user?: object;
-    }
-  }
-}
 
 export type IdirIdentityProvider = 'idir';
 export type BceidIdentityProvider = 'bceidbasic' | 'bceidbusiness' | 'bceidboth';
@@ -52,14 +43,21 @@ export type KeycloakGithubUser = {
   last_name?: string;
 };
 
-export type KeycloakUser = BaseKeycloakUser &
+export type CombinedKeycloakUser = BaseKeycloakUser &
   KeycloakIdirUser &
   KeycloakBCeIDUser &
   KeycloakGithubUser;
 
+export type KeycloakUser = BaseKeycloakUser & {
+  guid: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+};
+
 export type KCOptions = {
-  afterUserLogin?: (userInfo: KeycloakUser) => Promise<void> | void;
-  afterUserLogout?: (userInfo: KeycloakUser) => Promise<void> | void;
+  afterUserLogin?: (user: KeycloakUser, userInfo: CombinedKeycloakUser) => Promise<void> | void;
+  afterUserLogout?: (user: KeycloakUser, userInfo: CombinedKeycloakUser) => Promise<void> | void;
 };
 
 export type ProtectedRouteOptions = {
@@ -69,3 +67,14 @@ export type ProtectedRouteOptions = {
 export type HasRolesOptions = {
   requireAllRoles?: boolean;
 };
+
+// The token and user properties are not a part of the Request object by default.
+declare global {
+  namespace Express {
+    interface Request {
+      token?: string;
+      user?: KeycloakUser;
+      userInfo?: CombinedKeycloakUser;
+    }
+  }
+}
