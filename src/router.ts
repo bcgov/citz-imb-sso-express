@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { login, loginCallback, logout, logoutCallback, refreshToken } from './controllers';
-import { KCOptions } from './types';
+import { SSOOptions } from './types';
 
 const router = Router();
 
-const authRouter = (options?: KCOptions) => {
+const authRouter = (options?: SSOOptions) => {
   /**
    * Prompts the user to login.
    * @method GET

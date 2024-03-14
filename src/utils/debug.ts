@@ -1,5 +1,5 @@
 import config from '../config';
-import { CombinedKeycloakUser, KeycloakUser } from '../types';
+import { CombinedSSOUser, SSOUser } from '../types';
 const { DEBUG, VERBOSE_DEBUG, PACKAGE_NAME } = config;
 
 const controllerCalled = (controllerName: string) => {
@@ -10,14 +10,14 @@ const controllerError = (controllerName: string, error: unknown) => {
   console.error(`Error: ${controllerName} of '${PACKAGE_NAME}' called.`, error);
 };
 
-const afterUserLogout = (user: KeycloakUser | null, userInfo: CombinedKeycloakUser | null) => {
+const afterUserLogout = (user: SSOUser | null, userInfo: CombinedSSOUser | null) => {
   if (DEBUG && VERBOSE_DEBUG)
     console.info(`DEBUG: afterUserLogout function of '${PACKAGE_NAME}' called.`);
   if ((!user || !userInfo) && DEBUG)
     console.info(`DEBUG: Can't get user info in afterUserLogout function of '${PACKAGE_NAME}'.`);
 };
 
-const afterUserLogin = (user: KeycloakUser | null, userInfo: CombinedKeycloakUser | null) => {
+const afterUserLogin = (user: SSOUser | null, userInfo: CombinedSSOUser | null) => {
   if (DEBUG && VERBOSE_DEBUG)
     console.info(`DEBUG: afterUserLogin function of '${PACKAGE_NAME}' called.`);
   if ((!user || !userInfo) && DEBUG)

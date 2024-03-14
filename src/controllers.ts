@@ -1,4 +1,4 @@
-import { IdentityProvider, KCOptions } from './types';
+import { IdentityProvider, SSOOptions } from './types';
 import { Request, Response } from 'express';
 import { getNewTokens, getTokens } from './utils/kcApi';
 import { getLoginURL, getLogoutURL } from './utils/authUrls';
@@ -14,7 +14,7 @@ const { FRONTEND_URL } = config;
  * @route /auth/login
  */
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-export const login = (options?: KCOptions) => {
+export const login = (options?: SSOOptions) => {
   const request = async (req: Request, res: Response) => {
     debug.controllerCalled('login');
     try {
@@ -39,7 +39,7 @@ export const login = (options?: KCOptions) => {
  * @method GET
  * @route /auth/login/callback
  */
-export const loginCallback = (options?: KCOptions) => {
+export const loginCallback = (options?: SSOOptions) => {
   const request = async (req: Request, res: Response) => {
     debug.controllerCalled('loginCallback');
     try {
@@ -80,7 +80,7 @@ export const loginCallback = (options?: KCOptions) => {
  * @method GET
  * @route /auth/logout
  */
-export const logout = (options?: KCOptions) => {
+export const logout = (options?: SSOOptions) => {
   const request = async (req: Request, res: Response) => {
     debug.controllerCalled('logout');
     try {
@@ -115,7 +115,7 @@ export const logout = (options?: KCOptions) => {
  * @route /auth/logout/callback
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-export const logoutCallback = (options?: KCOptions) => {
+export const logoutCallback = (options?: SSOOptions) => {
   const request = async (req: Request, res: Response) => {
     debug.controllerCalled('logoutCallback');
     try {
@@ -139,7 +139,7 @@ export const logoutCallback = (options?: KCOptions) => {
  * @route /auth/token
  */
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-export const refreshToken = (options?: KCOptions) => {
+export const refreshToken = (options?: SSOOptions) => {
   const request = async (req: Request, res: Response) => {
     debug.controllerCalled('refreshToken');
     try {

@@ -1,7 +1,7 @@
 name: Create Release
 
 env:
-  PACKAGE-FILENAME: 'bcgov-citz-imb-kc-express'
+  PACKAGE-FILENAME: 'bcgov-citz-imb-sso-express'
   CHANGELOG: '' # Leave empty.
 
 on:
