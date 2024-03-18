@@ -65,7 +65,6 @@ export const protectedRoute = (
     // Set decoded token and user information in request object.
     req.token = token;
     req.user = normalizedUser;
-    req.userInfo = userInfo;
 
     // Pass control to the next middleware function.
     next();

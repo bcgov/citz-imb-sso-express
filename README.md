@@ -193,7 +193,7 @@ import {
 // TypeScript Types:
 import {
   SSOUser, // Normalized user type for req.user
-  CombinedSSOUser, // All user properties, type for req.userInfo
+  OriginalSSOUser, // All user properties from sso
   SSOIdirUser, // User types specific to Idir users.
   SSOBCeIDUser, // User types specific to BCeID users.
   SSOGithubUser, // User types specific to Github users.
@@ -272,7 +272,7 @@ export type SSOGithubUser = {
   last_name?: string;
 };
 
-export type CombinedSSOUser = BaseSSOUser &
+export type OriginalSSOUser = BaseSSOUser &
   SSOIdirUser &
   SSOBCeIDUser &
   SSOGithubUser;
@@ -282,11 +282,12 @@ export type SSOUser = BaseSSOUser & {
   username: string;
   first_name: string;
   last_name: string;
+  originalData: OriginalSSOUser;
 };
 
 export type SSOOptions = {
-  afterUserLogin?: (user: SSOUser, userInfo: CombinedSSOUser) => Promise<void> | void;
-  afterUserLogout?: (user: SSOUser, userInfo: CombinedSSOUser) => Promise<void> | void;
+  afterUserLogin?: (user: SSOUser) => Promise<void> | void;
+  afterUserLogout?: (user: SSOUser) => Promise<void> | void;
 };
 
 export type ProtectedRouteOptions = {
@@ -302,7 +303,6 @@ declare global {
     interface Request {
       token?: string;
       user?: SSOUser;
-      userInfo?: CombinedSSOUser;
     }
   }
 }
@@ -320,17 +320,13 @@ Use cases may include adding user to database upon first login or updating a las
 *Example:*
 
 ```JavaScript
-import { SSOOptions, SSOUser, CombinedSSOUser, sso } from "@bcgov/citz-imb-sso-express";
+import { SSOOptions, SSOUser, sso } from "@bcgov/citz-imb-sso-express";
 
 const SSO_OPTIONS: SSOOptions = {
-  afterUserLogin: (user: SSOUser, userInfo: CombinedSSOUser) => {
-    // user is preferred as it is a normalized user object.
-    // userInfo contains all user properties (each identity provider has unique properties).
+  afterUserLogin: (user: SSOUser) => {
     if (user) activateUser(user);
   },
-  afterUserLogout: (user: SSOUser, userInfo: CombinedSSOUser) => {
-    // user is preferred as it is a normalized user object.
-    // userInfo contains all user properties (each identity provider has unique properties).
+  afterUserLogout: (user: SSOUser) => {
     console.log(`${user?.display_name ?? "Unknown"} has logged out.`);
   },
 };
@@ -413,7 +409,7 @@ app.use("/api", protectedRoute(['admin']), adminRouter);
 Here is how to get the sso user info **in a protected endpoint**.  
 
 > [!IMPORTANT] 
-> `req.userInfo.client_roles` property is either a populated array or undefined. It is recommended to use the `hasRoles()` function instead of checking `req.userInfo.client_roles`. Alternatively it is safe to use `req.user.client_roles` and `req.user` is always preferred over `req.userInfo`.
+> It is recommended to use the `hasRoles()` function instead of checking `req.user.client_roles`.
 
 Example within a controller of a protected route:
 
@@ -438,7 +434,7 @@ if (hasRoles(user, ['Member', 'Commenter'])) // Do something...
 if (hasRoles(user, ['Member', 'Verified'], { requireAllRoles: false })) // Do Something...
 ```
 
-User state can be accessed through `req.user`, or `req.userInfo`. It is preferred that you use `req.user` as it is a normalized object that combines properties of users from different identity providers into a single user object.
+User state can be accessed through `req.user`.
 
 Example `req.user` object (Typescript Type is `SSOUser`):
 
@@ -454,11 +450,12 @@ Example `req.user` object (Typescript Type is `SSOUser`):
   "last_name": "Doe",
   "client_roles": ["Admin"],
   "scope": "openid idir email profile azureidir",
-  "identity_provider": "idir"
+  "identity_provider": "idir",
+  "originalData": { /* ... (original user data from sso) */ }
 }
 ```
 
-For all properties of `req.userInfo` which is of type `CombinedSSOUser`, reference [SSO Keycloak Wiki - Identity Provider Attribute Mapping].  
+For all properties of `req.user.originalData` which is of type `OriginalSSOUser`, reference [SSO Keycloak Wiki - Identity Provider Attribute Mapping].  
 
 [Return to Top](#bcgov-sso-integration-for-express)
 
