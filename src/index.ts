@@ -2,7 +2,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { Application, urlencoded, json } from 'express';
 import router from './router';
-import { KCOptions } from './types';
+import { SSOOptions } from './types';
 import debug from './utils/debug';
 
 import config from './config';
@@ -11,7 +11,7 @@ const { FRONTEND_URL } = config;
 export { protectedRoute } from './middleware';
 export { hasRoles, hasAllRoles, hasAtLeastOneRole } from './utils/user';
 
-export const keycloak = (app: Application, options?: KCOptions) => {
+export const sso = (app: Application, options?: SSOOptions) => {
   /**
    * Middleware for parsing request bodies.
    * @module body-parser

@@ -1,11 +1,11 @@
-import { CombinedKeycloakUser, HasRolesOptions, KeycloakUser } from '../types';
+import { CombinedSSOUser, HasRolesOptions, SSOUser } from '../types';
 import { parseJWT } from './jwt';
 
 import config from '../config';
 const { PACKAGE_NAME } = config;
 
 // Gets user information from parsing an access token JWT.
-export const getUserInfo = (access_token: string): KeycloakUser | null => {
+export const getUserInfo = (access_token: string): SSOUser | null => {
   const data = parseJWT(access_token);
   if (!data) return null;
   return data?.payload;
@@ -20,7 +20,7 @@ export const hasAtLeastOneRole = (userRoles: string[], requiredRoles: string[]) 
   requiredRoles.some((role) => userRoles.includes(role));
 
 // Return true if the user has the specified roles.
-export const hasRoles = (user: KeycloakUser, roles: string[], options?: HasRolesOptions) => {
+export const hasRoles = (user: SSOUser, roles: string[], options?: HasRolesOptions) => {
   const userRoles = user?.client_roles;
 
   // Ensure proper use of function.
@@ -38,7 +38,7 @@ export const hasRoles = (user: KeycloakUser, roles: string[], options?: HasRoles
 };
 
 // Combine properties of each user type into a single object
-export const normalizeUser = (userInfo: CombinedKeycloakUser | null): KeycloakUser | null => {
+export const normalizeUser = (userInfo: CombinedSSOUser | null): SSOUser | null => {
   if (!userInfo) return null;
   const {
     name = '',

@@ -1,4 +1,4 @@
-# BCGov SSO Keycloak Integration for Express
+# BCGov SSO Integration for Express
 
 [![Lifecycle:Experimental](https://img.shields.io/badge/Lifecycle-Experimental-339999)](Redirect-URL)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
@@ -15,7 +15,7 @@
 
 1. Install package by following the steps at [Installing the Package](#installing-the-package).
 2. Set up the package by following the steps at [Basic Setup Guide](#basic-setup-guide).
-3. For use with [@bcgov/citz-imb-kc-react].
+3. For use with [@bcgov/citz-imb-sso-react].
 
 </details>
 
@@ -34,15 +34,14 @@
 - [Initialization Options](#initialization-options) - Additional options.
 - [Authentication on an Endpoint](#authentication-on-an-endpoint) - Require user to be signed in.
 - [Authorization on an Endpoint](#authorization-on-an-endpoint) - Require user to have a role/permission.
-- [Authentication Flow](#authentication-flow) - How it works.
-- [Applications using Keycloak Solution](#applications-using-keycloak-solution) - See an example of how to use.
+- [Authentication Flow](#authentication-flow) - How it works. to use.
 
 ## General Information
 
 - For running on a NodeJS:20 Express API.
-- For Keycloak Gold Standard.
+- For [CSS] SSO Gold Standard with usecase set as `Browser Login & Service Account`.
 - Works with Vanilla JavaScript or Typescript 5.
-- For use with [@bcgov/citz-imb-kc-react]
+- For use with [@bcgov/citz-imb-sso-react]
 
 ---
 
@@ -50,32 +49,40 @@
 
 ## Installing the Package
 
-Run `npm install @bcgov/citz-imb-kc-express` or select a specific version tag from [NPM Package].
+Run `npm install @bcgov/citz-imb-sso-express` or select a specific version tag from [NPM Package].
 
-[Return to Top](#bcgov-sso-keycloak-integration-for-express)
+[Return to Top](#bcgov-sso-integration-for-express)
 
 <br />
 
 ## Basic Setup Guide
 
-1. Add import `const { keycloak } = require('@bcgov/citz-imb-kc-express');` or `import { keycloak } from '@bcgov/citz-imb-kc-express';` to the top of the file that defines the express app. Add `keycloak(app);` below the definition of the express app, where `app` is defined by `express()`.
+1. Add import for `sso` to the top of the file that defines the express app. Add `sso(app);` below the definition of the express app, where `app` is defined by `express()`.
+
+```JavaScript
+// ESModule import (preferred).
+import { sso } from '@bcgov/citz-imb-sso-express';
+
+// CommonJS import.
+const { sso } = require('@bcgov/citz-imb-sso-express');
+```
 
 *Example:*
 
 ```JavaScript
 import express, { Application } from 'express';
-import { keycloak } from '@bcgov/citz-imb-kc-express';
+import { sso } from '@bcgov/citz-imb-sso-express';
 
-// Define Express App
+// Define Express App.
 const app = express();
 
-// Initialize Keycloak(app: Application, options?: KCOptions).
-keycloak(app);
+// Initialize sso(app: Application, options?: SSOOptions).
+sso(app);
 ```
 
 2. Add the required environment variables from the [Environment Variables](#environment-variables) section below.
 
-[Return to Top](#bcgov-sso-keycloak-integration-for-express)
+[Return to Top](#bcgov-sso-integration-for-express)
 
 <br />
 
@@ -87,9 +94,9 @@ keycloak(app);
 FRONTEND_URL= # URL of the frontend application.
 BACKEND_URL= # URL of the backend application.
 
-SSO_CLIENT_ID= # Keycloak client_id
-SSO_CLIENT_SECRET= # Keycloak client_secret
-SSO_AUTH_SERVER_URL= # Keycloak auth URL, see example below.
+SSO_CLIENT_ID= # SSO client_id
+SSO_CLIENT_SECRET= # SSO client_secret
+SSO_AUTH_SERVER_URL= # SSO auth URL, see example below.
 # https://dev.loginproxy.gov.bc.ca/auth/realms/standard/protocol/openid-connect
 
 DEBUG= # (optional) Set to 'true' to get useful debug statements in api console.
@@ -98,7 +105,7 @@ SM_LOGOUT_URL= # (optional) Site minder logout url, see default value below.
 # https://logontest7.gov.bc.ca/clp-cgi/logoff.cgi
 ```
 
-[Return to Top](#bcgov-sso-keycloak-integration-for-express)
+[Return to Top](#bcgov-sso-integration-for-express)
 
 <br />
 
@@ -118,8 +125,6 @@ SM_LOGOUT_URL= # (optional) Site minder logout url, see default value below.
 |   ├── workflows/
 |   |   ├── npm-dep-report.yaml             # Reports on new package versions.
 |   |   └── releases.yaml                   # Creates a new GitHub Release.
-├── .husky/
-|   └── post-commit                         # Script that runs after a git commit.
 ├── scripts/
 |   ├── bump-version.mjs                    # Bumps version in package.json file.
 |   ├── post-commit-version-change.mjs      # Bumps version when post-commit is run.
@@ -139,7 +144,7 @@ SM_LOGOUT_URL= # (optional) Site minder logout url, see default value below.
 ├── rollupdts.config.mjs                    # Builds and compiles TypeScript declartion files.
 ```
 
-[Return to Top](#bcgov-sso-keycloak-integration-for-express)
+[Return to Top](#bcgov-sso-integration-for-express)
 
 <br />
 
@@ -170,52 +175,52 @@ $ npm run clean:postbuild
 $ npm run pack
 ```
 
-[Return to Top](#bcgov-sso-keycloak-integration-for-express)
+[Return to Top](#bcgov-sso-integration-for-express)
 
 <br />
 
 ## Module Exports
 
-These are the functions and types exported by the `@bcgov/citz-imb-kc-express` module.
+These are the functions and types exported by the `@bcgov/citz-imb-sso-express` module.
 
 ```JavaScript
 import {
-  keycloak, // Initializes the keycloak service in your express app.
+  sso, // Initializes the sso service in your express app.
   protectedRoute, // Middleware function used for authentication and authorization.
   hasRoles, // Utility function used to return a boolean if user has specified roles.
-} from '@bcgov/citz-imb-kc-express';
+} from '@bcgov/citz-imb-sso-express';
 
 // TypeScript Types:
 import {
-  KeycloakUser, // Normalized user type for req.user
-  CombinedKeycloakUser, // All user properties, type for req.userInfo
-  KeycloakIdirUser, // User types specific to Idir users.
-  KeycloakBCeIDUser, // User types specific to BCeID users.
-  KeycloakGithubUser, // User types specific to Github users.
-  KCOptions, // Type of optional second parameter for keycloak()
+  SSOUser, // Normalized user type for req.user
+  CombinedSSOUser, // All user properties, type for req.userInfo
+  SSOIdirUser, // User types specific to Idir users.
+  SSOBCeIDUser, // User types specific to BCeID users.
+  SSOGithubUser, // User types specific to Github users.
+  SSOOptions, // Type of optional second parameter for sso()
   ProtectedRouteOptions, // Type of optional second parameter for protectedRoute()
   HasRolesOptions, // Type of optional third parameter for hasRoles()
   IdentityProvider, // Combined type for identity providers.
   IdirIdentityProvider, // Used for more efficient login.
   BceidIdentityProvider, // Used for more efficient login.
   GithubIdentityProvider, // Used for more efficient login.
-} from '@bcgov/citz-imb-kc-express';
+} from '@bcgov/citz-imb-sso-express';
 
 ```
 
-[Return to Top](#bcgov-sso-keycloak-integration-for-express)
+[Return to Top](#bcgov-sso-integration-for-express)
 
 <br />
 
 ## TypeScript Types
 
-These are the TypeScript types of the `@bcgov/citz-imb-kc-express` module.
+These are the TypeScript types of the `@bcgov/citz-imb-sso-express` module.
 
 ```TypeScript
-const keycloak: (app: Application, options?: KCOptions) => void;
+const sso: (app: Application, options?: SSOOptions) => void;
 const protectedRoute: (roles?: string[], options?: ProtectedRouteOptions) => RequestHandler;
 const hasRoles = (
-  user: KeycloakUser,
+  user: SSOUser,
   roles: string[],
   options?: HasRolesOptions
 ) => boolean;
@@ -231,7 +236,7 @@ export type IdentityProvider = IdirIdentityProvider &
   BceidIdentityProvider &
   GithubIdentityProvider;
 
-export type BaseKeycloakUser = {
+export type BaseSSOUser = {
   name?: string;
   preferred_username: string;
   email: string;
@@ -244,20 +249,20 @@ export type BaseKeycloakUser = {
     | GithubIdentityProvider;
 };
 
-export type KeycloakIdirUser = {
+export type SSOIdirUser = {
   idir_user_guid?: string;
   idir_username?: string;
   given_name?: string;
   family_name?: string;
 };
 
-export type KeycloakBCeIDUser = {
+export type SSOBCeIDUser = {
   bceid_user_guid?: string;
   bceid_username?: string;
   bceid_business_name?: string;
 };
 
-export type KeycloakGithubUser = {
+export type SSOGithubUser = {
   github_id?: string;
   github_username?: string;
   orgs?: string;
@@ -267,21 +272,21 @@ export type KeycloakGithubUser = {
   last_name?: string;
 };
 
-export type CombinedKeycloakUser = BaseKeycloakUser &
-  KeycloakIdirUser &
-  KeycloakBCeIDUser &
-  KeycloakGithubUser;
+export type CombinedSSOUser = BaseSSOUser &
+  SSOIdirUser &
+  SSOBCeIDUser &
+  SSOGithubUser;
 
-export type KeycloakUser = BaseKeycloakUser & {
+export type SSOUser = BaseSSOUser & {
   guid: string;
   username: string;
   first_name: string;
   last_name: string;
 };
 
-export type KCOptions = {
-  afterUserLogin?: (user: KeycloakUser, userInfo: CombinedKeycloakUser) => Promise<void> | void;
-  afterUserLogout?: (user: KeycloakUser, userInfo: CombinedKeycloakUser) => Promise<void> | void;
+export type SSOOptions = {
+  afterUserLogin?: (user: SSOUser, userInfo: CombinedSSOUser) => Promise<void> | void;
+  afterUserLogout?: (user: SSOUser, userInfo: CombinedSSOUser) => Promise<void> | void;
 };
 
 export type ProtectedRouteOptions = {
@@ -296,55 +301,55 @@ declare global {
   namespace Express {
     interface Request {
       token?: string;
-      user?: KeycloakUser;
-      userInfo?: CombinedKeycloakUser;
+      user?: SSOUser;
+      userInfo?: CombinedSSOUser;
     }
   }
 }
 ```
 
-[Return to Top](#bcgov-sso-keycloak-integration-for-express)
+[Return to Top](#bcgov-sso-integration-for-express)
 
 <br />
 
 ## Initialization Options
 
-Optional second parameter to the `keycloak()` function.  
+Optional second parameter to the `sso()` function.  
 Use cases may include adding user to database upon first login or updating a last login field.
 
 *Example:*
 
 ```JavaScript
-import { KCOptions, KeycloakUser, CombinedKeycloakUser, keycloak } from "@bcgov/citz-imb-kc-express";
+import { SSOOptions, SSOUser, CombinedSSOUser, sso } from "@bcgov/citz-imb-sso-express";
 
-const KEYCLOAK_OPTIONS: KCOptions = {
-  afterUserLogin: (user: KeycloakUser, userInfo: CombinedKeycloakUser) => {
+const SSO_OPTIONS: SSOOptions = {
+  afterUserLogin: (user: SSOUser, userInfo: CombinedSSOUser) => {
     // user is preferred as it is a normalized user object.
     // userInfo contains all user properties (each identity provider has unique properties).
     if (user) activateUser(user);
   },
-  afterUserLogout: (user: KeycloakUser, userInfo: CombinedKeycloakUser) => {
+  afterUserLogout: (user: SSOUser, userInfo: CombinedSSOUser) => {
     // user is preferred as it is a normalized user object.
     // userInfo contains all user properties (each identity provider has unique properties).
     console.log(`${user?.display_name ?? "Unknown"} has logged out.`);
   },
 };
 
-// Initialize keycloak:
-keycloak(app, KEYCLOAK_OPTIONS);
+// Initialize sso:
+sso(app, SSO_OPTIONS);
 ```
 
-[Return to Top](#bcgov-sso-keycloak-integration-for-express)
+[Return to Top](#bcgov-sso-integration-for-express)
 
 <br />
 
 ## Authentication on an Endpoint
 
-Require keycloak authentication before using an endpoint.
-Import `protectedRoute` from `@bcgov/citz-imb-kc-express` and add as middleware.
+Require sso authentication before using an endpoint.
+Import `protectedRoute` from `@bcgov/citz-imb-sso-express` and add as middleware.
 
 ```JavaScript
-import { protectedRoute } from '@bcgov/citz-imb-kc-express';
+import { protectedRoute } from '@bcgov/citz-imb-sso-express';
 
 // Use in file where express app is defined:
 app.use("/users", protectedRoute(), usersRouter);
@@ -360,17 +365,17 @@ router.get("/protected", protectedRoute(), exampleProtectedController());
 <br />
 
 > [!Important]  
-> The following **WILL NOT WORK**:
+> The following **WILL NOT WORK** (each route must have a unique path):
 
 ```JavaScript
-import { protectedRoute } from '@bcgov/citz-imb-kc-express';
+import { protectedRoute } from '@bcgov/citz-imb-sso-express';
 
 // THIS WILL NOT WORK (each route must have a unique path).
 app.use("/api", protectedRoute(), guestRouter);
 app.use("/api", protectedRoute(['admin']), adminRouter);
 ```
 
-[Return to Top](#bcgov-sso-keycloak-integration-for-express)
+[Return to Top](#bcgov-sso-integration-for-express)
 
 <br />
 
@@ -396,7 +401,7 @@ app.use("/vote", protectedRoute(['Member', 'Verified'], { requireAllRoles: false
 > The following **WILL NOT WORK** (see above section for router usage and workaround):
 
 ```JavaScript
-import { protectedRoute } from '@bcgov/citz-imb-kc-express';
+import { protectedRoute } from '@bcgov/citz-imb-sso-express';
 
 // THIS WILL NOT WORK (each route must have a unique path).
 app.use("/api", protectedRoute(), guestRouter);
@@ -405,14 +410,14 @@ app.use("/api", protectedRoute(['admin']), adminRouter);
 
 <br />
 
-Here is how to get the keycloak user info **in a protected endpoint**.  
+Here is how to get the sso user info **in a protected endpoint**.  
 
 > [!IMPORTANT] 
-> `req.userInfo.client_roles` property is either a populated array or undefined. It is recommended to use the `hasRoles()` function instead of checking `req.userInfo.client_roles`. Alternatively it is safe to use `req.user.client_roles` and `req.user` is always preferred over `re.userInfo`.
+> `req.userInfo.client_roles` property is either a populated array or undefined. It is recommended to use the `hasRoles()` function instead of checking `req.userInfo.client_roles`. Alternatively it is safe to use `req.user.client_roles` and `req.user` is always preferred over `req.userInfo`.
 
 Example within a controller of a protected route:
 
-Add import `import { hasRoles } from '@bcgov/citz-imb-kc-express'` if using `hasRoles()` function.
+Add import `import { hasRoles } from '@bcgov/citz-imb-sso-express'` if using `hasRoles()` function.
 
 Use case could be first protecting the route so only users with the `Admin, Member, Commenter, OR Verified` roles can use the endpoint, and then doing something different based on role/permission.
 
@@ -435,7 +440,7 @@ if (hasRoles(user, ['Member', 'Verified'], { requireAllRoles: false })) // Do So
 
 User state can be accessed through `req.user`, or `req.userInfo`. It is preferred that you use `req.user` as it is a normalized object that combines properties of users from different identity providers into a single user object.
 
-Example `req.user` object (Typescript Type is `KeycloakUser`):
+Example `req.user` object (Typescript Type is `SSOUser`):
 
 ```JSON
 {
@@ -453,9 +458,9 @@ Example `req.user` object (Typescript Type is `KeycloakUser`):
 }
 ```
 
-For all properties of `req.userInfo` which is of type `CombinedKeycloakUser`, reference [SSO Keycloak Wiki - Identity Provider Attribute Mapping].  
+For all properties of `req.userInfo` which is of type `CombinedSSOUser`, reference [SSO Keycloak Wiki - Identity Provider Attribute Mapping].  
 
-[Return to Top](#bcgov-sso-keycloak-integration-for-express)
+[Return to Top](#bcgov-sso-integration-for-express)
 
 <br />
 
@@ -463,23 +468,12 @@ For all properties of `req.userInfo` which is of type `CombinedKeycloakUser`, re
 
 <img src="./assets/flow.PNG" alt="Flow chart">
 
-[Return to Top](#bcgov-sso-keycloak-integration-for-express)
-
-<br />
-
-## Applications using Keycloak Solution
-
-The following applications are currently using this keycloak implementation solution:
-
-[SET](https://github.com/bcgov/citz-imb-salary-estimate-tool) - Salary Estimation Tool
-[PIMS](https://github.com/bcgov/PIMS) - Property Inventory Management System (experimenting in express-api directory)
-[PLAY](https://github.com/bcgov/citz-imb-playground) - CITZ IMB Package Testing App
-
-[Return to Top](#bcgov-sso-keycloak-integration-for-express)
+[Return to Top](#bcgov-sso-integration-for-express)
 
 <!-- Link References -->
 
-[@bcgov/citz-imb-kc-react]: https://github.com/bcgov/citz-imb-kc-react
-[NPM Package]: https://www.npmjs.com/package/@bcgov/citz-imb-kc-express
-[releases]: https://github.com/bcgov/citz-imb-kc-express/releases
+[@bcgov/citz-imb-sso-react]: https://github.com/bcgov/citz-imb-sso-react
+[NPM Package]: https://www.npmjs.com/package/@bcgov/citz-imb-sso-express
+[releases]: https://github.com/bcgov/citz-imb-sso-express/releases
+[CSS]: https://bcgov.github.io/sso-requests
 [SSO Keycloak Wiki - Identity Provider Attribute Mapping]: https://github.com/bcgov/sso-keycloak/wiki/Identity-Provider-Attribute-Mapping

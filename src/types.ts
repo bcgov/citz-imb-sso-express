@@ -10,7 +10,7 @@ export type IdentityProvider =
   | BceidIdentityProvider
   | GithubIdentityProvider;
 
-export type BaseKeycloakUser = {
+export type BaseSSOUser = {
   name?: string;
   preferred_username: string;
   email: string;
@@ -20,20 +20,20 @@ export type BaseKeycloakUser = {
   identity_provider: IdirIdentityProvider | BceidIdentityProvider | GithubIdentityProvider;
 };
 
-export type KeycloakIdirUser = {
+export type SSOIdirUser = {
   idir_user_guid?: string;
   idir_username?: string;
   given_name?: string;
   family_name?: string;
 };
 
-export type KeycloakBCeIDUser = {
+export type SSOBCeIDUser = {
   bceid_user_guid?: string;
   bceid_username?: string;
   bceid_business_name?: string;
 };
 
-export type KeycloakGithubUser = {
+export type SSOGithubUser = {
   github_id?: string;
   github_username?: string;
   orgs?: string;
@@ -43,21 +43,18 @@ export type KeycloakGithubUser = {
   last_name?: string;
 };
 
-export type CombinedKeycloakUser = BaseKeycloakUser &
-  KeycloakIdirUser &
-  KeycloakBCeIDUser &
-  KeycloakGithubUser;
+export type CombinedSSOUser = BaseSSOUser & SSOIdirUser & SSOBCeIDUser & SSOGithubUser;
 
-export type KeycloakUser = BaseKeycloakUser & {
+export type SSOUser = BaseSSOUser & {
   guid: string;
   username: string;
   first_name: string;
   last_name: string;
 };
 
-export type KCOptions = {
-  afterUserLogin?: (user: KeycloakUser, userInfo: CombinedKeycloakUser) => Promise<void> | void;
-  afterUserLogout?: (user: KeycloakUser, userInfo: CombinedKeycloakUser) => Promise<void> | void;
+export type SSOOptions = {
+  afterUserLogin?: (user: SSOUser, userInfo: CombinedSSOUser) => Promise<void> | void;
+  afterUserLogout?: (user: SSOUser, userInfo: CombinedSSOUser) => Promise<void> | void;
 };
 
 export type ProtectedRouteOptions = {
@@ -73,8 +70,8 @@ declare global {
   namespace Express {
     interface Request {
       token?: string;
-      user?: KeycloakUser;
-      userInfo?: CombinedKeycloakUser;
+      user?: SSOUser;
+      userInfo?: CombinedSSOUser;
     }
   }
 }
