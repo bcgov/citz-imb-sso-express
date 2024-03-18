@@ -43,18 +43,19 @@ export type SSOGithubUser = {
   last_name?: string;
 };
 
-export type CombinedSSOUser = BaseSSOUser & SSOIdirUser & SSOBCeIDUser & SSOGithubUser;
+export type OriginalSSOUser = BaseSSOUser & SSOIdirUser & SSOBCeIDUser & SSOGithubUser;
 
 export type SSOUser = BaseSSOUser & {
   guid: string;
   username: string;
   first_name: string;
   last_name: string;
+  originalData: OriginalSSOUser;
 };
 
 export type SSOOptions = {
-  afterUserLogin?: (user: SSOUser, userInfo: CombinedSSOUser) => Promise<void> | void;
-  afterUserLogout?: (user: SSOUser, userInfo: CombinedSSOUser) => Promise<void> | void;
+  afterUserLogin?: (user: SSOUser) => Promise<void> | void;
+  afterUserLogout?: (user: SSOUser) => Promise<void> | void;
 };
 
 export type ProtectedRouteOptions = {
@@ -71,7 +72,6 @@ declare global {
     interface Request {
       token?: string;
       user?: SSOUser;
-      userInfo?: CombinedSSOUser;
     }
   }
 }

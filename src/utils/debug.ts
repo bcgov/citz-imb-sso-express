@@ -1,5 +1,5 @@
 import config from '../config';
-import { CombinedSSOUser, SSOUser } from '../types';
+import { SSOUser } from '../types';
 const { DEBUG, VERBOSE_DEBUG, PACKAGE_NAME } = config;
 
 const controllerCalled = (controllerName: string) => {
@@ -10,17 +10,17 @@ const controllerError = (controllerName: string, error: unknown) => {
   console.error(`Error: ${controllerName} of '${PACKAGE_NAME}' called.`, error);
 };
 
-const afterUserLogout = (user: SSOUser | null, userInfo: CombinedSSOUser | null) => {
+const afterUserLogout = (user: SSOUser | null) => {
   if (DEBUG && VERBOSE_DEBUG)
     console.info(`DEBUG: afterUserLogout function of '${PACKAGE_NAME}' called.`);
-  if ((!user || !userInfo) && DEBUG)
+  if (!user && DEBUG)
     console.info(`DEBUG: Can't get user info in afterUserLogout function of '${PACKAGE_NAME}'.`);
 };
 
-const afterUserLogin = (user: SSOUser | null, userInfo: CombinedSSOUser | null) => {
+const afterUserLogin = (user: SSOUser | null) => {
   if (DEBUG && VERBOSE_DEBUG)
     console.info(`DEBUG: afterUserLogin function of '${PACKAGE_NAME}' called.`);
-  if ((!user || !userInfo) && DEBUG)
+  if (!user && DEBUG)
     console.info(`DEBUG: Can't get user info in afterUserLogin function of '${PACKAGE_NAME}'.`);
 };
 

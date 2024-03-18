@@ -1,4 +1,4 @@
-import { CombinedSSOUser, HasRolesOptions, SSOUser } from '../types';
+import { OriginalSSOUser, HasRolesOptions, SSOUser } from '../types';
 import { parseJWT } from './jwt';
 
 import config from '../config';
@@ -38,7 +38,7 @@ export const hasRoles = (user: SSOUser, roles: string[], options?: HasRolesOptio
 };
 
 // Combine properties of each user type into a single object
-export const normalizeUser = (userInfo: CombinedSSOUser | null): SSOUser | null => {
+export const normalizeUser = (userInfo: OriginalSSOUser | null): SSOUser | null => {
   if (!userInfo) return null;
   const {
     name = '',
@@ -87,6 +87,7 @@ export const normalizeUser = (userInfo: CombinedSSOUser | null): SSOUser | null 
     client_roles,
     scope,
     identity_provider,
+    originalData: userInfo,
   };
 
   return user;

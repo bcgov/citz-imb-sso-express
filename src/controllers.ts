@@ -58,9 +58,9 @@ export const loginCallback = (options?: SSOOptions) => {
       if (options?.afterUserLogin) {
         const user = getUserInfo(access_token);
         const normalizedUser = normalizeUser(user);
-        debug.afterUserLogin(normalizedUser, user);
+        debug.afterUserLogin(normalizedUser);
 
-        if (normalizedUser && user) options.afterUserLogin(normalizedUser, user);
+        if (normalizedUser) options.afterUserLogin(normalizedUser);
       }
     } catch (error: unknown) {
       // Log error and send response
@@ -92,9 +92,9 @@ export const logout = (options?: SSOOptions) => {
       if (options?.afterUserLogout) {
         const user = getUserInfo(id_token as string);
         const normalizedUser = normalizeUser(user);
-        debug.afterUserLogout(normalizedUser, user);
+        debug.afterUserLogout(normalizedUser);
 
-        if (normalizedUser && user) options.afterUserLogout(normalizedUser, user);
+        if (normalizedUser) options.afterUserLogout(normalizedUser);
       }
     } catch (error: unknown) {
       // Log error and send response
