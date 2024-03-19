@@ -6,18 +6,7 @@
   "license": "Apache-2.0",
   "main": "build/index.js",
   "types": "build/bundle.d.ts",
-  "//": [
-    "THIS IS A COMMENT: Explanation of below scripts.",
-    "'build' will compile all src code into a bundle in build/ directory.",
-    "'build:dts' is part of 'build' and it bundles the typescipt declarations into a single bundle.d.ts file.",
-    "'clean:prebuild' is part of build and it removes directories and files before the build.",
-    "'clean:postbuild' is part of build and it removes directories and files after the build.",
-    "'pack' is used to package the code before a release.",
-    "'prepare' is automatically used to set up husky git hooks after an npm install",
-    "'bump:patch' updates the version number by a patch version",
-    "'bump:minor' updates the version number by a minor version",
-    "'bump:major' updates the version number by a major version"
-  ],
+  "//": "**NOTE**: See README for descriptions of each script.",
   "scripts": {
     "build": "npm run clean:prebuild && rollup -c rollup.config.mjs && npm run build:dts && npm run clean:postbuild",
     "build:dts": "rollup -c rollupdts.config.mjs && node scripts/remove-dts-files.mjs",
