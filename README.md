@@ -34,7 +34,7 @@ This npm package offers a seamless integration solution for Express applications
 
 We emphasize the inclusion of documentation on our code to enhance onboarding efficiency. Understanding the project's architecture and operational dynamics create efficient team members.
 
-By making our project's infrastructure transparent and accessible, we encourage collaboration, enabling developers to easily navigate and contribute to different parts of the codebase without unnecessary barriers. Ultimately, this practice of enriching our documentation contributes to creating a self-documenting codebase, where the project's structure and operational commands are clearly defined and updated within the repository itself, making the project more maintainable and scalable over time.
+We encourage collaboration by making our project's infrastructure transparent and accessible. Enabling developers to easily navigate and contribute to different parts of the codebase without barriers. Enriching our documentation contributes to a self-documenting codebase. The project's structure and commands are defined and updated within the repository itself. Ultimately, making the project more maintainable and scalable over time.
 
 Use the links below to help you understand the codebase better.
 
