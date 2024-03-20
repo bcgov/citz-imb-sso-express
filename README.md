@@ -10,7 +10,7 @@
 
 # `Introduction`
 
-This npm package offers a seamless integration solution for Express applications requiring authentication through the B.C. government's Single Sign-On SSO [CSS] service. Designed with ease of use in mind, this package abstracts the complexity of handling SSO protocols, providing developers with simple, high-level APIs to facilitate secure user authentication and authorization within their applications. By leveraging this package, developers can quickly implement a robust authentication flow, ensuring that their React applications are securely integrated with the B.C. government's standardized identity management system, thereby enhancing user experience and ensuring compliance with government security standards.
+This npm package offers a seamless integration solution for Express applications requiring authentication through the B.C. government's Single Sign-On SSO ([CSS]) service. Designed with ease of use in mind, this package abstracts the complexity of handling SSO protocols, providing developers with simple, high-level APIs to facilitate secure user authentication and authorization within their applications. By leveraging this package, developers can quickly implement a robust authentication flow, ensuring that their React applications are securely integrated with the B.C. government's standardized identity management system, thereby enhancing user experience and ensuring compliance with government security standards.
 
 - Built for a NodeJS:20 Express API.
 - For [CSS] Gold Standard with usecase set as `Browser Login and Service Account`.
