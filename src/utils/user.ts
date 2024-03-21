@@ -88,6 +88,7 @@ export const normalizeUser = (userInfo: OriginalSSOUser | null): SSOUser | null 
     scope,
     identity_provider,
     originalData: userInfo,
+    hasRoles: (roles: string[], options?: HasRolesOptions) => hasRoles(user, roles, options),
   };
 
   return user;

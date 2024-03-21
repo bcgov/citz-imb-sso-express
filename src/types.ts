@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable no-unused-vars */
 
+export type HasRolesOptions = {
+  requireAllRoles?: boolean;
+};
+
 export type IdirIdentityProvider = 'idir';
 export type BceidIdentityProvider = 'bceidbasic' | 'bceidbusiness' | 'bceidboth';
 export type GithubIdentityProvider = 'githubbcgov' | 'githubpublic';
@@ -51,6 +55,7 @@ export type SSOUser = BaseSSOUser & {
   first_name: string;
   last_name: string;
   originalData: OriginalSSOUser;
+  hasRoles: (roles: string[], options?: HasRolesOptions) => boolean;
 };
 
 export type SSOOptions = {
@@ -59,10 +64,6 @@ export type SSOOptions = {
 };
 
 export type ProtectedRouteOptions = {
-  requireAllRoles?: boolean;
-};
-
-export type HasRolesOptions = {
   requireAllRoles?: boolean;
 };
 
