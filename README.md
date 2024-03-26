@@ -24,9 +24,9 @@ This npm package offers an integration solution for Express applications requiri
 <br />
 
 > [!IMPORTANT] 
-> This package does not replicate the functionality of the [CSS] service or the provided [example apps].   
-> The [CITZ IMB Common Code] team created and maintains this package.  
-> Read more about the [Purpose and Benefits of This Package].
+> These packages complement, rather than replicate, Common Hosted Single Sign-On ([CSS]) or it's [example apps].  
+> They allow our own applications to integrate with the Common Hosted Single Sign-On ([CSS]) Service, providing us access to it's user management capabilities.  
+> They are developed and maintained by the [CITZ IMB Common Code] team, separate from the Common Hosted Single Sign-On ([CSS]) team.  
 
 <br />
 
