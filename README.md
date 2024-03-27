@@ -56,6 +56,6 @@ Use the links below to help you understand the codebase better.
 [Purpose and Benefits of This Package]: https://github.com/bcgov/citz-imb-sso-express/wiki/Purpose-and-Benefits-of-This-Package
 
 [Documentation]: https://github.com/bcgov/citz-imb-sso-express/wiki
-[Directory Structure]: https://github.com/bcgov/citz-imb-sso-express/wiki/11-Directory-Structure
-[Scripts]: https://github.com/bcgov/citz-imb-sso-express/wiki/12-Scripts
-[Publishing a New Release Version]: https://github.com/bcgov/citz-imb-sso-express/wiki/13-Publishing-a-New-Release-Version
+[Directory Structure]: https://github.com/bcgov/citz-imb-sso-express/wiki/12-Directory-Structure
+[Scripts]: https://github.com/bcgov/citz-imb-sso-express/wiki/13-Scripts
+[Publishing a New Release Version]: https://github.com/bcgov/citz-imb-sso-express/wiki/14-Publishing-a-New-Release-Version
