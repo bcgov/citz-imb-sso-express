@@ -1,24 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const {
-  FRONTEND_URL = '',
-  BACKEND_URL = '',
+  FRONTEND_URL,
+  BACKEND_URL,
   SSO_AUTH_SERVER_URL = 'https://dev.loginproxy.gov.bc.ca/auth/realms/standard/protocol/openid-connect',
   SM_LOGOUT_URL = 'https://logontest7.gov.bc.ca/clp-cgi/logoff.cgi',
-  SSO_CLIENT_ID = '',
-  SSO_CLIENT_SECRET = '',
+  SSO_CLIENT_ID,
+  SSO_CLIENT_SECRET,
   DEBUG = 'false',
   VERBOSE_DEBUG = 'false',
 } = process.env;
 
-if (DEBUG === 'true' && VERBOSE_DEBUG === 'true') {
-  console.log(`DEBUG: 'citz-imb-sso-express' environment variables:
-  SSO_CLIENT_ID=${SSO_CLIENT_ID}
-  SSO_CLIENT_SECRET=${SSO_CLIENT_SECRET}
-  FRONTEND_URL=${FRONTEND_URL}
-  BACKEND_URL=${BACKEND_URL}`);
-}
-
 // Exports.
-export default {
+const config = {
   DEBUG: DEBUG === 'true',
   VERBOSE_DEBUG: VERBOSE_DEBUG === 'true',
   PACKAGE_NAME: 'citz-imb-sso-express',
@@ -37,3 +30,12 @@ export default {
   FRONTEND_URL,
   BACKEND_URL,
 };
+
+// Throw error if env vars are not set.
+if (!FRONTEND_URL || !BACKEND_URL || !SSO_CLIENT_ID || !SSO_CLIENT_SECRET)
+  throw new Error(
+    `One or more environment variables were undefined for package ${config.PACKAGE_NAME}. 
+    Ensure [FRONTEND_URL, BACKEND_URL, SSO_CLIENT_ID, SSO_CLIENT_SECRET] variables are set.`,
+  );
+
+export default config;
