@@ -19,7 +19,11 @@ export const login = (options?: SSOOptions) => {
     debug.controllerCalled('login');
     try {
       const { idp } = req.query;
-      if (!req.token) return res.redirect(getLoginURL(idp as IdentityProvider));
+
+      const redirectURL = getLoginURL(idp as IdentityProvider);
+      debug.loginURL(redirectURL);
+      if (!req.token) return res.redirect(redirectURL);
+
       return res.redirect('');
     } catch (error: unknown) {
       // Log error and send response
@@ -46,13 +50,16 @@ export const loginCallback = (options?: SSOOptions) => {
       const { code } = req.query;
       const { access_token, refresh_token, refresh_expires_in } = await getTokens(code as string);
 
+      const redirectURL = `${FRONTEND_URL}?refresh_expires_in=${refresh_expires_in}`;
+      debug.loginCallbackRedirectURL(redirectURL);
+
       // Send response.
       res
         .cookie('refresh_token', refresh_token, {
           httpOnly: true,
           secure: true,
         })
-        .redirect(`${FRONTEND_URL}?refresh_expires_in=${refresh_expires_in}`);
+        .redirect(redirectURL);
 
       // Run after login callback request.
       if (options?.afterUserLogin) {
@@ -86,7 +93,10 @@ export const logout = (options?: SSOOptions) => {
     try {
       const { id_token } = req.query;
       if (!id_token) return res.status(401).send('id_token query param required');
-      res.redirect(getLogoutURL(id_token as string));
+
+      const redirectURL = getLogoutURL(id_token as string);
+      debug.logoutURL(redirectURL);
+      res.redirect(redirectURL);
 
       // Run after logout callback request.
       if (options?.afterUserLogout) {
@@ -119,7 +129,9 @@ export const logoutCallback = (options?: SSOOptions) => {
   const request = async (req: Request, res: Response) => {
     debug.controllerCalled('logoutCallback');
     try {
-      res.cookie('refresh_token', '', { httpOnly: true, secure: true }).redirect(FRONTEND_URL);
+      res
+        .cookie('refresh_token', '', { httpOnly: true, secure: true })
+        .redirect(FRONTEND_URL ?? '');
     } catch (error: unknown) {
       // Log error and send response
       debug.controllerError('logoutCallback', error);
@@ -144,8 +156,10 @@ export const refreshToken = (options?: SSOOptions) => {
     debug.controllerCalled('refreshToken');
     try {
       const { refresh_token } = req.cookies;
-      if (!refresh_token || refresh_token === '')
+      if (!refresh_token || refresh_token === '') {
+        debug.unauthorizedTokenError(refresh_token);
         return res.status(401).send('Cookies must include refresh_token.');
+      }
 
       const tokens = await getNewTokens(refresh_token);
 
