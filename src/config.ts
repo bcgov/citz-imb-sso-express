@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 const {
   FRONTEND_URL,
   BACKEND_URL,
   SSO_AUTH_SERVER_URL = 'https://dev.loginproxy.gov.bc.ca/auth/realms/standard/protocol/openid-connect',
   SM_LOGOUT_URL = 'https://logontest7.gov.bc.ca/clp-cgi/logoff.cgi',
+  COOKIE_DOMAIN = '.gov.bc.ca',
   SSO_CLIENT_ID,
   SSO_CLIENT_SECRET,
   DEBUG = 'false',
@@ -17,6 +17,7 @@ const config = {
   PACKAGE_NAME: 'citz-imb-sso-express',
   SSO_CLIENT_ID,
   SSO_CLIENT_SECRET,
+  COOKIE_DOMAIN,
   KC_AUTHORIZATION_URL: `${SSO_AUTH_SERVER_URL}/auth`,
   KC_TOKEN_URL: `${SSO_AUTH_SERVER_URL}/token`,
   KC_INTROSPECT_URL: `${SSO_AUTH_SERVER_URL}/token/introspect`,

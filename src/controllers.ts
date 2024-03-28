@@ -6,7 +6,7 @@ import { getUserInfo, normalizeUser } from './utils/user';
 import debug from './utils/debug';
 
 import config from './config';
-const { FRONTEND_URL } = config;
+const { COOKIE_DOMAIN, FRONTEND_URL } = config;
 
 /**
  * Prompts the user to login.
@@ -58,6 +58,7 @@ export const loginCallback = (options?: SSOOptions) => {
         .cookie('refresh_token', refresh_token, {
           httpOnly: true,
           secure: true,
+          domain: COOKIE_DOMAIN,
         })
         .redirect(redirectURL);
 
