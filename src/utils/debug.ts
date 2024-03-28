@@ -28,10 +28,36 @@ const initialized = () => {
   if (DEBUG) console.info(`DEBUG: Initialized '${PACKAGE_NAME}'.`);
 };
 
+const unauthorizedTokenError = (refresh_token: string) => {
+  if (DEBUG && VERBOSE_DEBUG)
+    console.info(`DEBUG: refresh_token of '${PACKAGE_NAME}' token endpoint is '${refresh_token}'.`);
+};
+
+const loginURL = (url: string) => {
+  if (DEBUG && VERBOSE_DEBUG)
+    console.info(`DEBUG: loginURL of '${PACKAGE_NAME}' login endpoint is '${url}'.`);
+};
+
+const logoutURL = (url: string) => {
+  if (DEBUG && VERBOSE_DEBUG)
+    console.info(`DEBUG: logoutURL of '${PACKAGE_NAME}' logout endpoint is '${url}'.`);
+};
+
+const loginCallbackRedirectURL = (url: string) => {
+  if (DEBUG && VERBOSE_DEBUG)
+    console.info(
+      `DEBUG: loginCallbackRedirectURL of '${PACKAGE_NAME}' login/callback endpoint is '${url}'.`,
+    );
+};
+
 export default {
   controllerCalled,
   controllerError,
   afterUserLogout,
   afterUserLogin,
   initialized,
+  unauthorizedTokenError,
+  loginURL,
+  logoutURL,
+  loginCallbackRedirectURL,
 };
