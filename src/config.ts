@@ -10,9 +10,6 @@ const {
   VERBOSE_DEBUG = 'false',
 } = process.env;
 
-// Note: COOKIE_DOMAIN defaults to either 'localhost' or '.gov.bc.ca'.
-// If FRONTEND_URL includes 'localhost', then that will be the value.
-
 // Exports.
 const config = {
   DEBUG: DEBUG === 'true',
@@ -20,7 +17,12 @@ const config = {
   PACKAGE_NAME: 'citz-imb-sso-express',
   SSO_CLIENT_ID,
   SSO_CLIENT_SECRET,
-  COOKIE_DOMAIN: COOKIE_DOMAIN ?? FRONTEND_URL?.includes('localhost') ? 'localhost' : '.gov.bc.ca',
+  COOKIE_DOMAIN:
+    COOKIE_DOMAIN && COOKIE_DOMAIN !== ''
+      ? COOKIE_DOMAIN // Use COOKIE_DOMAIN if defined.
+      : FRONTEND_URL?.includes('localhost') // Otherwise use 'localhost' or '.gov.bc.ca'
+        ? 'localhost'
+        : '.gov.bc.ca',
   KC_AUTHORIZATION_URL: `${SSO_AUTH_SERVER_URL}/auth`,
   KC_TOKEN_URL: `${SSO_AUTH_SERVER_URL}/token`,
   KC_INTROSPECT_URL: `${SSO_AUTH_SERVER_URL}/token/introspect`,
