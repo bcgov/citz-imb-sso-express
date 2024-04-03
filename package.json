@@ -1,6 +1,6 @@
 {
   "name": "@bcgov/citz-imb-sso-express",
-  "version": "1.0.0-alpha3",
+  "version": "1.0.0-alpha4",
   "description": "BCGov SSO integration for Express API",
   "author": "CITZ IMB Common Code <citz.codemvp@gov.bc.ca>",
   "license": "Apache-2.0",
