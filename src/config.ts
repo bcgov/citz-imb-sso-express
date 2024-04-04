@@ -3,7 +3,7 @@ const {
   BACKEND_URL,
   SSO_AUTH_SERVER_URL = 'https://dev.loginproxy.gov.bc.ca/auth/realms/standard/protocol/openid-connect',
   SM_LOGOUT_URL = 'https://logontest7.gov.bc.ca/clp-cgi/logoff.cgi',
-  COOKIE_DOMAIN = '.gov.bc.ca',
+  COOKIE_DOMAIN = FRONTEND_URL?.includes('localhost') ? 'localhost' : '.gov.bc.ca',
   SSO_CLIENT_ID,
   SSO_CLIENT_SECRET,
   DEBUG = 'false',
@@ -17,12 +17,7 @@ const config = {
   PACKAGE_NAME: 'citz-imb-sso-express',
   SSO_CLIENT_ID,
   SSO_CLIENT_SECRET,
-  COOKIE_DOMAIN:
-    COOKIE_DOMAIN && COOKIE_DOMAIN !== ''
-      ? COOKIE_DOMAIN // Use COOKIE_DOMAIN if defined.
-      : FRONTEND_URL?.includes('localhost') // Otherwise use 'localhost' or '.gov.bc.ca'
-        ? 'localhost'
-        : '.gov.bc.ca',
+  COOKIE_DOMAIN,
   KC_AUTHORIZATION_URL: `${SSO_AUTH_SERVER_URL}/auth`,
   KC_TOKEN_URL: `${SSO_AUTH_SERVER_URL}/token`,
   KC_INTROSPECT_URL: `${SSO_AUTH_SERVER_URL}/token/introspect`,
@@ -43,5 +38,9 @@ if (!FRONTEND_URL || !BACKEND_URL || !SSO_CLIENT_ID || !SSO_CLIENT_SECRET)
     `One or more environment variables were undefined for package ${config.PACKAGE_NAME}. 
     Ensure [FRONTEND_URL, BACKEND_URL, SSO_CLIENT_ID, SSO_CLIENT_SECRET] variables are set.`,
   );
+
+// Log all variables.
+if (config.DEBUG && config.VERBOSE_DEBUG)
+  console.info(`DEBUG: Configuration variables for '${config.PACKAGE_NAME}': `, config);
 
 export default config;

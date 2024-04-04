@@ -1,6 +1,6 @@
 {
   "name": "@bcgov/citz-imb-sso-express",
-  "version": "1.0.0-alpha4",
+  "version": "1.0.0-alpha5",
   "description": "BCGov SSO integration for Express API",
   "author": "CITZ IMB Common Code <citz.codemvp@gov.bc.ca>",
   "license": "Apache-2.0",
@@ -12,7 +12,7 @@
     "build:dts": "rollup -c rollupdts.config.mjs && node scripts/remove-dts-files.mjs",
     "clean:prebuild": "rm -rf .rollup.cache build tsconfig.tsbuildinfo",
     "clean:postbuild": "node scripts/remove-empty-dirs.mjs && rm -rf .rollup.cache tsconfig.tsbuildinfo",
-    "pack": "npm i && npm run build && npm cache clean --force && npm pack && mkdir releases && mv *.tgz ./releases/",
+    "pack": "rm -rf releases && npm i && npm run build && npm cache clean --force && npm pack && mkdir releases && mv *.tgz ./releases/ && npm audit",
     "bump:patch": "node scripts/bump-version.mjs patch",
     "bump:minor": "node scripts/bump-version.mjs minor",
     "bump:major": "node scripts/bump-version.mjs major"
