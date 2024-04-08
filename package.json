@@ -12,7 +12,7 @@
     "build:dts": "rollup -c rollupdts.config.mjs && node scripts/remove-dts-files.mjs",
     "clean:prebuild": "rm -rf .rollup.cache build tsconfig.tsbuildinfo",
     "clean:postbuild": "node scripts/remove-empty-dirs.mjs && rm -rf .rollup.cache tsconfig.tsbuildinfo",
-    "pack": "rm -rf releases && npm i && npm run build && npm cache clean --force && npm pack && mkdir releases && mv *.tgz ./releases/ && npm audit",
+    "pack": "rm -rf releases && npm i && npm run build && npm cache clean --force && npm pack && mkdir releases && mv *.tgz ./releases/",
     "bump:patch": "node scripts/bump-version.mjs patch",
     "bump:minor": "node scripts/bump-version.mjs minor",
     "bump:major": "node scripts/bump-version.mjs major"
