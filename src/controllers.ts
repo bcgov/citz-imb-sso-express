@@ -18,6 +18,7 @@ export const login = (options?: SSOOptions) => {
   const request = async (req: Request, res: Response) => {
     debug.controllerCalled('login');
     try {
+      debug.logQueryParams('login', req.query);
       const { idp } = req.query;
 
       const redirectURL = getLoginURL(idp as IdentityProvider);
@@ -47,6 +48,7 @@ export const loginCallback = (options?: SSOOptions) => {
   const request = async (req: Request, res: Response) => {
     debug.controllerCalled('loginCallback');
     try {
+      debug.logQueryParams('loginCallback', req.query);
       const { code } = req.query;
       const { access_token, refresh_token, refresh_expires_in } = await getTokens(code as string);
 
@@ -92,6 +94,7 @@ export const logout = (options?: SSOOptions) => {
   const request = async (req: Request, res: Response) => {
     debug.controllerCalled('logout');
     try {
+      debug.logQueryParams('logout', req.query);
       const { id_token } = req.query;
       if (!id_token) return res.status(401).send('id_token query param required');
 

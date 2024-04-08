@@ -50,6 +50,16 @@ const loginCallbackRedirectURL = (url: string) => {
     );
 };
 
+const logQueryParams = (controllerName: string, query: unknown) => {
+  if (DEBUG && VERBOSE_DEBUG)
+    console.info(`DEBUG: Query parameters of ${controllerName} of '${PACKAGE_NAME}' are: `, query);
+};
+
+const getTokensResponse = (response: unknown) => {
+  if (DEBUG && VERBOSE_DEBUG)
+    console.info(`DEBUG: getTokens response of '${PACKAGE_NAME}' is: `, response);
+};
+
 export default {
   controllerCalled,
   controllerError,
@@ -60,4 +70,6 @@ export default {
   loginURL,
   logoutURL,
   loginCallbackRedirectURL,
+  logQueryParams,
+  getTokensResponse,
 };
