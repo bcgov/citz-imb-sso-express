@@ -18,11 +18,17 @@ export const login = (options?: SSOOptions) => {
   const request = async (req: Request, res: Response) => {
     debug.controllerCalled('login');
     try {
-      const { idp } = req.query;
+      debug.logQueryParams('login', req.query);
+      const { idp, post_login_redirect_url } = req.query;
 
       const redirectURL = getLoginURL(idp as IdentityProvider);
       debug.loginURL(redirectURL);
-      if (!req.token) return res.redirect(redirectURL);
+      if (!req.token)
+        return res
+          .cookie('post_login_redirect_url', post_login_redirect_url, {
+            domain: COOKIE_DOMAIN,
+          })
+          .redirect(redirectURL);
 
       return res.redirect('');
     } catch (error: unknown) {
@@ -47,10 +53,13 @@ export const loginCallback = (options?: SSOOptions) => {
   const request = async (req: Request, res: Response) => {
     debug.controllerCalled('loginCallback');
     try {
+      debug.logQueryParams('loginCallback', req.query);
       const { code } = req.query;
       const { access_token, refresh_token, refresh_expires_in } = await getTokens(code as string);
 
-      const redirectURL = `${FRONTEND_URL}?refresh_expires_in=${refresh_expires_in}`;
+      const post_login_redirect_url = req.cookies.post_login_redirect_url;
+
+      const redirectURL = `${FRONTEND_URL}?refresh_expires_in=${refresh_expires_in}&post_login_redirect_url=${post_login_redirect_url}`;
       debug.loginCallbackRedirectURL(redirectURL);
 
       // Send response.
@@ -92,6 +101,7 @@ export const logout = (options?: SSOOptions) => {
   const request = async (req: Request, res: Response) => {
     debug.controllerCalled('logout');
     try {
+      debug.logQueryParams('logout', req.query);
       const { id_token } = req.query;
       if (!id_token) return res.status(401).send('id_token query param required');
 

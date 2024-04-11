@@ -1,6 +1,7 @@
 import qs from 'qs';
 import config from '../config';
 import { encodeJWT } from './jwt';
+import debug from './debug';
 
 const {
   SSO_CLIENT_ID,
@@ -37,6 +38,7 @@ export const getTokens = async (code: string) => {
   });
 
   const { id_token, access_token, refresh_token, refresh_expires_in } = await response.json();
+  debug.getTokensResponse({ id_token, access_token, refresh_token, refresh_expires_in });
 
   return {
     id_token,
