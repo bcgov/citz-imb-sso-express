@@ -4,3 +4,4 @@ package-lock.json
 tsconfig.tsbuildinfo
 build
 releases
+coverage
