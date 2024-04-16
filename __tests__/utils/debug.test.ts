@@ -131,4 +131,34 @@ describe('debug functions', () => {
     // Restore the mock
     mockConsoleInfo.mockRestore();
   });
+
+  // Test case: logQueryParams function
+  it('logQueryParams - should log debug info if DEBUG and VERBOSE_DEBUG are true', () => {
+    // Mocking console.info
+    const mockConsoleInfo = jest.spyOn(console, 'info').mockImplementation();
+
+    debug.logQueryParams('testController', { param1: 'value1', param2: 'value2' });
+    expect(mockConsoleInfo).toHaveBeenCalledWith(
+      "DEBUG: Query parameters of testController of 'test-package' are: ",
+      { param1: 'value1', param2: 'value2' },
+    );
+
+    // Restore the mock
+    mockConsoleInfo.mockRestore();
+  });
+
+  // Test case: getTokensResponse function
+  it('getTokensResponse - should log debug info if DEBUG and VERBOSE_DEBUG are true', () => {
+    // Mocking console.info
+    const mockConsoleInfo = jest.spyOn(console, 'info').mockImplementation();
+
+    debug.getTokensResponse({ access_token: 'token123', expires_in: 3600 });
+    expect(mockConsoleInfo).toHaveBeenCalledWith(
+      "DEBUG: getTokens response of 'test-package' is: ",
+      { access_token: 'token123', expires_in: 3600 },
+    );
+
+    // Restore the mock
+    mockConsoleInfo.mockRestore();
+  });
 });

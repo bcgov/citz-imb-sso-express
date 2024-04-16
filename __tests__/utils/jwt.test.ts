@@ -52,4 +52,25 @@ describe('JWT Functions', () => {
     const invalidInput = 'InvalidInput';
     expect(() => decodeJWT(invalidInput)).toThrow('Invalid input in decodeJWT()');
   });
+
+  // Test case: Parse a null JWT should return null
+  it('should return null when parsing a null JWT', () => {
+    const parsed = parseJWT(null as unknown as string);
+    expect(parsed).toBeNull();
+  });
+
+  // Test case: Parse a JWT with missing header should return null
+  it('should return null when parsing a JWT with missing header', () => {
+    const jwt =
+      '.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+    const parsed = parseJWT(jwt);
+    expect(parsed).toBeNull();
+  });
+
+  // Test case: Parse a JWT with missing payload should return null
+  it('should return null when parsing a JWT with missing payload', () => {
+    const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+    const parsed = parseJWT(jwt);
+    expect(parsed).toBeNull();
+  });
 });

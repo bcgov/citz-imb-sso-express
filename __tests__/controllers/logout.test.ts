@@ -96,4 +96,29 @@ describe('logout controller', () => {
     expect(options.afterUserLogout).toHaveBeenCalledWith(user);
     expect(debug.afterUserLogout).toHaveBeenCalled();
   });
+
+  // Test case: should handle non-Error thrown objects properly
+  it('should handle non-Error thrown objects properly', async () => {
+    const req = {
+      query: { id_token: 'mocked_id_token' },
+    } as unknown as Request;
+    const res = {
+      redirect: jest.fn(),
+      json: jest.fn(),
+    } as unknown as Response;
+    const error = { customError: true }; // Not an instance of Error
+
+    (getLogoutURL as jest.Mock).mockImplementationOnce(() => {
+      throw error;
+    });
+
+    const requestHandler = logout();
+    await requestHandler(req, res);
+
+    expect(debug.controllerError).toHaveBeenCalledWith('logout', error);
+    expect(res.json).toHaveBeenCalledWith({
+      success: false,
+      error,
+    });
+  });
 });

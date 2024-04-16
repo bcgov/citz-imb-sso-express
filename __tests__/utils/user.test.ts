@@ -15,6 +15,7 @@ jest.mock('@/config', () => ({
 // Mock user data
 const mockUser = {
   preferred_username: 'testUser',
+  display_name: 'Test User',
   client_roles: ['role1', 'role2', 'role3'],
 };
 
@@ -32,6 +33,85 @@ describe('getUserInfo function', () => {
     (parseJWT as jest.Mock).mockReturnValueOnce({ payload: mockUser });
     const userInfo = getUserInfo('valid_access_token');
     expect(userInfo).toEqual(mockUser);
+  });
+
+  // Test case: should return null when user information is null
+  it('should return null when user information is null', () => {
+    (parseJWT as jest.Mock).mockReturnValueOnce({ payload: null });
+    const userInfo = getUserInfo('valid_access_token');
+    expect(userInfo).toBeNull();
+  });
+
+  // Test case: should return null when client_roles of userInfo is not defined
+  it('should return [] when client_roles of userInfo is not defined', () => {
+    const userInfo = { preferred_username: 'testUser' } as OriginalSSOUser;
+    const result = normalizeUser(userInfo);
+    expect(result?.client_roles).toStrictEqual([]);
+  });
+
+  // Test case: should normalize user data correctly for identity_provider 'bceidbasic'
+  it('should normalize user data correctly for identity_provider bceidbasic', () => {
+    const userInfo = {
+      preferred_username: 'testUser',
+      display_name: 'Test User',
+      identity_provider: 'bceidbasic',
+    } as OriginalSSOUser;
+    const normalizedUser = normalizeUser(userInfo);
+    expect(normalizedUser?.identity_provider).toBe('bceidbasic');
+    expect(normalizedUser?.first_name).toBe('Test');
+    expect(normalizedUser?.last_name).toBe('User');
+  });
+
+  // Test case: should normalize user data correctly for identity_provider 'bceidbusiness'
+  it('should normalize user data correctly for identity_provider bceidbusiness', () => {
+    const userInfo = {
+      preferred_username: 'testUser',
+      display_name: 'Test User',
+      identity_provider: 'bceidbusiness',
+    } as OriginalSSOUser;
+    const normalizedUser = normalizeUser(userInfo);
+    expect(normalizedUser?.identity_provider).toBe('bceidbusiness');
+    expect(normalizedUser?.first_name).toBe('Test');
+    expect(normalizedUser?.last_name).toBe('User');
+  });
+
+  // Test case: should normalize user data correctly for identity_provider 'bceidboth'
+  it('should normalize user data correctly for identity_provider bceidboth', () => {
+    const userInfo = {
+      preferred_username: 'testUser',
+      display_name: 'Test User',
+      identity_provider: 'bceidboth',
+    } as OriginalSSOUser;
+    const normalizedUser = normalizeUser(userInfo);
+    expect(normalizedUser?.identity_provider).toBe('bceidboth');
+    expect(normalizedUser?.first_name).toBe('Test');
+    expect(normalizedUser?.last_name).toBe('User');
+  });
+
+  // Test case: should normalize user data correctly for identity_provider 'githubbcgov'
+  it('should normalize user data correctly for identity_provider githubbcgov', () => {
+    const userInfo = {
+      preferred_username: 'testUser',
+      display_name: 'Test User',
+      identity_provider: 'githubbcgov',
+    } as OriginalSSOUser;
+    const normalizedUser = normalizeUser(userInfo);
+    expect(normalizedUser?.identity_provider).toBe('githubbcgov');
+    expect(normalizedUser?.first_name).toBe('Test');
+    expect(normalizedUser?.last_name).toBe('User');
+  });
+
+  // Test case: should normalize user data correctly for identity_provider 'githubpublic'
+  it('should normalize user data correctly for identity_provider githubpublic', () => {
+    const userInfo = {
+      preferred_username: 'testUser',
+      display_name: 'Test User',
+      identity_provider: 'githubpublic',
+    } as OriginalSSOUser;
+    const normalizedUser = normalizeUser(userInfo);
+    expect(normalizedUser?.identity_provider).toBe('githubpublic');
+    expect(normalizedUser?.first_name).toBe('Test');
+    expect(normalizedUser?.last_name).toBe('User');
   });
 });
 

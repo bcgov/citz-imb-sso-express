@@ -75,4 +75,27 @@ describe('login controller', () => {
     expect(debug.controllerError).toHaveBeenCalledWith('login', error);
     expect(res.json).toHaveBeenCalledWith({ success: false, error: error.message });
   });
+
+  // Test case: Non-Error object thrown
+  it('should handle non-Error thrown objects properly', async () => {
+    const req = {
+      query: { idp: 'idir', post_login_redirect_url: 'http://localhost:3000' },
+    } as unknown as Request;
+    const res = {
+      cookie: jest.fn().mockReturnThis(),
+      redirect: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    } as unknown as Response;
+    const error = { customError: true }; // Not an instance of Error
+
+    (getLoginURL as jest.Mock).mockImplementationOnce(() => {
+      throw error;
+    });
+
+    const requestHandler = login();
+    await requestHandler(req, res);
+
+    expect(debug.controllerError).toHaveBeenCalledWith('login', error);
+    expect(res.json).toHaveBeenCalledWith({ success: false, error });
+  });
 });
