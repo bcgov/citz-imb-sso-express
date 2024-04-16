@@ -17,7 +17,8 @@
     "bump:minor": "node scripts/bump-version.mjs minor",
     "bump:major": "node scripts/bump-version.mjs major",
     "test": "jest",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "coverage:open": "node scripts/run-coverage-and-open-report.mjs"
   },
   "dependencies": {
     "cookie-parser": "1.4.6",
