@@ -72,4 +72,22 @@ describe('refreshToken controller', () => {
     expect(debug.unauthorizedTokenError).toHaveBeenCalledWith('');
     expect(res.send).toHaveBeenCalledWith('Cookies must include refresh_token.');
   });
+
+  // Test case: should handle non-Error thrown objects properly
+  it('should handle non-Error thrown objects properly', async () => {
+    const req = {
+      cookies: { refresh_token: 'valid_refresh_token' },
+    } as unknown as Request;
+    const res = {
+      json: jest.fn(),
+    } as unknown as Response;
+    const error = { customError: true }; // Not an instance of Error
+
+    (getNewTokens as jest.Mock).mockRejectedValueOnce(error);
+
+    const requestHandler = refreshToken();
+    await requestHandler(req, res);
+
+    expect(res.json).toHaveBeenCalledWith({ success: false, error: error });
+  });
 });

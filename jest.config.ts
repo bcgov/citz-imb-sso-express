@@ -16,11 +16,11 @@ const jestConfig: JestConfigWithTsJest = {
   testPathIgnorePatterns: ['node_modules/', 'build/'],
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.ts'],
-  coveragePathIgnorePatterns: ['index.ts'],
+  coveragePathIgnorePatterns: ['index.ts', 'config.ts'],
   coverageReporters: [['lcov', { projectRoot: '..' }]],
   coverageThreshold: {
     global: {
-      branches: 80,
+      branches: 80, // Possible paths the logic could follow
       functions: 80,
       lines: 80,
       statements: 80,

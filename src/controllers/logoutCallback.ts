@@ -22,7 +22,7 @@ export const logoutCallback = (options?: SSOOptions) => {
       // Log error and send response
       debug.controllerError('logoutCallback', error);
       if (error instanceof Error) {
-        res.json({ success: false, error: error.message ?? error });
+        res.json({ success: false, error: error.message });
       } else {
         res.json({ success: false, error: error });
       }

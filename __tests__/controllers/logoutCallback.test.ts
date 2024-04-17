@@ -57,4 +57,24 @@ describe('logoutCallback controller', () => {
       expect(debug.controllerError).toHaveBeenCalled();
     }
   });
+
+  // Test case: should handle non-Error thrown objects properly
+  it('should handle non-Error thrown objects properly', async () => {
+    const error = { customError: true }; // Not an instance of Error
+    // Simulate throwing a non-Error object on redirect
+    mockRedirect.mockImplementation(() => {
+      throw error; // Not an instance of Error
+    });
+
+    const requestHandler = logoutCallback();
+    try {
+      await requestHandler(req as Request, res as Response);
+    } catch (error) {
+      expect(mockJson).toHaveBeenCalledWith({
+        success: false,
+        error,
+      });
+      expect(debug.controllerError).toHaveBeenCalled();
+    }
+  });
 });

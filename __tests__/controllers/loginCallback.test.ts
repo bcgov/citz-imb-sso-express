@@ -102,4 +102,31 @@ describe('loginCallback controller', () => {
     expect(options.afterUserLogin).toHaveBeenCalledWith(user);
     expect(debug.afterUserLogin).toHaveBeenCalledWith(user);
   });
+
+  // Test case: should handle non-Error thrown objects properly
+  it('should handle non-Error thrown objects properly', async () => {
+    const req = {
+      query: { code: 'mocked_code' },
+      cookies: { post_login_redirect_url: 'mocked_post_login_redirect_url' },
+    } as unknown as Request;
+    const res = {
+      cookie: jest.fn().mockReturnThis(),
+      redirect: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    } as unknown as Response;
+    const error = { customError: true }; // Not an instance of Error
+
+    (getTokens as jest.Mock).mockImplementationOnce(() => {
+      throw error;
+    });
+
+    const requestHandler = loginCallback();
+    await requestHandler(req, res);
+
+    expect(debug.controllerError).toHaveBeenCalledWith('loginCallback', error);
+    expect(res.json).toHaveBeenCalledWith({
+      success: false,
+      error,
+    });
+  });
 });

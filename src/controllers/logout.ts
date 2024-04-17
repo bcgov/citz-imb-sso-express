@@ -33,7 +33,7 @@ export const logout = (options?: SSOOptions) => {
       // Log error and send response
       debug.controllerError('logout', error);
       if (error instanceof Error) {
-        res.json({ success: false, error: error.message ?? error });
+        res.json({ success: false, error: error.message });
       } else {
         res.json({ success: false, error: error });
       }
