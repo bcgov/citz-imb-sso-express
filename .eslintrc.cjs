@@ -41,5 +41,5 @@ module.exports = {
       },
     ],
   },
-  ignorePatterns: ['node_modules/', 'package-lock.json', 'build/'],
+  ignorePatterns: ['node_modules/', 'package-lock.json', 'build/', 'coverage/'],
 };
