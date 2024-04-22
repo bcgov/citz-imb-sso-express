@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
     "outDir": "./build",
     "rootDir": "./src",
     "baseUrl": ".",
@@ -15,9 +14,8 @@
     "skipLibCheck": true,
     "exactOptionalPropertyTypes": true,
     "removeComments": true,
-    "sourceMap": true,
-    "resolveJsonModule": true
+    "sourceMap": true
   },
-  "include": ["src/**/*.ts", "__tests__"],
+  "include": ["src", "__tests__"],
   "exclude": ["node_modules", "build", "coverage"]
 }
