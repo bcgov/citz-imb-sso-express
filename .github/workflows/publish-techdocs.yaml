@@ -2,17 +2,13 @@ name: Build TechDocs with DevHub TechDocs Publish Action
 
 on:
     workflow_dispatch:
-    push:
-        branches: [ main ]
-        paths:
-            - "mkdocs.yml"
-            - "docs/*"
-            - "catalog-info.yaml"
+    release:
+        types: [released]
     pull_request:
         branches: [ main ]
         paths:
             - "mkdocs.yml"
-            - "docs/*"
+            - "techdocs/docs/*"
             - "catalog-info.yaml"
 
 jobs:

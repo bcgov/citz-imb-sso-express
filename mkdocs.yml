@@ -2,15 +2,17 @@ site_name: "CITZ IMB SSO Express (NPM Package)"
 site_description: "An npm package that offers an integration solution for connecting Express applications requiring authentication to the B.C. government's Single Sign-On service."
 docs_dir: "docs"
 repo_url: "https://github.com/bcgov/citz-imb-sso-express"
-edit_uri: edit/main/docs
+edit_uri: edit/main/techdocs/docs
 nav:
-    - Introduction: index.md
-    - Getting started: getting-started.md
-    - Configuration: configuration.md
-    - Tips and tricks: tips-and-tricks.md
-    - About us: about-us.md
-plugins:
-    - techdocs-core
-    - git-revision-date-localized
-markdown_extensions:
-    - md_in_html
+  - Introduction: index.md
+  - Getting Started:
+      - Installing the Package: getting-started/installing-the-package.md
+      - Quick Start Guide: getting-started/quick-start-guide.md
+      - SSO Integration Settings: getting-started/integration-settings.md
+  - Using The Package: 
+      - Environment Variables: using-the-package/environment-variables.md
+      - Protecting a Route: using-the-package/protecting-a-route.md
+      - Initialization Options: using-the-package/init-options.md
+      - Module Exports: using-the-package/module-exports.md
+      -TypeScript Types: using-the-package/typescript-types.md
+  - Authentication Flow: authentication-flow.md
