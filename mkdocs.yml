@@ -16,3 +16,4 @@ nav:
       - Module Exports: using-the-package/module-exports.md
       -TypeScript Types: using-the-package/typescript-types.md
   - Authentication Flow: authentication-flow.md
+  - Purpose and Benefits: purpose-and-benefits.md
