@@ -49,7 +49,7 @@ app.use("/comment", protectedRoute(['Member', 'Commenter']), commentRouter);
 app.use("/vote", protectedRoute(['Member', 'Verified'], { requireAllRoles: false }), voteRouter);
 ```
 
-!!! note "Note
+!!! note "Note"
     By default, all roles in the array will be required.  
     If you wish to require only one of a list of roles, add the options parameter with `requireAllRoles` property set to `false`.
 
