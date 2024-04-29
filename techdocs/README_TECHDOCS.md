@@ -86,15 +86,15 @@ You will likely want to preview your documentation on your computer. Follow [the
 
 ## Building and publishing your documentation
 
-The [GitHub Action workflow file](.github/workflows/publish.yaml) can validate, build (produce browser-friendly HTML from Markdown) and publish your documentation to DevHub automatically.  Initially, it is set up just to validate and build your documentation. 
+The [GitHub Action workflow file](.github/workflows/publish-techdocs.yaml) can validate, build (produce browser-friendly HTML from Markdown) and publish your documentation to DevHub automatically.  Initially, it is set up just to validate and build your documentation. 
 
 The portion of the workflow file that publishes your documentation is commented out because it requires addition set up with the Developer Experience team. When you'd like to have your documentation published in DevHub, [contact the Developer Experience Team](mailto:developer.experience@gov.bc.ca) who will work with you to set things up. 
 
 ### The publishing workflow
 
-DevHub has a "preview" environment and a production environment, and once the Developer Experience team has you set up, and you've uncommented the publishing sections in the [workflow file](.github/workflows/publish.yaml) you'll be in control of how and when your content is published to each. You'll be able to control this by modifying the [workflow file](.github/workflows/publish.yaml) to suit your process and team.
+DevHub has a "preview" environment and a production environment, and once the Developer Experience team has you set up, and you've uncommented the publishing sections in the [workflow file](.github/workflows/publish-techdocs.yaml) you'll be in control of how and when your content is published to each. You'll be able to control this by modifying the [workflow file](.github/workflows/publish-techdocs.yaml) to suit your process and team.
 
-The configuration provided in the [workflow file](.github/workflows/publish.yaml) behaves as follows: 
+The configuration provided in the [workflow file](.github/workflows/publish-techdocs.yaml) behaves as follows: 
 
 * A pull request to your repo will build and publish the code to the [DevHub preview](https://dev.developer.gov.bc.ca) site. This is a development site where you can preview your changes.
 * A release in your repository will publish the code to the [production DevHub website](http://developer.gov.bc.ca).
@@ -104,11 +104,6 @@ The configuration provided in the [workflow file](.github/workflows/publish.yaml
 To report bugs/issues/features requests, please email the Developer Experience team at [Developer.Experience@gov.bc.ca](mailto:Developer.Experience@gov.bc.ca)
 
 The full documentation for MkDocs (which is powering the DevHub TechDocs function) is at the [MkDocs website](https://www.mkdocs.org/user-guide/writing-your-docs/). Note that not all content on the site will be applicable to DevHub's use of MkDocs.
-
-## Contributing
-If you would like to contribute, please see our [contributing](CONTRIBUTING.md) guidelines.
-
-Please note that this project is released with a [Contributor Code of Conduct](CODE-OF-CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 ## License
 
