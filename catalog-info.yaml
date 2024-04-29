@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: citz-imb-sso-express-npm-package
+  title: CITZ IMB SSO Express (NPM Package)
+  description: An npm package that offers an integration solution for connecting
+    Express applications requiring authentication to the B.C. government's
+    Single Sign-On service.
+  annotations:
+    github.com/project-slug: bcgov/citz-imb-sso-express
+    backstage.io/techdocs-ref: dir:.
+    bcgovpubcode.gov.bc.ca/ministry: CITZ
+    bcgovpubcode.gov.bc.ca/product_name: citz-imb-sso-express
+    developer.gov.bc.ca/source_template: default/docs-template-pr
+spec:
+  type: documentation
+  lifecycle: experimental
+  owner: group:default/citz-imb-common-code
