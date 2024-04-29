@@ -5,6 +5,6 @@ product_information:
   ministry: CITZ
   product_acronym: 
   product_description: An npm package that offers an integration solution for connecting Express applications requiring authentication to the B.C. government's Single Sign-On service.
-  product_name: CITZ IMB SSO Express (NPM Package)
+  product_name: citz-imb-sso-express
 product_technology_information:
   hosting_platforms: Not-Applicable
