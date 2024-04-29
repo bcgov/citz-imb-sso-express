@@ -39,7 +39,7 @@ Access user information from the `user` object (of type `SSOUser`) which can be 
 const user = req?.user;
 ```
 
-### Example User Object:
+### `Example User Object:`
 
 ```JSON
 {

@@ -3,7 +3,7 @@
 Add additional functionality to your SSO integration by using the optional second parameter to the `sso()` function which is of type `SSOOptions`.  
 Currently `afterUserLogin` and `afterUserLogout` are available to configure. 
 
-### Example:
+### `Example:`
 
 ```JavaScript
 import { SSOOptions, SSOUser, sso } from "@bcgov/citz-imb-sso-express";
