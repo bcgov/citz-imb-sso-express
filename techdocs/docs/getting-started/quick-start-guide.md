@@ -7,7 +7,7 @@ Set up in 2 steps.
 Add import for `sso` to the file that defines the express app.  
 Add `sso(app);` below the definition of the express app, where `app` is defined by `express()`.
 
-#### Import Examples:
+#### `Import Examples:`
 
 ```JavaScript
 // ESModule import (preferred).
