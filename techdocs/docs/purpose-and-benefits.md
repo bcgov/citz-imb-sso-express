@@ -8,7 +8,7 @@ We created these packages to integrate with the Common Hosted Single Sign-On ([C
 
 <br />
 
-!!! info "Important"
+!!! warning "Important"
     These packages complement, rather than replicate, Common Hosted Single Sign-On ([CSS]) or it's [example apps].  
     They allow our own applications to integrate with the Common Hosted Single Sign-On ([CSS]) Service, providing us access to it's user management capabilities.  
     They are developed and maintained by the [CITZ IMB Common Code] team, separate from the Common Hosted Single Sign-On ([CSS]) team.  
