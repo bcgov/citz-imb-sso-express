@@ -24,7 +24,7 @@ if (user?.hasRoles(['Member', 'Verified'], { requireAllRoles: false })) // Do So
     By default, all roles in the array will be required.  
     If you wish to require only one of a list of roles, add the options parameter with `requireAllRoles` property set to `false`.
 
-!!! warn "Important"
+!!! warning "Important"
     This will only work in a controller that is part of a protected route.
 
 ---
