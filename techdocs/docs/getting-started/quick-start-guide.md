@@ -17,7 +17,7 @@ import { sso } from '@bcgov/citz-imb-sso-express';
 const { sso } = require('@bcgov/citz-imb-sso-express');
 ```
 
-#### Use Example:
+#### `Use Example:`
 
 ```JavaScript
 import express, { Application } from 'express';
