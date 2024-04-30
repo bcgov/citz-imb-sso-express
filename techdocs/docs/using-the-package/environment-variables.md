@@ -20,3 +20,14 @@ COOKIE_DOMAIN= # (optional) The domain for the refresh_token cookie.
 SM_LOGOUT_URL= # (optional) Site minder logout url.
 # By default, set to 'https://logontest7.gov.bc.ca/clp-cgi/logoff.cgi'.
 ```
+
+!!! tip "Tip"
+    `SSO_CLIENT_ID`, `SSO_CLIENT_SECRET`, and `SSO_AUTH_SERVER_URL` details can be found in the `Technical Details` tab on your SSO integration dashboard (managed by Common Hosted Single Sign-On ([CSS]) team). 
+    resource -> SSO_CLIENT_ID,
+    credentials.secret -> SSO_CLIENT_SECRET,
+    auth-server-url -> SSO_AUTH_SERVER_URL
+
+
+<!-- Reference links -->
+
+[CSS]: https://bcgov.github.io/sso-requests
