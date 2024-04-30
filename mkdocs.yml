@@ -8,9 +8,10 @@ nav:
   - Getting Started:
       - Installing the Package: getting-started/installing-the-package.md
       - Quick Start Guide: getting-started/quick-start-guide.md
+      - Environment Variables: getting-started/environment-variables.md
       - SSO Integration Settings: getting-started/integration-settings.md
   - Using The Package: 
-      - Environment Variables: using-the-package/environment-variables.md
+
       - Protecting a Route: using-the-package/protecting-a-route.md
       - Initialization Options: using-the-package/init-options.md
       - Module Exports: using-the-package/module-exports.md

@@ -40,5 +40,5 @@ sso(app);
 
 ### 2. Add Environment Variables 
 
-Add the required environment variables from the [Environment Variables](../using-the-package/environment-variables.md) section.
+Add the required environment variables from the [Environment Variables](../getting-started/environment-variables.md) section.
 
