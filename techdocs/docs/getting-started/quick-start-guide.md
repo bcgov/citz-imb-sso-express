@@ -30,7 +30,15 @@ const app = express();
 sso(app);
 ```
 
+!!! note "Note"
+    sso() has optional props that can be customized through `SSOOPTIONS`.
+    See [Initialization Options](../using-the-package/init-options.md) for more information.
+
+---
+
+<br />
+
 ### 2. Add Environment Variables 
 
-Add the required environment variables from the [Environment Variables](using-the-package/environment-variables.md) section.
+Add the required environment variables from the [Environment Variables](../getting-started/environment-variables.md) section.
 

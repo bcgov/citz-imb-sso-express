@@ -29,7 +29,7 @@ type OriginalSSOUser = BaseSSOUser & SSOIdirUser & SSOBCeIDUser & SSOGithubUser;
 
 type BaseSSOUser = {
     name?: string;
-    preferred_username: string;
+    preferred_username: string; // Use as unique identifier for user
     email: string;
     display_name: string;
     client_roles?: string[];
