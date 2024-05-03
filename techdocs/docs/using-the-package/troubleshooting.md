@@ -23,8 +23,8 @@ If an issue persists after following all the proper setup guides, follow these s
 
 2. For the `citz-imb-sso-react` package you can check the Application cookies and Network tab in your browser's dev tools to help diagnose the problem.
 
-  - If you see an undefined `refresh_token` cookie, there is a problem.
-  - In the Network tab you will see a chain of login requests and a `?refresh_expires_in=1799&post_login_redirect_url=` request. If `refresh_expires_in` is `undefined` there is a problem.
+  - If you see an undefined `refresh_token` cookie, there is a problem somewhere in the backend. Make sure all environment variables are correct.
+  - In the Network tab you will see a chain of login requests and a `?refresh_expires_in=1799&post_login_redirect_url=` request. If `refresh_expires_in` is `undefined` there is a problem somewhere in the backend. Make sure all environment variables are correct.
   - In the Network tab, `https://logontest7.gov.bc.ca/clp-cgi/accessDenied.cgi` should be expected and will not cause issues with the login process.
   - In the Network tab, you should also see a `token` request. This is the final step in the login process where token details are retrieved and stored in React useContext state. This will run every page refresh.
 
