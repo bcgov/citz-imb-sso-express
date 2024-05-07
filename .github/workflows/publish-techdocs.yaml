@@ -26,7 +26,7 @@ jobs:
                 id: build_and_publish
                 with:
                     publish: 'true' 
-                    production:  ${{ github.ref == 'refs/heads/main' && 'true' || 'false' }} # example of only pushing to prod DevHub when changes that triggered the job are in main branch
+                    production:  ${{ github.event_name == 'release' }} # will need to be tested. Only publish to prod on release
                     bucket_name: ${{ secrets.TECHDOCS_S3_BUCKET_NAME }}
                     s3_access_key_id: ${{ secrets.TECHDOCS_AWS_ACCESS_KEY_ID }}
                     s3_secret_access_key: ${{ secrets.TECHDOCS_AWS_SECRET_ACCESS_KEY }}
