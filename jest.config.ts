@@ -27,6 +27,7 @@ const jestConfig: JestConfigWithTsJest = {
     },
   },
   roots: ['.'],
+  testMatch: ['**/*.test.*'],
   modulePaths: [compilerOptions.baseUrl],
   moduleNameMapper:
     pathsToModuleNameMapper(
