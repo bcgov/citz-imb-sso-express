@@ -24,7 +24,6 @@ This npm package offers an integration solution for Express applications requiri
 <!-- Link References -->
 [CSS]: https://bcgov.github.io/sso-requests
 [@bcgov/citz-imb-sso-react]: https://github.com/bcgov/citz-imb-sso-react
-[GitHub Repository]: https://github.com/bcgov/citz-imb-sso-express
 [NPM Package]: https://www.npmjs.com/package/@bcgov/citz-imb-sso-express
 [example apps]: https://github.com/bcgov/keycloak-example-apps
 [CITZ IMB Common Code]: mailto:citz.codemvp@gov.bc.ca?subject=SSO%20Packages%20Support
