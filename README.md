@@ -59,9 +59,9 @@ Use the links below to help you understand the codebase better.
 [NPM Package]: https://www.npmjs.com/package/@bcgov/citz-imb-sso-express
 [example apps]: https://github.com/bcgov/keycloak-example-apps
 [CITZ IMB Common Code]: mailto:citz.codemvp@gov.bc.ca?subject=SSO%20Packages%20Support
-[Purpose and Benefits of This Package]: https://github.com/bcgov/citz-imb-sso-express/wiki/Purpose-and-Benefits-of-This-Package
+[Purpose and Benefits of This Package]: https://developer.gov.bc.ca/docs/default/component/citz-imb-sso-express-npm-package/purpose-and-benefits/
 
-[Documentation]: https://github.com/bcgov/citz-imb-sso-express/wiki
+[Documentation]: https://developer.gov.bc.ca/docs/default/component/citz-imb-sso-express-npm-package
 [Directory Structure]: https://github.com/bcgov/citz-imb-sso-express/wiki/12-Directory-Structure
 [Scripts]: https://github.com/bcgov/citz-imb-sso-express/wiki/13-Scripts
 [Publishing a New Release Version]: https://github.com/bcgov/citz-imb-sso-express/wiki/14-Publishing-a-New-Release-Version
