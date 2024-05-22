@@ -1,102 +1,255 @@
 name: Create Release
 
+# Used to automate the versioning, tagging, and releasing process of an npm package.
+
+# Release Process:
+
+# 1. Bump the version and add a beta tag for testing (e.g., beta, beta2, beta3).
+# 2. For major releases, create an rc (release candidate) version after beta testing.
+# 3. For patch or minor releases, move directly from beta to the official release.
+# 4. Create the official release by removing pre-release tags.
+
+# - The package is published to npm at each stage of the release process.
+# - A GitHub tag is created at each stage of the process. 
+# - A GitHub Release is ONLY created for official release (not beta or rc).
+
+# Release Steps:
+
+# 1. Creating a new beta release for testing.
+# - Set "versionChange" input to the appropriate version bump (patch, minor, or major).
+# - Set "versionTag" input to 'beta'.
+
+# 2. Incrementing the beta release.
+# - Set "versionChange" input to 'none'.
+# - Set "versionTag" input to 'beta'.
+
+# 3. Changing to rc (release candidate) release (for major changes ONLY).
+# - Set "versionChange" input to 'none'.
+# - Set "versionTag" input to 'rc'.
+
+# 4. Incrementing the rc (release candidate) release (for major changes ONLY).
+# - Set "versionChange" input to 'none'.
+# - Set "versionTag" input to 'rc'.
+
+# 5. Publishing the official release.
+# - Set "versionChange" input to 'none'.
+# - Set "versionTag" input to 'release'.
+
 env:
-  PACKAGE-FILENAME: 'bcgov-citz-imb-sso-express'
   CHANGELOG: '' # Leave empty.
 
 on:
   # Manually triggered
   workflow_dispatch:
     inputs:
-      releaseTitle:
+      releaseTitle: # Release title shows in GitHub Releases tab.
         description: 'The title of the release'
+        required: false # Only required if versionTag === 'release'
+      versionChange: # How much to increment the version number by.
+        description: 'Increment version by...'
         required: true
+        default: 'none'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - none
+      versionTag: # Add or increment a version tag such as beta or rc.
+        description: 'Add or increment tag, or official release...'
+        required: true
+        default: 'beta'
+        type: choice
+        options:
+          - beta
+          - rc
+          - release
 
 jobs:
-  check_version_change:
+  version_change:
     runs-on: ubuntu-latest
     steps:
+      # Validate inputs
+      - name: Validate inputs
+        if: ${{ github.event.inputs.versionTag == 'release' && !github.event.inputs.releaseTitle }}
+        run: |
+          echo "Error: 'releaseTitle' is required when 'versionTag' == 'release'."
+          exit 1
+
       # Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch all history for all tags and branches
-      
-      # Fetch all tags
-      - name: Fetch tags
-        run: git fetch --tags
+          persist-credentials: false
 
-      # Get latest tag name
-      - name: Get latest tag
-        id: latest_tag
-        run: echo "::set-output name=TAG::$(git describe --tags `git rev-list --tags --max-count=1`)"
+      # CONDITIONAL: Bump version
+      - name: Bump version in package.json
+        if: ${{ github.event.inputs.versionChange != 'none' }}
+        run: npm run bump:${{ github.event.inputs.versionChange }}
 
-      # Get version from package.json
-      - name: Get package version
-        id: package_version
-        run: echo "::set-output name=VERSION::$(node -p "require('./package.json').version")"
+      # If versionChange === 'none', version will not be bumped.
 
-      # Compare versions and fail if they match
-      - name: Compare versions and fail if necessary
+      # CONDITIONAL: Add or increment tag
+      - name: Add or increment tag in package.json
+        if: ${{ github.event.inputs.versionTag != 'release' }}
+        run: npm run tag:${{ github.event.inputs.versionTag }}
+
+      # CONDITIONAL: Remove tag
+      - name: Remove version tag in package.json
+        if: ${{ github.event.inputs.versionTag == 'release' }}
+        run: npm run remove-tag
+
+      # Commit changes to the package.json
+      - name: Commit changes to repo
+        env:
+          PAT_TOKEN: ${{ secrets.GIT_PERSONAL_ACCESS_TOKEN }}
         run: |
-          if [ "v${{ steps.package_version.outputs.VERSION }}" == "${{ steps.latest_tag.outputs.TAG }}" ]; then
-            echo "Version in package.json (${{ steps.package_version.outputs.VERSION }}) matches the latest tag (${{ steps.latest_tag.outputs.TAG }})."
-            echo "You must update the version with 'npm run bump' before a release can be made."
-            exit 1
-          fi
-          
-  create_release:
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git add .
+          echo "Pushing changes to package version"
+          git commit -m "Bumping version by ${{ github.event.inputs.versionChange }} and updating tag by ${{ github.event.inputs.versionTag }}"
+          git remote set-url origin https://x-access-token:${{ secrets.GIT_PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}
+          git push origin main
+
+  # UNPUBLISHING NOTE: 
+  # If you need to unpublish a package version for any reason, you must do so within 72 hours
+  # of the version being published. To do so, use 'npm login' to login to the 'citzcodemvp' account
+  # and then run 'npm unpublish @bcgov/<package-name>@<version>' where <package-name> and <version>
+  # have been replaced.
+
+  npm_publish:
     runs-on: ubuntu-latest
+    needs: version_change
     steps:
       # Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Fetch all history for all tags and branches
 
-      # Create changelog
-      - name: Create changelog from commits
-        id: changelog
-        run: |
-          changelog=$(git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:'%h - %s')
-          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
-          echo "$changelog" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+      # Get latest changes
+      - name: Get latest changes
+        run: git pull
 
       # Package code
       - name: Run npm pack
         run: npm run pack
+
+      # CONDITIONAL: Publish package to NPM with tag
+      - name: Publish to npm with tag
+        uses: JS-DevTools/npm-publish@v3
+        if: ${{ github.event.inputs.versionTag != 'release' }}
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          tag: ${{ github.event.inputs.versionTag }}
+          access: public
+
+      # CONDITIONAL: Publish package to NPM without tag (official release)
+      - name: Publish to npm
+        uses: JS-DevTools/npm-publish@v3
+        if: ${{ github.event.inputs.versionTag == 'release' }}
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public
+          
+  create_github_release:
+    runs-on: ubuntu-latest
+    needs: npm_publish
+    steps:
+      # Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for all tags and branches
+
+      # Get latest changes
+      - name: Get latest changes
+        run: git pull
 
       # Get new version number
       - name: Get the version from package.json
         id: package_version
         run: echo "::set-output name=VERSION::$(node -p "require('./package.json').version")"
 
-      # Publish package to NPM
-      - name: Publish to npm
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          access: public
+      # Get previous official version
+      - name: Get previous official version
+        id: previous_version
+        run: |
+          PREV_VERSION=$(git tag --sort=-creatordate | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+          echo "::set-output name=PREV_VERSION::$PREV_VERSION"
 
-      # Create new release in GitHub
+      # Tag the version
+      - name: Create GitHub Tag
+        run: |
+          git tag ${{ steps.package_version.outputs.VERSION }}
+          git push origin ${{ steps.package_version.outputs.VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Install GitHub CLI for use in changelog step
+      - name: Install GitHub CLI
+        if: ${{ github.event.inputs.versionTag == 'release' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh
+      
+      # Install JQ for use in changelog step
+      - name: Install jq
+        if: ${{ github.event.inputs.versionTag == 'release' }}
+        run: |
+          sudo apt-get install -y jq
+
+      # Create changelog (only official releases)
+      - name: Create changelog
+        id: changelog
+        if: ${{ github.event.inputs.versionTag == 'release' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get the current version from package.json
+          VERSION=${{ steps.package_version.outputs.VERSION }}
+
+          # Get the previous official version
+          PREV_VERSION=${{ steps.previous_version.outputs.PREV_VERSION }}
+        
+          # Generate comparison link
+          COMPARISON_URL="https://github.com/${{ github.repository }}/compare/$PREV_VERSION...$VERSION"
+          
+          # Generate technical documentation link
+          TECH_DOCS_URL="https://github.com/${{ github.repository }}/tree/$VERSION/techdocs/docs"
+          
+          # List all tags for the current version that have 'beta' or 'rc' in their names
+          TAGS=$(git tag --list "${VERSION}-beta*" "${VERSION}-rc*")
+          
+          CHANGELOG=""
+          
+          # Loop through each tag to get merged pull requests
+          for TAG in $TAGS; do
+            # Use GitHub CLI to list pull requests merged into the tag
+            PRS=$(gh pr list --search "merged:${TAG}" --json title,url)
+            
+            # Loop through each pull request to construct the changelog
+            for PR in $PRS; do
+              TITLE=$(echo $PR | jq -r '.title')
+              URL=$(echo $PR | jq -r '.url')
+              CHANGELOG="${CHANGELOG}\n- ${TITLE} (${URL})"
+            done
+          done
+          
+          # Set the CHANGELOG environment variable with the constructed changelog, comparison link, and technical documentation link
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "<details><summary>Pull Requests</summary>\n$CHANGELOG\n</details>" >> $GITHUB_ENV
+          echo "\n[Compare changes since last version]($COMPARISON_URL)" >> $GITHUB_ENV
+          echo "\n[Documentation]($TECH_DOCS_URL)" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      # Create new release in GitHub (only official releases)
       - name: Create GitHub Release
         id: create_release
+        if: ${{ github.event.inputs.versionTag == 'release' }}
         uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.package_version.outputs.VERSION }}
+          tag_name: ${{ steps.package_version.outputs.VERSION }}
           name: ${{ github.event.inputs.releaseTitle }}
           body: ${{ env.CHANGELOG }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Upload packaged code
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/${{ env.PACKAGE-FILENAME }}-${{ steps.package_version.outputs.VERSION }}.tgz
-          asset_name: ${{ env.PACKAGE-FILENAME }}-${{ steps.package_version.outputs.VERSION }}.tgz
-          asset_content_type: application/gzip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
