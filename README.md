@@ -47,6 +47,7 @@ Use the links below to help you understand the codebase better.
 
 - [Directory Structure]
 - [Scripts]
+- [Package Management Plan]
 - [Publishing a New Release Version]
 
 <br />
@@ -64,4 +65,5 @@ Use the links below to help you understand the codebase better.
 [Documentation]: https://developer.gov.bc.ca/docs/default/component/citz-imb-sso-express-npm-package
 [Directory Structure]: https://github.com/bcgov/citz-imb-sso-express/wiki/12-Directory-Structure
 [Scripts]: https://github.com/bcgov/citz-imb-sso-express/wiki/13-Scripts
-[Publishing a New Release Version]: https://github.com/bcgov/citz-imb-sso-express/wiki/14-Publishing-a-New-Release-Version
+[Publishing a New Release Version]: https://citz-imb.atlassian.net/l/cp/rj2F0y2n
+[Package Management Plan]: https://citz-imb.atlassian.net/l/cp/jcxjEmBf
