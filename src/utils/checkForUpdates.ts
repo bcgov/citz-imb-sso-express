@@ -23,7 +23,7 @@ export const checkForUpdates = async () => {
 
     if (process.env.NODE_ENV === 'development' && currentVersion !== latestVersion) {
       console.log(
-        `\n${BACKGROUND_RED}${WHITE}Update available for ${packageName}: ${currentVersion} -> ${latestVersion}${RESET}\n`,
+        `\n${BACKGROUND_RED}${WHITE} Update available for ${packageName}: ${currentVersion} -> ${latestVersion} ${RESET}\n`,
       );
     }
   } catch (error) {
