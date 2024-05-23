@@ -63,7 +63,7 @@ Use the links below to help you understand the codebase better.
 [Purpose and Benefits of This Package]: https://developer.gov.bc.ca/docs/default/component/citz-imb-sso-express-npm-package/purpose-and-benefits/
 
 [Documentation]: https://developer.gov.bc.ca/docs/default/component/citz-imb-sso-express-npm-package
-[Directory Structure]: https://github.com/bcgov/citz-imb-sso-express/wiki/12-Directory-Structure
-[Scripts]: https://github.com/bcgov/citz-imb-sso-express/wiki/13-Scripts
+[Directory Structure]: https://github.com/bcgov/citz-imb-sso-express/wiki/Directory-Structure
+[Scripts]: https://github.com/bcgov/citz-imb-sso-express/wiki/Scripts
 [Publishing a New Release Version]: https://citz-imb.atlassian.net/l/cp/rj2F0y2n
 [Package Management Plan]: https://citz-imb.atlassian.net/l/cp/jcxjEmBf
