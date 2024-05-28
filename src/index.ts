@@ -6,6 +6,7 @@ import { SSOOptions } from './types';
 import debug from './utils/debug';
 
 import config from './config';
+import { checkForUpdates } from './utils';
 const { FRONTEND_URL } = config;
 
 export { protectedRoute } from './middleware';
@@ -47,6 +48,9 @@ export const sso = (app: Application, options?: SSOOptions) => {
 
   // Routes defined in ./router file.
   app.use('/auth', router(options));
+
+  // Check for updates
+  checkForUpdates();
 
   debug.initialized();
 };
