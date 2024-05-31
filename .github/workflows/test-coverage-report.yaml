@@ -1,0 +1,55 @@
+name:  Code Climate Test Coverage Reports Generation
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  package-codeclimate-jest-coverage:
+    runs-on: ubuntu-latest
+    env:
+      CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+
+    steps:
+      # Checkout code from Repo.
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      # Import Code Climate test reporter.
+      - name: Import Code Climate
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          
+      # Allow test reporter to be executed.
+      - name: Execute Permissions for Code Climate Binary
+        run: |
+          chmod +x ./cc-test-reporter
+          
+      # Notifies Code Climate of impending report.
+      - name: Test Reporter Before Build
+        run: |
+          ./cc-test-reporter before-build
+          
+      # Install dependencies.
+      - name: Install Dependencies and Run Coverage Report Generation
+        run: |
+          npm i
+          npm run coverage      
+          
+      # Use lcov to format coverage for Code Climate
+      # -t is for coverage type
+      - name: Format Test Coverage
+        run: |
+          ./cc-test-reporter format-coverage ${{ github.workspace }}/coverage/lcov.info -t lcov --output ${{ github.workspace }}/coverage/sso-express-coverage.json
+          
+      # Upload JSON for debugging purposes
+      - name: Upload JSON for Aggregation
+        uses: actions/upload-artifact@v4
+        with:
+          name: sso-express-coverage-json
+          path: ${{ github.workspace }}/coverage/sso-express-coverage.json
+
+      # Upload total coverage report to Code Climate
+      - name: Upload coverage report to Code Climate
+        run: ./cc-test-reporter upload-coverage -d -i ${{ github.workspace }}/coverage/sso-express-coverage.json
