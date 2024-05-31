@@ -95,7 +95,7 @@ An API reference for the properties of the `req.user` object.
       <td>User's login identity provider such as IDIR.</td>
     </tr>
     <tr>
-      <td>hasRoles</td>
+      <td><a href="../has-roles">hasRoles</a></td>
       <td>(roles: string[], options?: HasRolesOptions) => boolean</td>
       <td>Checks if the user has specific role(s).</td>
     </tr>
