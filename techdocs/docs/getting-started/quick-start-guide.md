@@ -43,4 +43,4 @@ sso(app);
 Add the required environment variables from the [Environment Variables](../getting-started/environment-variables.md) section.
 
 <!-- Link References -->
-[sso]: ../using-the-package/apis-&-components/sso
+[sso]: ../../using-the-package/apis-&-components/sso

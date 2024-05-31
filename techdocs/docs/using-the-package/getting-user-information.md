@@ -2,12 +2,12 @@
 
 ## Checking a User's Role(s)
 
-You can check if the user has a role or roles within a controller function that is protected by the `protectedRoute` middleware function.  
+You can check if the user has a role or roles within a controller function that is protected by the [protectedRoute] middleware function by using the [user] object from the request.  
 
 ```JavaScript
 // ... inside controller function v
 
-const user = req?.user;
+const user = req.user;
 
 // User must have 'Admin' role.
 if (user?.hasRoles(['Admin'])) // Do something...
@@ -33,10 +33,10 @@ if (user?.hasRoles(['Member', 'Verified'], { requireAllRoles: false })) // Do So
 
 ## Getting User Data
 
-Access user information from the `user` object (of type `SSOUser`) which can be accessed from the request object (commonly `req`) of a controller function that is protected by the `protectedRoute` middleware function.
+Access user information from the [user] object (of type `SSOUser`) which can be accessed from the request object (commonly `req`) of a controller function that is protected by the `protectedRoute` middleware function.
 
 ```JavaScript
-const user = req?.user;
+const user = req.user;
 ```
 
 ### `Example User Object:`
@@ -64,3 +64,4 @@ const user = req?.user;
 
 <!-- Link References -->
 [SSO Keycloak Wiki - Identity Provider Attribute Mapping]: https://github.com/bcgov/sso-keycloak/wiki/Identity-Provider-Attribute-Mapping
+[user]: ../apis-&-components/req-user
