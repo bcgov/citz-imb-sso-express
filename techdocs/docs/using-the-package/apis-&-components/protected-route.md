@@ -107,7 +107,7 @@ The Name column starting with `*` means the prop is required.
     <tr>
       <td>options</td>
       <td>ProtectedRouteOptions</td>
-      <td>-</td>
+      <td>{ requireAllRoles: true }</td>
       <td>Configurable options for the protected route.</td>
     </tr>
     <tr>
