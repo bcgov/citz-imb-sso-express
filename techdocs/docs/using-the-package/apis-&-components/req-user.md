@@ -1,6 +1,6 @@
 # req.user
 
-The `user` object is part of the `req` (Request) object when the route is protected by [protectedRoute] middleware. The `user` object holds information on the user from SSO.
+The `user` object is part of the `req` (Request) object when the route is protected by [protectedRoute] middleware and holds information on the user from SSO.
 
 ## Usage
 
