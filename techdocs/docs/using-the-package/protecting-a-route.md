@@ -61,7 +61,9 @@ app.use("/vote", protectedRoute(['Member', 'Verified'], { requireAllRoles: false
     If you wish to require only one of a list of roles, add the options parameter with `requireAllRoles` property set to `false`.
 
 !!! tip "Tip"
-    You can also check if the user has a role within the controller function by using the `hasRoles` function on the `SSOUser` object of `req.user`.
+    You can also check if the user has a role within the controller function by using the [hasRoles] function on the `SSOUser` object of [req.user].
 
 <!-- Link References -->
+[hasRoles]: ../has-roles
+[req.user]: ../req-user
 [protectedRoute]: ../apis-&-components/protected-route

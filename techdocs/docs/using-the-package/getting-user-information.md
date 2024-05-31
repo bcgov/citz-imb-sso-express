@@ -33,7 +33,7 @@ if (user?.hasRoles(['Member', 'Verified'], { requireAllRoles: false })) // Do So
 
 ## Getting User Data
 
-Access user information from the [user] object (of type `SSOUser`) which can be accessed from the request object (commonly `req`) of a controller function that is protected by the `protectedRoute` middleware function.
+Access user information from the [user] object (of type `SSOUser`) which can be accessed from the request object (commonly `req`) of a controller function that is protected by the [protectedRoute] middleware function.
 
 ```JavaScript
 const user = req.user;
@@ -65,3 +65,4 @@ const user = req.user;
 <!-- Link References -->
 [SSO Keycloak Wiki - Identity Provider Attribute Mapping]: https://github.com/bcgov/sso-keycloak/wiki/Identity-Provider-Attribute-Mapping
 [user]: ../apis-&-components/req-user
+[protectedRoute]: ../apis-&-components/protected-route
