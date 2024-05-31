@@ -12,6 +12,7 @@ nav:
       - SSO Integration Settings: getting-started/integration-settings.md
   - Using The Package:
       - Protecting a Route: using-the-package/protecting-a-route.md
+      - Getting User Information: using-the-package/getting-user-information.md
       - Initialization Options: using-the-package/init-options.md
       - APIs & Components:
           - sso: using-the-package/apis-&-components/sso.md
