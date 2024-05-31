@@ -15,6 +15,7 @@ nav:
       - Initialization Options: using-the-package/init-options.md
       - APIs & Components:
           - sso: using-the-package/apis-&-components/sso.md
+          - protectedRoute: using-the-package/apis-&-components/protected-route.md
       - Module Exports: using-the-package/module-exports.md
       - TypeScript Types: using-the-package/typescript-types.md
       - Troubleshooting: using-the-package/troubleshooting.md

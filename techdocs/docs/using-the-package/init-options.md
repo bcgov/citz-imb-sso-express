@@ -1,6 +1,6 @@
 # Initialization Options
 
-Add additional functionality to your SSO integration by using the optional second parameter to the `sso()` function which is of type `SSOOptions`.  
+Add additional functionality to your SSO integration by using the optional second parameter to the [sso] function which is of type `SSOOptions`.  
 Currently `afterUserLogin` and `afterUserLogout` are available to configure. 
 
 ### `Example:`
@@ -24,3 +24,6 @@ sso(app, SSO_OPTIONS);
 
 !!! tip "Tip"
     Use this to add a user to your database upon first login and then update fields such as last login upon subsequent logins.
+
+<!-- Link References -->
+[sso]: ../apis-&-components/sso

@@ -1,6 +1,6 @@
 # sso
 
-The `sso` function initializes the sso service in your express app.
+The `sso` function initializes the SSO service in your express app.
 
 ## Import
 
@@ -14,17 +14,33 @@ const { sso } = require('@bcgov/citz-imb-sso-express');
 
 ## Usage
 
-A basic example of using the `sso` function to initialize the SSO service.
+A basic example of using the `sso` function to initialize the SSO service with SSOOptions.
 
 ```JavaScript
 import express, { Application } from 'express';
 import { sso } from '@bcgov/citz-imb-sso-express';
+import { activateUser } from "./utils";
 
 // Define Express App.
 const app = express();
 
+const SSO_OPTIONS: SSOOptions = {
+  afterUserLogin: (user: SSOUser) => {
+    if (user) activateUser(user); // Demonstration of passing user info to a custom function.
+  },
+  afterUserLogout: (user: SSOUser) => {
+    console.log(`${user?.display_name ?? "Unknown"} has logged out.`);
+  },
+};
+
 // Initialize sso(app: Application, options?: SSOOptions).
-sso(app);
+sso(app, SSO_OPTIONS);
+```
+
+## TypeScript Type
+
+```TypeScript
+(app: Application, options?: SSOOptions) => void;
 ```
 
 ## Parameters
