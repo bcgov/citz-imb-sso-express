@@ -64,6 +64,6 @@ app.use("/vote", protectedRoute(['Member', 'Verified'], { requireAllRoles: false
     You can also check if the user has a role within the controller function by using the [hasRoles] function on the `SSOUser` object of [req.user].
 
 <!-- Link References -->
-[hasRoles]: ../has-roles
-[req.user]: ../req-user
+[hasRoles]: ../apis-&-components/has-roles
+[req.user]: ../apis-&-components/req-user
 [protectedRoute]: ../apis-&-components/protected-route
