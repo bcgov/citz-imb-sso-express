@@ -1,0 +1,22 @@
+name: CI Unit Integration Test Suite 
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review] # Triggered by opened or changed pull requests.
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs: 
+  ci-unit-integration-test:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:  
+          fetch-depth: 0
+
+      - name: Run Package Test Suite at Root
+        run: |
+          npm i 
+          npm run test
