@@ -123,4 +123,4 @@ An API reference for the properties of the `req.user` object.
 </table>
 
 <!-- Link References -->
-[protectedRoute]: ./protecting-a-route
+[protectedRoute]: ../protecting-a-route
