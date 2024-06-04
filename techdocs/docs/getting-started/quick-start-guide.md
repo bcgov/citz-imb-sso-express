@@ -4,7 +4,7 @@ Set up in 2 steps.
 
 ### 1. Initialize with Express App 
 
-Add import for `sso` to the file that defines the express app.  
+Add import for [sso] to the file that defines the express app.  
 Add `sso(app);` below the definition of the express app, where `app` is defined by `express()`.
 
 #### `Import Examples:`
@@ -42,3 +42,5 @@ sso(app);
 
 Add the required environment variables from the [Environment Variables](../getting-started/environment-variables.md) section.
 
+<!-- Link References -->
+[sso]: ../../using-the-package/apis-&-components/sso

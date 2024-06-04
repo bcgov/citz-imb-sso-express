@@ -3,12 +3,19 @@
 ## Requiring a user to be logged in to use a route
 
 Require sso authentication before using an endpoint.  
-Import `protectedRoute` from `@bcgov/citz-imb-sso-express` and add as middleware to a route.
+Import [protectedRoute] from `@bcgov/citz-imb-sso-express` and add as middleware to a route.
 
 ### Use Where Express app is Defined
 
 ```JavaScript
+import express, { Application } from 'express';
 import { protectedRoute } from '@bcgov/citz-imb-sso-express';
+
+// Define Express App.
+const app = express();
+
+// Initialize SSO.
+sso(app);
 
 app.use("/protected", protectedRoute(), protectedRouter); // Protected.
 app.use("/unprotected", unprotectedRouter); // Not protected.
@@ -35,7 +42,7 @@ router.get("/unprotected", unprotectedController()); // Not protected.
 
 ## Requiring Roles for a Route
 
-You can require that a user has a role or roles in order to use a protected route by passing an array of strings (role names) to the `protectedRoute` middleware function.
+You can require that a user has a role or roles in order to use a protected route by passing an array of strings (role names) to the [protectedRoute] middleware function.
 
 ```Javascript
 // Users must have 'Member' role.
@@ -54,4 +61,9 @@ app.use("/vote", protectedRoute(['Member', 'Verified'], { requireAllRoles: false
     If you wish to require only one of a list of roles, add the options parameter with `requireAllRoles` property set to `false`.
 
 !!! tip "Tip"
-    You can also check if the user has a role within the controller function by using the `hasRoles` function on the `SSOUser` object of `req.user`.
+    You can also check if the user has a role within the controller function by using the [hasRoles] function on the `SSOUser` object of [req.user].
+
+<!-- Link References -->
+[hasRoles]: ../apis-&-components/has-roles
+[req.user]: ../apis-&-components/req-user
+[protectedRoute]: ../apis-&-components/protected-route

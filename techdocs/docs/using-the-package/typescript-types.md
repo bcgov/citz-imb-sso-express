@@ -34,7 +34,7 @@ type BaseSSOUser = {
     display_name: string;
     client_roles?: string[];
     scope?: string;
-    identity_provider: IdirIdentityProvider | BceidIdentityProvider | GithubIdentityProvider;
+    identity_provider: IdentityProvider;
 };
 
 type SSOIdirUser = {
