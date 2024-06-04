@@ -42,7 +42,7 @@ sso(app, SSO_OPTIONS);
 <!-- The following code block is auto generated when types in the package change. -->
 <!-- TYPE: sso -->
 ```TypeScript
-(app: Application, options?: SSOOptions) => void;
+const sso: (app: Application, options?: SSOOptions) => void;
 ```
 
 Type of `SSOOptions`:
@@ -50,7 +50,10 @@ Type of `SSOOptions`:
 <!-- The following code block is auto generated when types in the package change. -->
 <!-- TYPE: SSOOptions -->
 ```TypeScript
-// Placeholder
+type SSOOptions = {
+    afterUserLogin?: (user: SSOUser) => Promise<void> | void;
+    afterUserLogout?: (user: SSOUser) => Promise<void> | void;
+}
 ```
 
 ## Parameters

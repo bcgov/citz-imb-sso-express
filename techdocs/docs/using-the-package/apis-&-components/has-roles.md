@@ -42,7 +42,7 @@ export const controller = (req: Request, res: Response) => {
 <!-- The following code block is auto generated when types in the package change. -->
 <!-- TYPE: hasRoles -->
 ```TypeScript
-// Placeholder
+const hasRoles: (user: SSOUser, roles: string[], options?: HasRolesOptions) => boolean;
 ```
 
 Type of `HasRolesOptions`:
@@ -50,7 +50,9 @@ Type of `HasRolesOptions`:
 <!-- The following code block is auto generated when types in the package change. -->
 <!-- TYPE: HasRolesOptions -->
 ```TypeScript
-// Placeholder
+type HasRolesOptions = {
+    requireAllRoles?: boolean;
+}
 ```
 
 ## Parameters

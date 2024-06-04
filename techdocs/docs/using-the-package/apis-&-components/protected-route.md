@@ -78,7 +78,7 @@ app.use("/vote", protectedRoute(['Member', 'Verified'], { requireAllRoles: false
 <!-- The following code block is auto generated when types in the package change. -->
 <!-- TYPE: protectedRoute -->
 ```TypeScript
-(roles?: string[], options?: ProtectedRouteOptions) => RequestHandler;
+const protectedRoute: (roles?: string[], options?: ProtectedRouteOptions) => RequestHandler;
 ```
 
 Type of `ProtectedRouteOptions`:
@@ -86,7 +86,9 @@ Type of `ProtectedRouteOptions`:
 <!-- The following code block is auto generated when types in the package change. -->
 <!-- TYPE: ProtectedRouteOptions -->
 ```TypeScript
-// Placeholder
+type ProtectedRouteOptions = {
+    requireAllRoles?: boolean;
+}
 ```
 
 ## Parameters

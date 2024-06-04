@@ -29,6 +29,7 @@ type SSOUser = BaseSSOUser & {
     first_name: string;
     last_name: string;
     originalData: OriginalSSOUser;
+    hasRoles: (roles: string[], options?: HasRolesOptions) => boolean;
 }
 ```
 
