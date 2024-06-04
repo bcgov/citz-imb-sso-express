@@ -1,7 +1,13 @@
 # TypeScript Types
 
-These are the TypeScript types available within the package.
+These are the complete TypeScript types available within the package as they are in the bundled build.
 
+For more in depth documentation on types, look at the `APIs & Components` pages.
+
+<!-- DO NOT REMOVE THE FOLLOWING LINES. -->
+<!-- This code block is auto generated when types in the package change. -->
+
+<!-- TYPESCRIPT TYPES -->
 ```TypeScript
 // Application and RequestHandler are types provided by 'express'
 
