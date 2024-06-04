@@ -22,5 +22,7 @@ nav:
       - Module Exports: using-the-package/module-exports.md
       - TypeScript Types: using-the-package/typescript-types.md
       - Troubleshooting: using-the-package/troubleshooting.md
+  - Major Releases:
+      - 1.0.0: major-release-1.md
   - Authentication Flow: authentication-flow.md
   - Purpose and Benefits: purpose-and-benefits.md
