@@ -18,3 +18,6 @@ Release 1.0.0 is the first stable release of the package. It offers an integrati
 - Get user information from logged in user.
 - Execute functions on user login and logout.
 - Type safety.
+
+<!-- Link References -->
+[CSS]: https://bcgov.github.io/sso-requests
