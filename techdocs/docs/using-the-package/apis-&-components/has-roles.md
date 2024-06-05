@@ -37,6 +37,24 @@ export const controller = (req: Request, res: Response) => {
     By default, all roles in the array will be required.  
     If you wish to require only one of a list of roles, add the options parameter with `requireAllRoles` property set to `false`.
 
+## TypeScript Type
+
+<!-- The following code block is auto generated when types in the package change. -->
+<!-- TYPE: hasRoles -->
+```TypeScript
+const hasRoles: (user: SSOUser, roles: string[], options?: HasRolesOptions) => boolean;
+```
+
+Type of `HasRolesOptions`:
+
+<!-- The following code block is auto generated when types in the package change. -->
+<!-- TYPE: HasRolesOptions -->
+```TypeScript
+type HasRolesOptions = {
+    requireAllRoles?: boolean;
+}
+```
+
 ## Parameters
 
 An API reference for the parameters of the `hasRoles` function.

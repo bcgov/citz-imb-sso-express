@@ -1,0 +1,66 @@
+name: Update TechDoc Types
+
+# Updates the TypeScript type docs in techdocs 
+# automatically every time changes are made to the source code.
+
+# Makes updates to:
+# - Main "TypeScript Types" page under the "<!-- TYPESCRIPT TYPES -->" comment.
+# - Codeblocks in ".md" files of techdocs/docs with the "<!-- TYPE: <type> -->" comment.
+#    -> "<type>" Can be a type, interface, or function, as well as nested type property.
+#    -> Examples include "SSOUser", "useSSO", or "AuthService.hasRoles".
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ src/** ] # Triggered by changes to the src code
+  workflow_dispatch:
+
+jobs:
+  update-typescript-types:
+      runs-on: ubuntu-22.04
+      env:
+        changes_detected: 'false'
+
+      steps:
+        # Checkout branch.
+        - name: Checkout Repository
+          uses: actions/checkout@v4
+
+        # Install dependencies and build package
+        - name: Install & build
+          run: |
+            npm i
+            npm run build
+
+        # Run script
+        - name: Run scripts
+          working-directory: ${{ github.workspace }}
+          run: |
+            node .github/helpers/techdocs/update-main-typescript-types.cjs
+            node .github/helpers/techdocs/update-typescript-types.cjs
+
+        # Add changes to repo
+        - name: Add changes to repo
+          run: |
+            git config --global user.name "${{ github.actor }}"
+            git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+            git add .
+
+        # Check if changes were made and commit
+        - name: Commit changes if any
+          run: |
+            if git diff --cached --quiet; then
+              echo "No changes to commit"
+            else
+              git commit -m "Updating TypeScript types in docs"
+              echo "changes_detected=true" >> $GITHUB_ENV
+            fi
+
+        # Push changes to repo
+        - name: Push changes to repo
+          if: env.changes_detected == 'true'
+          env:
+            PAT_TOKEN: ${{ secrets.GIT_PERSONAL_ACCESS_TOKEN }}
+          run: |
+            git remote set-url origin https://x-access-token:${{ secrets.GIT_PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}
+            git push origin main

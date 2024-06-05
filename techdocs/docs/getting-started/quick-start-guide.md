@@ -32,7 +32,7 @@ sso(app);
 
 !!! note "Note"
     sso() has optional props that can be customized through `SSOOPTIONS`.
-    See [Initialization Options](../using-the-package/init-options.md) for more information.
+    See [Initialization Options](../using-the-package/init-options.md) or [sso] for more information.
 
 ---
 
