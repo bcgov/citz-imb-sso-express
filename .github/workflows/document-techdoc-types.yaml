@@ -25,6 +25,8 @@ jobs:
         # Checkout branch.
         - name: Checkout Repository
           uses: actions/checkout@v4
+          with:
+            persist-credentials: false
 
         # Install dependencies and build package
         - name: Install & build
