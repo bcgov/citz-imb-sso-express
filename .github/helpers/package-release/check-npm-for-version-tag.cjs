@@ -4,9 +4,10 @@
  * @param {string} version - Property 'version' of package.json
  * @param {string} tag - Version tag such as 'beta' or 'rc'
  */
-export const checkNPMForVersionTag = async (packageName, version, tag) => {
+const checkNPMForVersionTag = async (packageName, version, tag) => {
   const url = `https://registry.npmjs.org/${encodeURIComponent(packageName)}`;
-  const taggedVersion = `${version}-${tag}`;
+  const versionStrippedOfTag = version.replace(/-\w+$/, '');
+  const taggedVersion = `${versionStrippedOfTag}-${tag}`;
 
   try {
     const response = await fetch(url);
@@ -27,3 +28,5 @@ export const checkNPMForVersionTag = async (packageName, version, tag) => {
     process.exit(1);
   }
 };
+
+module.exports = { checkNPMForVersionTag };
