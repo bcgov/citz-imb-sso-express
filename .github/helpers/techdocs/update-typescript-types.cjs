@@ -27,7 +27,8 @@ fs.readFile(declarationFilePath, 'utf8', (error, declarationData) => {
 
 // Extract type definitions from the declaration file
 const extractTypeDefinitions = (declarationData) => {
-  const typeRegex = /(?:type|interface|const|let|var|function|class)\s+(\w+(\.\w+)?)[\s\S]*?[;{]/g;
+  const typeRegex =
+    /(?:type|interface|const|let|var|function|class|declare module)\s+([\w.]+)[\s\S]*?[;{]/g;
   const types = {};
   let match;
 
@@ -36,10 +37,30 @@ const extractTypeDefinitions = (declarationData) => {
     const startIndex = match.index;
     const endIndex = findTypeEnd(declarationData, startIndex + match[0].length - 1);
     const typeDefinition = declarationData.slice(startIndex, endIndex + 1).trim();
-    types[typeName] = typeDefinition;
+    addTypeDefinition(types, typeName.split('.'), typeDefinition);
+  }
+
+  // Special handling for express-serve-static-core.Request
+  const expressRequestTypeRegex =
+    /declare module 'express-serve-static-core' \{[\s\S]*?interface Request \{([\s\S]*?)\}/g;
+  while ((match = expressRequestTypeRegex.exec(declarationData)) !== null) {
+    const typeName = 'express-serve-static-core.Request';
+    const typeDefinition = `interface Request {${match[1]}}`;
+    addTypeDefinition(types, typeName.split('.'), typeDefinition);
   }
 
   return types;
+};
+
+const addTypeDefinition = (types, keys, typeDefinition) => {
+  let current = types;
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    if (!current[key]) {
+      current[key] = i === keys.length - 1 ? typeDefinition : {};
+    }
+    current = current[key];
+  }
 };
 
 // Find the end of the type definition, handling nested braces
