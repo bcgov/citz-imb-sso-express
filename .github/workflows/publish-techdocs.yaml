@@ -3,7 +3,7 @@ name: Build TechDocs with DevHub TechDocs Publish Action
 on:
     workflow_dispatch:
     release:
-        types: [released]
+        types: [published]
     push:
         branches: [ main ]
         paths:
