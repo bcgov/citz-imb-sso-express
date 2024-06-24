@@ -52,3 +52,11 @@ exclude_patterns:
   - "**/__tests__/"
   - ".github/"
   - "**/.docker/"
+
+plugins: 
+  eslint:
+    enabled: true
+    channel: "eslint-8"
+    config: .eslintrc.cjs
+  fixme:
+    enabled: true
