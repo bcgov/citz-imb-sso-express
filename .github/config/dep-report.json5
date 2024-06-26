@@ -1,8 +1,7 @@
-// CONFIG FILE for specifying options in the NPM Dependency Report workflow.
+// Dependency Report Workflow CONFIG FILE
 {
   // Check package.json files for dependency updates.
   packageJsonPaths: ["."],
-
   // Do not report on the following packages.
   ignorePackages: {
     // Path to package.json file.
