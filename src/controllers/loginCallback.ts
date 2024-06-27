@@ -30,6 +30,7 @@ export const loginCallback = (options?: SSOOptions) => {
         .cookie('refresh_token', refresh_token, {
           httpOnly: true,
           secure: true,
+          sameSite: 'none',
           domain: COOKIE_DOMAIN,
         })
         .redirect(redirectURL);
