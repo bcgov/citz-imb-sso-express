@@ -42,6 +42,7 @@ describe('loginCallback controller', () => {
     expect(res.cookie).toHaveBeenCalledWith('refresh_token', 'mocked_refresh_token', {
       httpOnly: true,
       secure: true,
+      sameSite: 'none',
       domain: 'localhost',
     });
     expect(res.redirect).toHaveBeenCalledWith(
