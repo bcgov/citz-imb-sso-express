@@ -230,7 +230,11 @@ jobs:
           PREV_VERSION=${{ steps.previous_version.outputs.PREV_VERSION }}
         
           # Generate comparison link
-          COMPARISON_URL="https://github.com/${{ github.repository }}/compare/$PREV_VERSION...$VERSION"
+          if [ -n "$PREV_VERSION" ]; then
+            COMPARISON_URL="https://github.com/${{ github.repository }}/compare/$PREV_VERSION...$VERSION"
+          else
+            COMPARISON_URL=""
+          fi
           
           # Generate technical documentation link
           TECH_DOCS_URL="https://github.com/${{ github.repository }}/tree/$VERSION/techdocs/docs"
@@ -246,9 +250,9 @@ jobs:
             PRS=$(gh pr list --search "merged:${TAG}" --json title,url)
             
             # Loop through each pull request to construct the changelog
-            for PR in $PRS; do
-              TITLE=$(echo $PR | jq -r '.title')
-              URL=$(echo $PR | jq -r '.url')
+            for PR in $(echo "$PRS" | jq -c '.[]'); do
+              TITLE=$(echo "$PR" | jq -r '.title')
+              URL=$(echo "$PR" | jq -r '.url')
               CHANGELOG="${CHANGELOG}\n- ${TITLE} (${URL})"
             done
           done
@@ -256,7 +260,9 @@ jobs:
           # Set the CHANGELOG environment variable with the constructed changelog, comparison link, and technical documentation link
           echo "CHANGELOG<<EOF" >> $GITHUB_ENV
           echo "<details><summary>Pull Requests</summary>\n$CHANGELOG\n</details>" >> $GITHUB_ENV
-          echo "\n[Compare changes since last version]($COMPARISON_URL)" >> $GITHUB_ENV
+          if [ -n "$COMPARISON_URL" ]; then
+            echo "\n[Compare changes since last version]($COMPARISON_URL)" >> $GITHUB_ENV
+          fi
           echo "\n[Documentation]($TECH_DOCS_URL)" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
