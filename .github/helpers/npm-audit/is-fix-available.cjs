@@ -9,9 +9,7 @@ const semver = require('semver');
  */
 const isFixAvailable = (latestVersion, vulnerableRange, childDepVersion) => {
   // Check if the latest version is within the vulnerable range
-  if (semver.satisfies(latestVersion, vulnerableRange)) {
-    return false;
-  }
+  if (semver.satisfies(latestVersion, vulnerableRange)) return false;
 
   // Check if the child dependency version is outside the vulnerable range
   const resolvedVersion = semver.maxSatisfying(
