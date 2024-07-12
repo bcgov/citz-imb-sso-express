@@ -42,7 +42,7 @@ jobs:
         # Run script to convert json5 config to Output Vars.
         - name: Run Script
           id: parse_config
-          run: node .github/helpers/parse-json5-config .github/config/dep-report.json5
+          run: node .github/helpers/parse-json5-config.cjs .github/config/dep-report.json5
 
   # Check package versions for updates.
   parse-package-versions:
