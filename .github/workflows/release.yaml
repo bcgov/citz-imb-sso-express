@@ -10,7 +10,7 @@ name: Create Release
 # 4. Create the official release by removing pre-release tags.
 
 # - The package is published to npm at each stage of the release process.
-# - A GitHub tag is created at each stage of the process. 
+# - A GitHub tag is created at each stage of the process.
 # - A GitHub Release is ONLY created for official release (not beta or rc).
 
 # Release Steps:
@@ -42,9 +42,6 @@ on:
   # Manually triggered
   workflow_dispatch:
     inputs:
-      releaseTitle: # Release title shows in GitHub Releases tab.
-        description: 'The title of the release'
-        required: false # Only required if versionTag === 'release'
       versionChange: # How much to increment the version number by.
         description: 'Increment version by...'
         required: true
@@ -69,13 +66,6 @@ jobs:
   version_change:
     runs-on: ubuntu-latest
     steps:
-      # Validate release input for release title
-      - name: Validate release input for release title
-        if: ${{ github.event.inputs.versionTag == 'release' && !github.event.inputs.releaseTitle }}
-        run: |
-          echo "Error: 'releaseTitle' is required when 'versionTag' == 'release'."
-          exit 1
-
       # Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -130,7 +120,7 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.GIT_PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}
           git push origin main
 
-  # UNPUBLISHING NOTE: 
+  # UNPUBLISHING NOTE:
   # If you need to unpublish a package version for any reason, you must do so within 72 hours
   # of the version being published. To do so, use 'npm login' to login to the 'citzcodemvp' account
   # and then run 'npm unpublish @bcgov/<package-name>@<version>' where <package-name> and <version>
@@ -168,7 +158,7 @@ jobs:
         with:
           token: ${{ secrets.NPM_TOKEN }}
           access: public
-          
+
   create_github_release:
     runs-on: ubuntu-latest
     needs: npm_publish
@@ -209,7 +199,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y gh
-      
+
       # Install JQ for use in changelog step
       - name: Install jq
         if: ${{ github.event.inputs.versionTag == 'release' }}
@@ -228,43 +218,47 @@ jobs:
 
           # Get the previous official version
           PREV_VERSION=${{ steps.previous_version.outputs.PREV_VERSION }}
-        
+
           # Generate comparison link
           if [ -n "$PREV_VERSION" ]; then
             COMPARISON_URL="https://github.com/${{ github.repository }}/compare/$PREV_VERSION...$VERSION"
           else
             COMPARISON_URL=""
           fi
-          
+
           # Generate technical documentation link
           TECH_DOCS_URL="https://github.com/${{ github.repository }}/tree/$VERSION/techdocs/docs"
-          
-          # List all tags for the current version that have 'beta' or 'rc' in their names
-          TAGS=$(git tag --list "${VERSION}-beta*" "${VERSION}-rc*")
-          
+
           CHANGELOG=""
-          
-          # Loop through each tag to get merged pull requests
-          for TAG in $TAGS; do
-            # Use GitHub CLI to list pull requests merged into the tag
-            PRS=$(gh pr list --search "merged:${TAG}" --json title,url)
-            
-            # Loop through each pull request to construct the changelog
-            for PR in $(echo "$PRS" | jq -c '.[]'); do
-              TITLE=$(echo "$PR" | jq -r '.title')
-              URL=$(echo "$PR" | jq -r '.url')
-              CHANGELOG="${CHANGELOG}\n- ${TITLE} (${URL})"
-            done
+
+          # Get the list of commits for current version
+          COMMITS=$(git log $VERSION-beta..HEAD --pretty=format:"%s %b")
+
+          # Extract pull request numbers from the commit messages
+          PR_NUMBERS=$(echo "$COMMITS" | grep -oE "#[0-9]+" | sort | uniq)
+
+          for PR_NUMBER in $PR_NUMBERS; do
+            # Get the pull request details
+            PR=$(gh pr view $PR_NUMBER --json title,url)
+            TITLE=$(echo "$PR" | jq -r '.title')
+            URL=$(echo "$PR" | jq -r '.url')
+            CHANGELOG="${CHANGELOG}\n- ${TITLE} (${URL})  "
           done
-          
+
+          # Escape changelog content for GitHub Actions without encoding newlines
+          ESCAPED_CHANGELOG=$(echo -e "$CHANGELOG" | sed 's/%/%25/g; s/\r/%0D/g; s/\n/%0A/g')
+
           # Set the CHANGELOG environment variable with the constructed changelog, comparison link, and technical documentation link
-          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
-          echo "<details><summary>Pull Requests</summary>\n$CHANGELOG\n</details>" >> $GITHUB_ENV
-          if [ -n "$COMPARISON_URL" ]; then
-            echo "\n[Compare changes since last version]($COMPARISON_URL)" >> $GITHUB_ENV
-          fi
-          echo "\n[Documentation]($TECH_DOCS_URL)" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          {
+            echo "CHANGELOG<<EOF"
+            echo "<details><summary>Pull Requests</summary>"
+            echo "$ESCAPED_CHANGELOG"
+            echo "</details>"
+            echo ""
+            [ -n "$COMPARISON_URL" ] && echo "[Compare changes since last version]($COMPARISON_URL)"
+            echo "[Documentation]($TECH_DOCS_URL)"
+            echo "EOF"
+          } >> $GITHUB_ENV
 
       # Create new release in GitHub (only official releases)
       - name: Create GitHub Release
@@ -275,5 +269,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.package_version.outputs.VERSION }}
-          name: ${{ github.event.inputs.releaseTitle }}
+          name: ${{ steps.package_version.outputs.VERSION }}
           body: ${{ env.CHANGELOG }}
