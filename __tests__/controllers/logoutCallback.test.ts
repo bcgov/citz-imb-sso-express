@@ -5,6 +5,7 @@ import debug from '@/utils/debug';
 // Mock the config values
 jest.mock('@/config', () => ({
   FRONTEND_URL: 'http://localhost:3000',
+  COOKIE_DOMAIN: '.gov.bc.ca',
 }));
 
 // Mock dependencies
@@ -35,7 +36,12 @@ describe('logoutCallback controller', () => {
     const requestHandler = logoutCallback();
     await requestHandler(req as Request, res as Response);
 
-    expect(res.cookie).toHaveBeenCalledWith('refresh_token', '', { httpOnly: true, secure: true });
+    expect(res.cookie).toHaveBeenCalledWith('refresh_token', '', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      domain: '.gov.bc.ca',
+    });
     expect(mockRedirect).toHaveBeenCalledWith('http://localhost:3000');
   });
 
