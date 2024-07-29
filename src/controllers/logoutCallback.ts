@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import debug from '../utils/debug';
 
 import config from '../config';
-const { FRONTEND_URL } = config;
+const { FRONTEND_URL, COOKIE_DOMAIN } = config;
 
 /**
  * Removes the user's httpOnly refresh token, and redirects back to the frontend.
@@ -16,7 +16,12 @@ export const logoutCallback = (options?: SSOOptions) => {
     debug.controllerCalled('logoutCallback');
     try {
       res
-        .cookie('refresh_token', '', { httpOnly: true, secure: true })
+        .cookie('refresh_token', '', {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'none',
+          domain: COOKIE_DOMAIN,
+        })
         .redirect(FRONTEND_URL ?? '');
     } catch (error: unknown) {
       // Log error and send response
