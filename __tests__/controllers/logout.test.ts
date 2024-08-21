@@ -7,6 +7,7 @@ import { getUserInfo, normalizeUser } from '@/utils/user';
 // Mock the config values
 jest.mock('@/config', () => ({
   COOKIE_DOMAIN: 'localhost',
+  FRONTEND_URL: 'http://localhost:3000',
 }));
 
 // Mock dependencies
@@ -33,21 +34,28 @@ describe('logout controller', () => {
     expect(res.redirect).toHaveBeenCalledWith('mocked_logout_url');
   });
 
-  // Test case: should return 401 if id_token is missing
-  it('should return 401 if id_token is missing', async () => {
+  // Test case: should return empty cookie id_token is missing
+  it('should return empty cookie if id_token is missing', async () => {
+    const mockRedirect = jest.fn();
     const req = {
       query: {},
     } as unknown as Request;
     const res = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn().mockReturnThis(),
+      cookie: jest.fn().mockReturnThis(), // Preserves chaining
+      redirect: mockRedirect,
+      json: jest.fn().mockReturnThis(),
     } as unknown as Response;
 
     const requestHandler = logout();
     await requestHandler(req, res);
 
-    expect(res.status).toHaveBeenCalledWith(401);
-    expect(res.send).toHaveBeenCalledWith('id_token query param required');
+    expect(res.cookie).toHaveBeenCalledWith('refresh_token', '', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      domain: 'localhost',
+    });
+    expect(mockRedirect).toHaveBeenCalledWith('http://localhost:3000');
   });
 
   // Test case: should handle errors during logout process
