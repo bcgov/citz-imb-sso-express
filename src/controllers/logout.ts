@@ -4,6 +4,9 @@ import { getLogoutURL } from '../utils/authUrls';
 import { getUserInfo, normalizeUser } from '../utils/user';
 import debug from '../utils/debug';
 
+import config from '../config';
+const { FRONTEND_URL, COOKIE_DOMAIN } = config;
+
 /**
  * Logs out the user and, once finished, redirects them to /auth/logout/callback
  * @method GET
@@ -15,7 +18,15 @@ export const logout = (options?: SSOOptions) => {
     try {
       debug.logQueryParams('logout', req.query);
       const { id_token } = req.query;
-      if (!id_token) return res.status(401).send('id_token query param required');
+      if (!id_token)
+        return res
+          .cookie('refresh_token', '', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            domain: COOKIE_DOMAIN,
+          })
+          .redirect(FRONTEND_URL ?? '');
 
       const redirectURL = getLogoutURL(id_token as string);
       debug.logoutURL(redirectURL);
