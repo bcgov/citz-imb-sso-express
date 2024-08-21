@@ -25,7 +25,7 @@ type BaseSSOUser = {
     display_name: string;
     client_roles?: string[];
     scope?: string;
-    identity_provider: IdirIdentityProvider | BceidIdentityProvider | GithubIdentityProvider;
+    identity_provider: IdentityProvider;
 };
 type SSOIdirUser = {
     idir_user_guid?: string;
@@ -86,7 +86,7 @@ declare const login: (options?: SSOOptions) => (req: Request, res: Response) => 
 
 declare const loginCallback: (options?: SSOOptions) => (req: Request, res: Response) => Promise<void>;
 
-declare const logout: (options?: SSOOptions) => (req: Request, res: Response) => Promise<Response<any, Record<string, any>> | undefined>;
+declare const logout: (options?: SSOOptions) => (req: Request, res: Response) => Promise<void>;
 
 declare const logoutCallback: (options?: SSOOptions) => (req: Request, res: Response) => Promise<void>;
 
@@ -94,6 +94,8 @@ declare const refreshToken: (options?: SSOOptions) => (req: Request, res: Respon
 
 declare const getLoginURL: (kc_idp_hint?: IdentityProvider) => string;
 declare const getLogoutURL: (id_token: string) => string;
+
+declare const checkForUpdates: () => Promise<void>;
 
 declare const _default: {
     controllerCalled: (controllerName: string) => void;
@@ -112,8 +114,6 @@ declare const _default: {
 declare namespace debug_d {
   export { _default as default };
 }
-
-declare const checkForUpdates: () => Promise<void>;
 
 declare const encodeJWT: (jwt: string) => string;
 declare const decodeJWT: (jwt: string) => any;
