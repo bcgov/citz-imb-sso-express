@@ -18,7 +18,7 @@ export const logout = (options?: SSOOptions) => {
     try {
       debug.logQueryParams('logout', req.query);
       const { id_token } = req.query;
-      if (!id_token)
+      if (!id_token || id_token === 'undefined')
         return res
           .cookie('refresh_token', '', {
             httpOnly: true,
