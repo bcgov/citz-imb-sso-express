@@ -64,14 +64,16 @@ export const normalizeUser = (userInfo: OriginalSSOUser | null): SSOUser | null 
     // BCeID
     guid = userInfo?.bceid_user_guid ?? '';
     username = userInfo?.bceid_username ?? '';
-    first_name = userInfo?.display_name.split(' ')[0];
-    last_name = userInfo?.display_name.split(' ')[1];
+    const nameParts = userInfo?.display_name.split(' ');
+    first_name = nameParts[0];
+    last_name = nameParts.slice(1).join(' ');
   } else if (identity_provider === 'githubbcgov' || identity_provider === 'githubpublic') {
     // GitHub
     guid = userInfo?.github_id ?? '';
     username = userInfo?.github_username ?? '';
-    first_name = userInfo?.display_name.split(' ')[0];
-    last_name = userInfo?.display_name.split(' ')[1];
+    const nameParts = userInfo?.display_name.split(' ');
+    first_name = nameParts[0];
+    last_name = nameParts.slice(1).join(' ');
   }
 
   // Normalized user
