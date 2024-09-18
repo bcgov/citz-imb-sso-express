@@ -9,6 +9,7 @@ export type IdirIdentityProvider = 'idir';
 export type AzureIdirIdentityProvider = 'azureidir';
 export type BceidIdentityProvider = 'bceidbasic' | 'bceidbusiness' | 'bceidboth';
 export type GithubIdentityProvider = 'githubbcgov' | 'githubpublic';
+// BC Services Card uses SSO_CLIENT_ID as the provider.
 
 export type IdentityProvider =
   | IdirIdentityProvider
