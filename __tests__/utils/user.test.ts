@@ -49,6 +49,36 @@ describe('getUserInfo function', () => {
     expect(result?.client_roles).toStrictEqual([]);
   });
 
+  // Test case: should normalize user data correctly for identity_provider 'idir'
+  it('should normalize user data correctly for identity_provider idir', () => {
+    const userInfo = {
+      preferred_username: 'testUser',
+      display_name: 'Test User',
+      identity_provider: 'idir',
+      given_name: 'Test',
+      family_name: 'User',
+    } as OriginalSSOUser;
+    const normalizedUser = normalizeUser(userInfo);
+    expect(normalizedUser?.identity_provider).toBe('idir');
+    expect(normalizedUser?.first_name).toBe('Test');
+    expect(normalizedUser?.last_name).toBe('User');
+  });
+
+    // Test case: should normalize user data correctly for identity_provider 'azureidir'
+    it('should normalize user data correctly for identity_provider azureidir', () => {
+      const userInfo = {
+        preferred_username: 'testUser',
+        display_name: 'Test User',
+        given_name: 'Test',
+        family_name: 'User',
+        identity_provider: 'azureidir',
+      } as OriginalSSOUser;
+      const normalizedUser = normalizeUser(userInfo);
+      expect(normalizedUser?.identity_provider).toBe('azureidir');
+      expect(normalizedUser?.first_name).toBe('Test');
+      expect(normalizedUser?.last_name).toBe('User');
+    });
+
   // Test case: should normalize user data correctly for identity_provider 'bceidbasic'
   it('should normalize user data correctly for identity_provider bceidbasic', () => {
     const userInfo = {

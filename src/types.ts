@@ -5,17 +5,15 @@ export type HasRolesOptions = {
   requireAllRoles?: boolean;
 };
 
-export type IdirIdentityProvider = 'idir';
-export type AzureIdirIdentityProvider = 'azureidir';
+export type IdirIdentityProvider = 'idir' | 'azureidir';
 export type BceidIdentityProvider = 'bceidbasic' | 'bceidbusiness' | 'bceidboth';
 export type GithubIdentityProvider = 'githubbcgov' | 'githubpublic';
 // BC Services Card uses SSO_CLIENT_ID as the provider.
 
-export type IdentityProvider =
+export type IdentityProvider = 
   | IdirIdentityProvider
   | BceidIdentityProvider
-  | GithubIdentityProvider
-  | AzureIdirIdentityProvider;
+  | GithubIdentityProvider;
 
 export type BaseSSOUser = {
   name?: string;

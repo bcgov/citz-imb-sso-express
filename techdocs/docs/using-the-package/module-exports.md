@@ -21,7 +21,6 @@ import {
   HasRolesOptions, // Type of optional second parameter for req?.user?.hasRoles()
   IdentityProvider, // Combined type for identity providers.
   IdirIdentityProvider, // Used for more efficient login.
-  AzureIdirIdentityProvider, // Used for more efficient login.
   BceidIdentityProvider, // Used for more efficient login.
   GithubIdentityProvider, // Used for more efficient login.
   // BC Services Card has no fixed identity provider. It uses SSO_CLIENT_ID.
