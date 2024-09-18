@@ -14,7 +14,7 @@ import { RequestHandler, Application, Request, Response } from 'express';
 type HasRolesOptions = {
     requireAllRoles?: boolean;
 };
-type IdirIdentityProvider = 'idir' | 'azureidir';
+type IdirIdentityProvider = 'idir';
 type BceidIdentityProvider = 'bceidbasic' | 'bceidbusiness' | 'bceidboth';
 type GithubIdentityProvider = 'githubbcgov' | 'githubpublic';
 type IdentityProvider = IdirIdentityProvider | BceidIdentityProvider | GithubIdentityProvider;
@@ -47,12 +47,7 @@ type SSOGithubUser = {
     first_name?: string;
     last_name?: string;
 };
-type SSOBcServicesCardUser = {
-    given_name?: string;
-    family_name?: string;
-    first_name?: string;
-}
-type OriginalSSOUser = BaseSSOUser & SSOIdirUser & SSOBCeIDUser & SSOGithubUser & SSOBcServicesCardUser;
+type OriginalSSOUser = BaseSSOUser & SSOIdirUser & SSOBCeIDUser & SSOGithubUser;
 type SSOUser = BaseSSOUser & {
     guid: string;
     username: string;
@@ -140,5 +135,5 @@ declare const getNewTokens: (refresh_token: string) => Promise<null | {
     expires_in: number;
 }>;
 
-export { type BaseSSOUser, type BceidIdentityProvider, type GithubIdentityProvider, type HasRolesOptions, type IdentityProvider, type IdirIdentityProvider, type OriginalSSOUser, type ProtectedRouteOptions, type SSOBCeIDUser, type SSOGithubUser, type SSOIdirUser, type SSOOptions, type SSOUser, type SSOBcServicesCardUser, checkForUpdates, debug_d as debug, decodeJWT, encodeJWT, getLoginURL, getLogoutURL, getNewTokens, getTokens, getUserInfo, hasAllRoles, hasAtLeastOneRole, hasRoles, isJWTValid, login, loginCallback, logout, logoutCallback, normalizeUser, parseJWT, protectedRoute, refreshToken, sso };
+export { type BaseSSOUser, type BceidIdentityProvider, type GithubIdentityProvider, type HasRolesOptions, type IdentityProvider, type IdirIdentityProvider, type OriginalSSOUser, type ProtectedRouteOptions, type SSOBCeIDUser, type SSOGithubUser, type SSOIdirUser, type SSOOptions, type SSOUser, checkForUpdates, debug_d as debug, decodeJWT, encodeJWT, getLoginURL, getLogoutURL, getNewTokens, getTokens, getUserInfo, hasAllRoles, hasAtLeastOneRole, hasRoles, isJWTValid, login, loginCallback, logout, logoutCallback, normalizeUser, parseJWT, protectedRoute, refreshToken, sso };
 ```
