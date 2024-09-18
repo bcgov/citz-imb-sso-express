@@ -6,13 +6,15 @@ export type HasRolesOptions = {
 };
 
 export type IdirIdentityProvider = 'idir';
+export type AzureIdirIdentityProvider = 'azureidir';
 export type BceidIdentityProvider = 'bceidbasic' | 'bceidbusiness' | 'bceidboth';
 export type GithubIdentityProvider = 'githubbcgov' | 'githubpublic';
 
 export type IdentityProvider =
   | IdirIdentityProvider
   | BceidIdentityProvider
-  | GithubIdentityProvider;
+  | GithubIdentityProvider
+  | AzureIdirIdentityProvider;
 
 export type BaseSSOUser = {
   name?: string;
@@ -47,7 +49,13 @@ export type SSOGithubUser = {
   last_name?: string;
 };
 
-export type OriginalSSOUser = BaseSSOUser & SSOIdirUser & SSOBCeIDUser & SSOGithubUser;
+export type SSOBcServicesCardUser = {
+  given_name?: string;
+  family_name?: string;
+  first_name?: string;
+}
+
+export type OriginalSSOUser = BaseSSOUser & SSOIdirUser & SSOBCeIDUser & SSOGithubUser & SSOBcServicesCardUser;
 
 export type SSOUser = BaseSSOUser & {
   guid: string;
