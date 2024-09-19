@@ -51,27 +51,43 @@ export const normalizeUser = (userInfo: OriginalSSOUser | null): SSOUser | null 
   } = userInfo;
 
   // Normalize properties
-  let guid = userInfo?.idir_user_guid ?? '';
-  let username = userInfo?.idir_username ?? '';
-  let first_name = userInfo?.given_name ?? '';
-  let last_name = userInfo?.family_name ?? '';
+  let guid;
+  let username;
+  let first_name;
+  let last_name;
 
-  if (
-    identity_provider === 'bceidbasic' ||
-    identity_provider === 'bceidbusiness' ||
-    identity_provider === 'bceidboth'
-  ) {
-    // BCeID
-    guid = userInfo?.bceid_user_guid ?? '';
-    username = userInfo?.bceid_username ?? '';
-    first_name = userInfo?.display_name.split(' ')[0];
-    last_name = userInfo?.display_name.split(' ')[1];
-  } else if (identity_provider === 'githubbcgov' || identity_provider === 'githubpublic') {
-    // GitHub
-    guid = userInfo?.github_id ?? '';
-    username = userInfo?.github_username ?? '';
-    first_name = userInfo?.display_name.split(' ')[0];
-    last_name = userInfo?.display_name.split(' ')[1];
+  switch (identity_provider) {
+    case 'idir':
+    case 'azureidir':
+      // IDIR
+      guid = userInfo?.idir_user_guid ?? '';
+      username = userInfo?.idir_username ?? '';
+      first_name = userInfo?.given_name ?? '';
+      last_name = userInfo?.family_name ?? '';
+      break;
+    case 'bceidbasic':
+    case 'bceidboth':
+    case 'bceidbusiness':
+      // BCeID
+      guid = userInfo?.bceid_user_guid ?? '';
+      username = userInfo?.bceid_username ?? '';
+      first_name = userInfo?.display_name.split(' ')[0] ?? '';
+      last_name = userInfo?.display_name.split(' ')[1] ?? '';
+      break;
+    case 'githubbcgov':
+    case 'githubpublic':
+      // GitHub
+      guid = userInfo?.github_id ?? '';
+      username = userInfo?.github_username ?? '';
+      first_name = userInfo?.display_name.split(' ')[0] ?? '';
+      last_name = userInfo?.display_name.split(' ')[1] ?? '';
+      break;
+    default:
+      guid = userInfo?.preferred_username.split('@').at(0) ?? '';
+      username = userInfo?.preferred_username ?? '';
+      first_name = userInfo?.given_name ?? '';
+      last_name = userInfo?.family_name ?? '';
+      break;
   }
 
   // Normalized user
