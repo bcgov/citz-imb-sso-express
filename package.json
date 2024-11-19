@@ -24,9 +24,9 @@
     "coverage:open": "node scripts/run-coverage-and-open-report.mjs"
   },
   "dependencies": {
-    "cookie-parser": "1.4.6",
+    "cookie-parser": "1.4.7",
     "cors": "2.8.5",
-    "express": "4.19.2"
+    "express": "4.21.1"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "26.0.1",
