@@ -15,4 +15,4 @@ metadata:
 spec:
   type: documentation
   lifecycle: experimental
-  owner: group:default/citz-imb-common-code
+  owner: bcgov/citz-imb-common-code
