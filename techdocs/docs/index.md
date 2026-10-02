@@ -1,5 +1,7 @@
 # CITZ IMB SSO Express (NPM Package)
 
+![Deprecated](https://img.shields.io/badge/status-deprecated-red)
+
 ## Overview
 
 This npm package offers an integration solution for Express applications requiring authentication through the B.C. government's Single Sign-On ([CSS]) service. It abstracts the complexity of handling SSO protocols manually. By using this package, developers can quickly implement authentication and authorization in their Express applications to meet B.C. government security standards.
