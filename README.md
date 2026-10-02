@@ -1,6 +1,6 @@
 # BCGov SSO Integration for Express
 
-[![Lifecycle:Experimental](https://img.shields.io/badge/Lifecycle-Experimental-339999)](Redirect-URL)
+![Deprecated](https://img.shields.io/badge/status-deprecated-red)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/7c72860811ca41c5cc02/maintainability)](https://codeclimate.com/github/bcgov/citz-imb-sso-express/maintainability) 
