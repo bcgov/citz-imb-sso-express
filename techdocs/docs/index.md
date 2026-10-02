@@ -1,6 +1,7 @@
 # CITZ IMB SSO Express (NPM Package)
 
-![Deprecated](https://img.shields.io/badge/status-deprecated-red)
+!!! danger "Deprecated"
+    This package has been deprecated and should not be used for new development.
 
 ## Overview
 
